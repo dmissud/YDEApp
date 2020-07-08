@@ -1,0 +1,23 @@
+@startuml
+() "AppManage"
+() "CommentApp"
+() "GestUser"
+() "GestApp"
+
+package "Front" {
+GestUser - [administrateur]
+GestApp - [administrateur]
+[administrateur] --> AppManage
+CommentApp - [colloborateur]
+}
+
+package "Back" {
+package "application" {
+CommentApp - [App comment]
+AppManage - [App evolution]
+
+
+}
+}
+
+@enduml

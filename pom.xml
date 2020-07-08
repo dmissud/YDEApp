@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- =============================================================== -->
+    <!-- Informations du projet -->
+    <!-- =============================================================== -->
+    <!-- ===== Informations Maven ===== -->
+    <groupId>org.yde.ydeapp</groupId>
+    <artifactId>YDEApp</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <!-- =============================================================== -->
+    <!-- utilisation du Spring parent pour la gestion des versions -->
+    <!-- =============================================================== -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.1.RELEASE</version>
+    </parent>
+
+    <!-- =============================================================== -->
+    <!-- Propriétés -->
+    <!-- =============================================================== -->
+    <properties>
+        <projectName>YDEApp</projectName>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <!-- ===== Informations générales ===== -->
+    <name>${projectName}</name>
+    <description>
+        Projet fil rouge pour la formation Badge Epita Session 2.
+        Effectuer une cartographie applicative de l’ensemble du SI de FIT
+    </description>
+
+    <!-- ===== Organisation ===== -->
+    <organization>
+        <name>#La Fabrique BDDF IT</name>
+        <url>https://#Lafabrique</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>Yan</id>
+            <name>Yannick Hanh</name>
+            <email>yannick.hanh@bnpparibas.com</email>
+            <organization>BNPP BDDF IT</organization>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Paris</timezone>
+            <properties>
+                <picUrl>https://ca.slack-edge.com/TUZLVHNC8-UUZ7L9THS-g515d30074dc-512</picUrl>
+            </properties>
+        </developer>
+        <developer>
+            <id>Manu</id>
+            <name>Emmanuel Houdin</name>
+            <email>emmanuel.houdin@bnpparibas.com</email>
+            <organization>BNPP BDDF IT</organization>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Paris</timezone>
+            <properties>
+                <picUrl>https://ca.slack-edge.com/TUZLVHNC8-UUZML4Q4V-2a62f4b6cae4-512</picUrl>
+            </properties>
+        </developer>
+        <developer>
+            <id>Dan</id>
+            <name>Daniel Missud</name>
+            <email>daniel.missud@bnpparibas.com</email>
+            <organization>BNPP BDDF IT</organization>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Paris</timezone>
+            <properties>
+                <picUrl>https://ca.slack-edge.com/TUZLVHNC8-UUZM74Y7J-9f689f69d65e-512</picUrl>
+            </properties>
+        </developer>
+    </developers>
+
+    <!-- ===== Licences ===== -->
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <!-- =============================================================== -->
+    <!-- Modules -->
+    <!-- =============================================================== -->
+    <modules>
+        <module>domain</module>
+    </modules>
+
+    <!-- =============================================================== -->
+    <!-- Gestion des dépendances -->
+    <!-- =============================================================== -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- Autre dependances -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>2.9.2</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>2.9.2</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- =============================================================== -->
+    <!-- Dépendances globales -->
+    <!-- =============================================================== -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+    </dependencies>
+</project>

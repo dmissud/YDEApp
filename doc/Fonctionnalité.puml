@@ -1,0 +1,16 @@
+@startuml
+(Enrich the App repository) as (Use)
+
+Admin ---> (Use)
+
+Collaborateur -> (Comment a App)
+
+note right of Admin : In charge to maintain the repository of App.
+
+note left of Collaborateur: Can be a simple anonymous user or the RA of teh App
+note left of (Use)
+Integrate in the application
+the REFI Flux, mays be the Refog one to
+end note
+
+@enduml
