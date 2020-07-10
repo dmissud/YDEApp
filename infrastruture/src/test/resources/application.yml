@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: YDEApp
+  datasource:
+    platform: H2
+
