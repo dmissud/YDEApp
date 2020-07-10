@@ -1,8 +1,13 @@
 package org.yde.ydeapp.domain;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.validation.constraints.NotNull;
 
 public class Application {
+    private static final Logger log = LoggerFactory.getLogger(Application.class);
+
     private final String codeApplication;
     private String shortDescription;
     private String longDescription;
@@ -28,6 +33,7 @@ public class Application {
 
         public Builder(@NotNull String codeApplication) {
             this.codeApplication = codeApplication;
+            log.trace("New builder Application");
         }
 
         public Builder withShortDescription(String shortDescription) {
@@ -50,7 +56,7 @@ public class Application {
             application.shortDescription = this.shortDescription;
             application.longDescription = this.longDescription;
             application.nameOfResponsable = nameOfResponsable;
-
+            log.trace("New Application Create");
             return application;
         }
     }

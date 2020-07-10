@@ -17,17 +17,21 @@ public class CreateApplicationSteps {
     public static final String CODE_APPLICATION = "AP00002";
     private ApplicationDataTable appDesc = null;
     private Application application;
+
     @DataTableType
     public ApplicationDataTable applicationFataTableEntry(Map<String, String> entry) {
-        application = null;
         return new ApplicationDataTable(entry.get("codeApplication"),
             entry.get("shortDescription"),
             entry.get("longDescription"),
             entry.get("nameOfResponsable"));
     }
 
+    @Given("The application doesn't exist in the repository")
+    public void the_application_doesn_t_exist_in_the_repository() {
+        application = null;
+    }
 
-    @Given("Administrator want to create a new application with the following attributes")
+    @When("Administrator want to create a new application with the following attributes")
     public void administrator_want_to_create_a_new_application_with_the_following_attributes(List<ApplicationDataTable> apps) {
         if (apps.size() == 1) {
             appDesc = apps.get(0);
@@ -35,21 +39,11 @@ public class CreateApplicationSteps {
         } else {
             throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
         }
-    }
-
-    @When("Administrator validate")
-    public void administrator_validate() {
-        Application.Builder appBuilder = new Application.Builder(appDesc.getCodeApplication());
-        if (appDesc.getShortDescription() != null) {
-            appBuilder.withShortDescription(appDesc.getShortDescription());
-        }
-        if (appDesc.getLongDescription() != null) {
-            appBuilder.withLongDescription(appDesc.getLongDescription());
-        }
-        if (appDesc.getNameOfResponsable() != null) {
-            appBuilder.withResponsable(appDesc.getNameOfResponsable());
-        }
-        application = appBuilder.build();
+        application = new Application.Builder(appDesc.getCodeApplication())
+            .withShortDescription(appDesc.getShortDescription())
+            .withLongDescription(appDesc.getLongDescription())
+            .withResponsable(appDesc.getNameOfResponsable())
+            .build();
     }
 
     @Then("the create is success")
@@ -58,9 +52,10 @@ public class CreateApplicationSteps {
         assertThat(application.getCodeApplication()).isEqualTo(appDesc.getCodeApplication());
     }
 
-    @Given("Administrator want to create a new application with only code app AP00002")
+    @When("Administrator want to create a new application with only code app AP00002")
     public void administrator_want_to_create_a_new_application_with_only_code_app_ap00002() {
-        appDesc = new ApplicationDataTable(CODE_APPLICATION, null, null, null);
+        application = new Application.Builder(CODE_APPLICATION)
+            .build();
     }
 
     @Then("the create is success with default field")

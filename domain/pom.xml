@@ -12,6 +12,7 @@
     <artifactId>domain</artifactId>
 
     <dependencies>
+        <!-- Autre dependances -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
@@ -28,14 +29,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <scope>test</scope>
@@ -48,7 +41,6 @@
             <plugin>
                 <groupId>net.masterthought</groupId>
                 <artifactId>maven-cucumber-reporting</artifactId>
-                <version>5.3.0</version>
             </plugin>
         </plugins>
     </build>
