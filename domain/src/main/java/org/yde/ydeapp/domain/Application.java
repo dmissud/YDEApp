@@ -31,6 +31,10 @@ public class Application {
         private String longDescription = "to be completed";
         private String nameOfResponsable = "who is responsible ?";
 
+        public ApplicationIdent giveApplicationIdent() {
+            return new ApplicationIdent(this.codeApplication, this.shortDescription);
+        }
+
         public Builder(@NotNull String codeApplication) {
             this.codeApplication = codeApplication;
             log.trace("New builder Application");

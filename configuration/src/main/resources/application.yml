@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: YDEApp
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5436/db_cartographie
+    username: yde_users
+    password: yde_users
+    driverClassName: org.postgresql.Driver
+server:
+  port: 9090
+logging:
+  level:
+    org.yde.ydeapp: debug
+    org.springframework: error

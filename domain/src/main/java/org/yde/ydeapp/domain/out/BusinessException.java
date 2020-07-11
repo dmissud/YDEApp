@@ -1,6 +1,6 @@
 package org.yde.ydeapp.domain.out;
 
-public class EntityAlreadyExist extends BusinessException {
+public class BusinessException extends RuntimeException {
     /**
      * Constructs a new runtime exception with the specified detail message.
      * The cause is not initialized, and may subsequently be initialized by a
@@ -9,7 +9,18 @@ public class EntityAlreadyExist extends BusinessException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public EntityAlreadyExist(String message) {
-        super(message, "ENTITY_ALREADY_EXIST");
+    public BusinessException(String message) {
+        super(message);
+        this.code = "UNKNOW_BUSINESS_ERROR";
     }
+
+    public BusinessException(String message, String code) {
+        super(message);
+        this.code = code;
+    }
+
+    private final String code;
+
+    public String getCode() { return code; }
+
 }
