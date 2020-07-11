@@ -25,6 +25,18 @@ public class Application {
 
     public String getNameOfResponsable() { return nameOfResponsable; }
 
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
+    public void setLongDescription(String longDescription) {
+        this.longDescription = longDescription;
+    }
+
+    public void setNameOfResponsable(String nameOfResponsable) {
+        this.nameOfResponsable = nameOfResponsable;
+    }
+
     public static class Builder {
         private final String codeApplication;
         private String shortDescription = "to be completed";

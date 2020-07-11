@@ -57,4 +57,21 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
     public List<ApplicationIdent> retrieveIdentOfAllApplications() {
         return repositoryOfApplicationJpa.retrieveApplicationsIdent();
     }
+
+    @Override
+    public void updateApplication(Application application) {
+        ApplicationEntity applicationEntity = repositoryOfApplicationJpa.findByCodeApp(application.getCodeApplication());
+        if (applicationEntity == null) {
+            log.error("Application {} not exist", application.getCodeApplication());
+            throw new EntityNotFound(String.format("Application with %s is not in repository", application.getCodeApplication()));
+        }
+
+        applicationEntity.setCodeApp(application.getCodeApplication());
+        applicationEntity.setShortDescription(application.getShortDescription());
+        applicationEntity.setLongDescription(application.getLongDescription());
+        applicationEntity.setNameOfResponsable(application.getNameOfResponsable());
+        log.debug("Application {} update", application.getCodeApplication());
+
+        repositoryOfApplicationJpa.save(applicationEntity);
+    }
 }

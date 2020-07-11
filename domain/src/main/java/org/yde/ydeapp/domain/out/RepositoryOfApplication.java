@@ -11,4 +11,6 @@ public interface RepositoryOfApplication {
     void referenceApplication(Application application);
 
     List<ApplicationIdent> retrieveIdentOfAllApplications();
+
+    void updateApplication(Application application);
 }

@@ -37,6 +37,16 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
     }
 
     @Override
+    public void updateApplication(ReferenceApplicationCmd referenceApplicationCmd) {
+        Application application = getApplication(referenceApplicationCmd.getCodeApp());
+        application.setLongDescription(referenceApplicationCmd.getLongDescription());
+        application.setNameOfResponsable(referenceApplicationCmd.getNameOfResponsable());
+        application.setShortDescription(referenceApplicationCmd.getShortDescription());
+
+        repositoryOfApplication.updateApplication(application);
+    }
+
+    @Override
     public Application getApplication(String codeApplication) {
         return repositoryOfApplication.retrieveByAppCode(codeApplication);
     }

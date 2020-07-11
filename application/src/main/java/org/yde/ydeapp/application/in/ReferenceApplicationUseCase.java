@@ -6,9 +6,10 @@ import org.yde.ydeapp.domain.Application;
 
 import javax.validation.constraints.Pattern;
 
-@FunctionalInterface
 public interface ReferenceApplicationUseCase {
     Application referenceApplication(ReferenceApplicationCmd referenceApplicationCmd);
+
+    void updateApplication(ReferenceApplicationCmd referenceApplicationCmd);
 
     @Validated
     class ReferenceApplicationCmd extends SelfValidating<ReferenceApplicationCmd> {

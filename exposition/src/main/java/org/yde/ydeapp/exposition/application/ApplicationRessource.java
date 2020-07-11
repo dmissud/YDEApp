@@ -43,6 +43,24 @@ public class ApplicationRessource {
         return ResponseEntity.created(location).build();
     }
 
+    @PutMapping("Applications")
+    public ResponseEntity<Void> updateApplication(@RequestBody ApplicationDesc applicationDesc) {
+
+        ReferenceApplicationCmd referenceApplicationCmd = new ReferenceApplicationCmd(applicationDesc.getCodeApplication(),
+            applicationDesc.getShortDescription(),
+            applicationDesc.getLongDescription(),
+            applicationDesc.getNameOfResponsable());
+
+        referenceApplicationUseCase.updateApplication(referenceApplicationCmd);
+        URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{codeApp}")
+            .buildAndExpand(applicationDesc.getCodeApplication())
+            .toUri();
+
+        return ResponseEntity.created(location).build();
+    }
+
     @GetMapping(value = "applications/{codeApplication}", produces = {"application/json"})
     public ResponseEntity<ApplicationDesc> retrieveApplicationByCodeApplication(
         @NotNull @PathVariable("codeApplication") final String codeApplication) {
