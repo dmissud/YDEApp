@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @DisplayName("Validation du Repository des Applications")
-public class RepositoryOfApplicationImplTest {
+class RepositoryOfApplicationImplTest {
 
 
     private static final String CODE_APP = "AP00001";
@@ -43,7 +43,7 @@ public class RepositoryOfApplicationImplTest {
 
     @Test
     @DisplayName("Find a exiting application")
-    public void When_Application_exist_i_should_retrieve_it() {
+    void When_Application_exist_i_should_retrieve_it() {
         // Given
         GivenAApplicationExistInBase();
 
@@ -57,7 +57,7 @@ public class RepositoryOfApplicationImplTest {
 
     @Test
     @DisplayName("Have a exception when try to find a non exist application")
-    public void When_Application_not_exist_i_have_a_EntityNotExist_Exception() {
+    void When_Application_not_exist_i_have_a_EntityNotExist_Exception() {
         // Given
 
         // When
@@ -78,7 +78,7 @@ public class RepositoryOfApplicationImplTest {
 
     @Test
     @DisplayName("Create the application when it's not exist")
-    public void should_application_save_when_application_not_in_base() {
+    void should_application_save_when_application_not_in_base() {
         // Given
         GivenAApplicationExistInBase();
 
@@ -98,7 +98,7 @@ public class RepositoryOfApplicationImplTest {
 
     @Test
     @DisplayName("Couldn't create the application when it's exist and got Exception")
-    public void should_have_EntityAlreadyExist_when_application_in_base() {
+    void should_have_EntityAlreadyExist_when_application_in_base() {
         // Given
 
         // Application not in base
