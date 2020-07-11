@@ -13,6 +13,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
@@ -59,9 +61,7 @@ public class RepositoryOfApplicationImplTest {
         // Given
 
         // When
-        Throwable thrown = catchThrowable(() -> {
-            Application application = repositoryOfApplication.retrieveByAppCode(CODE_APP_NOT_EXIST);
-        });
+        Throwable thrown = catchThrowable(() -> repositoryOfApplication.retrieveByAppCode(CODE_APP_NOT_EXIST));
 
         // Then
         Assertions.assertThat(thrown).as("Essai recherche application pas présente en base").hasMessage(String.format("Application with %s is not in repository", CODE_APP_NOT_EXIST));
@@ -77,8 +77,46 @@ public class RepositoryOfApplicationImplTest {
     }
 
     @Test
-    public void referenceApplication() {
-        int i = 1;
-        assertThat(i).isZero();
+    @DisplayName("Create the application when it's not exist")
+    public void should_application_save_when_application_not_in_base() {
+        // Given
+        GivenAApplicationExistInBase();
+
+        // Application not in base
+        Application application = new Application.Builder(CODE_APP)
+            .withShortDescription(SHORT_DESCRIPTION)
+            .withLongDescription(LONG_DESCRIPTION)
+            .withResponsable(NAME_OF_RESPONSABLE)
+            .build();
+
+        // When
+        Throwable thrown = catchThrowable(() -> repositoryOfApplication.referenceApplication(application));
+
+        // Then
+        Assertions.assertThat(thrown).as("Essai creation application déjà en base").hasMessage(String.format("Application with %s is in repository", CODE_APP));
     }
+
+    @Test
+    @DisplayName("Couldn't create the application when it's exist and got Exception")
+    public void should_have_EntityAlreadyExist_when_application_in_base() {
+        // Given
+
+        // Application not in base
+        Application application = new Application.Builder(CODE_APP)
+            .withShortDescription(SHORT_DESCRIPTION)
+            .withLongDescription(LONG_DESCRIPTION)
+            .withResponsable(NAME_OF_RESPONSABLE)
+            .build();
+
+        // When
+        repositoryOfApplication.referenceApplication(application);
+
+        // Then
+        List lstApp = testEntityManager.getEntityManager().createQuery("select c from ApplicationEntity c where c.codeApp = :codeAppAttenduDansQuery")
+            .setParameter("codeAppAttenduDansQuery", CODE_APP)
+            .getResultList();
+        assertThat(lstApp.size()).isEqualTo(1);
+        assertThat(((ApplicationEntity) lstApp.get(0)).getNameOfResponsable()).isEqualTo(NAME_OF_RESPONSABLE);
+    }
+
 }
