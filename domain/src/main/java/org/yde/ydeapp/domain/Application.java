@@ -11,7 +11,7 @@ public class Application {
     private final String codeApplication;
     private String shortDescription;
     private String longDescription;
-    private String nameOfResponsable;
+    private Personne responsable;
 
     private Application(String codeApplication) {
         this.codeApplication = codeApplication;
@@ -23,7 +23,7 @@ public class Application {
 
     public String getLongDescription() { return longDescription; }
 
-    public String getNameOfResponsable() { return nameOfResponsable; }
+    public Personne getResponsable() { return responsable; }
 
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
@@ -33,15 +33,12 @@ public class Application {
         this.longDescription = longDescription;
     }
 
-    public void setNameOfResponsable(String nameOfResponsable) {
-        this.nameOfResponsable = nameOfResponsable;
-    }
 
     public static class Builder {
         private final String codeApplication;
         private String shortDescription = "to be completed";
         private String longDescription = "to be completed";
-        private String nameOfResponsable = "who is responsible ?";
+        private Personne responsable = null;
 
         public ApplicationIdent giveApplicationIdent() {
             return new ApplicationIdent(this.codeApplication, this.shortDescription);
@@ -62,8 +59,8 @@ public class Application {
             return this;
         }
 
-        public Builder withResponsable(String nameOfResponsable) {
-            this.nameOfResponsable = nameOfResponsable;
+        public Builder withResponsable(Personne responsable) {
+            this.responsable = responsable;
             return this;
         }
 
@@ -71,7 +68,7 @@ public class Application {
             Application application = new Application(this.codeApplication);
             application.shortDescription = this.shortDescription;
             application.longDescription = this.longDescription;
-            application.nameOfResponsable = nameOfResponsable;
+            application.responsable = this.responsable;
             log.trace("New Application Create");
             return application;
         }

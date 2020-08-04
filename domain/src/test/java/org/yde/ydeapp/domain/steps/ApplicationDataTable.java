@@ -4,13 +4,18 @@ public class ApplicationDataTable {
     private final String codeApplication;
     private final String shortDescription;
     private final String longDescription;
-    private final String nameOfResponsable;
+    private final String uid;
+    private final String fisrtName;
+    private final String lastName;
 
-    public ApplicationDataTable(String codeApplication, String shortDescription, String longDescription, String nameOfResponsable) {
+    public ApplicationDataTable(String codeApplication, String shortDescription, String longDescription, String uid,String fisrtName,String lastName) {
         this.codeApplication = codeApplication;
         this.shortDescription = shortDescription;
         this.longDescription = longDescription;
-        this.nameOfResponsable = nameOfResponsable;
+        this.uid = uid;
+        this.fisrtName= fisrtName;
+        this.lastName=lastName;
+
     }
 
     public String getCodeApplication() { return codeApplication; }
@@ -19,5 +24,15 @@ public class ApplicationDataTable {
 
     public String getLongDescription() { return longDescription; }
 
-    public String getNameOfResponsable() { return nameOfResponsable; }
+    public String getUid() {
+        return uid;
+    }
+
+    public String getFisrtName() {
+        return fisrtName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
 }

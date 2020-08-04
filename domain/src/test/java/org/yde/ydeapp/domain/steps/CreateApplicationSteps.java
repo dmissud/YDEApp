@@ -6,6 +6,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.yde.ydeapp.domain.Application;
+import org.yde.ydeapp.domain.Personne;
 
 import java.util.List;
 import java.util.Map;
@@ -18,12 +19,16 @@ public class CreateApplicationSteps {
     private ApplicationDataTable appDesc = null;
     private Application application;
 
+
     @DataTableType
     public ApplicationDataTable applicationFataTableEntry(Map<String, String> entry) {
         return new ApplicationDataTable(entry.get("codeApplication"),
             entry.get("shortDescription"),
             entry.get("longDescription"),
-            entry.get("nameOfResponsable"));
+            entry.get("uid"),
+            entry.get("firstName"),
+            entry.get("lastName"));
+
     }
 
     @Given("The application doesn't exist in the repository")
@@ -39,10 +44,11 @@ public class CreateApplicationSteps {
         } else {
             throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
         }
+        Personne personne = new Personne(appDesc.getUid(), appDesc.getFisrtName(), appDesc.getLastName());
         application = new Application.Builder(appDesc.getCodeApplication())
             .withShortDescription(appDesc.getShortDescription())
             .withLongDescription(appDesc.getLongDescription())
-            .withResponsable(appDesc.getNameOfResponsable())
+            .withResponsable(personne)
             .build();
     }
 
@@ -50,6 +56,12 @@ public class CreateApplicationSteps {
     public void the_create_is_success() {
         assertThat(application).isNotNull();
         assertThat(application.getCodeApplication()).isEqualTo(appDesc.getCodeApplication());
+        assertThat(application.getShortDescription()).isEqualTo(appDesc.getShortDescription());
+        assertThat(application.getLongDescription()).isEqualTo(appDesc.getLongDescription());
+        assertThat(application.getResponsable().getUid()).isEqualTo(appDesc.getUid());
+        assertThat(application.getResponsable().getFirstName()).isEqualTo(appDesc.getFisrtName());
+        assertThat(application.getResponsable().getLastName()).isEqualTo(appDesc.getLastName());
+
     }
 
     @When("Administrator want to create a new application with only code app AP00002")
