@@ -7,17 +7,14 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.spring.CucumberContextConfiguration;
-import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase.ReferenceApplicationCmd;
 import org.yde.ydeapp.application.service.ApplicationManagementService;
 import org.yde.ydeapp.domain.Application;
+import org.yde.ydeapp.domain.Personne;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 
@@ -25,19 +22,17 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
 @CucumberContextConfiguration
-@SpringBootTest(classes = {ApplicationManagementService.class, RepositoryOfApplication.class})
 public class RegisterApplicationSteps {
 
-    @Autowired
-    private ReferenceApplicationUseCase referenceApplicationUseCase;
+    @InjectMocks
+    private ApplicationManagementService applicationManagementService;
 
-    @MockBean
     @Mock
     private RepositoryOfApplication repositoryOfApplication;
+
+
 
     private Application application;
 
@@ -49,14 +44,19 @@ public class RegisterApplicationSteps {
     @DataTableType
     public ReferenceApplicationCmd applicationFataTableEntry(Map<String, String> entry) {
         return new ReferenceApplicationCmd(entry.get("codeApplication"),
-            entry.get("shortDescription"),
-            entry.get("longDescription"),
-            entry.get("nameOfResponsable"));
+                entry.get("shortDescription"),
+                entry.get("longDescription"),
+                entry.get("uid"),
+                entry.get("firstName"),
+                entry.get("lastName"));
+
     }
 
     @Given("Application with code {string} is not on the repository")
     public void application_with_code_is_not_on_the_repository(String codeApp) {
-        when(repositoryOfApplication.retrieveByAppCode(codeApp)).thenThrow(new EntityNotFound(String.format("Application : %s", codeApp)));
+        Mockito
+                .when(repositoryOfApplication.retrieveByAppCode(codeApp))
+                .thenThrow(new EntityNotFound(String.format("Application : %s", codeApp)));
     }
 
     @When("The administrator enrich the repository with this application with this data")
@@ -64,11 +64,15 @@ public class RegisterApplicationSteps {
         if (apps.size() != 1) {
             throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
         }
-        application = referenceApplicationUseCase.referenceApplication(apps.get(0));
+        application = applicationManagementService.referenceApplication(apps.get(0));
     }
 
     @Then("a new application is in the repository with code {string}")
     public void a_new_application_is_in_the_repository_with_code(String string) {
         assertThat(application).isNotNull();
+
     }
+
+
+
 }

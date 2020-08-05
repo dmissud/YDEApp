@@ -33,6 +33,9 @@ public class Application {
         this.longDescription = longDescription;
     }
 
+    public void setResponsable(Personne responsable) {
+        this.responsable = responsable;
+    }
 
     public static class Builder {
         private final String codeApplication;

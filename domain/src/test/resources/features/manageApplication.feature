@@ -7,6 +7,7 @@ Feature: Management of a Application
     When Administrator want to create a new application with the following attributes
       | codeApplication | shortDescription | longDescription               | uid        |firstName |lastName     |
       | AP00001         | Test App         | Long description for Test app |123456      |John      |Doe          |
+
     Then the create is success
 
   Scenario: Create a new Application with deffault value
@@ -17,8 +18,8 @@ Feature: Management of a Application
   Scenario: Update a existing application
     Given The application exist in the repository
       | codeApplication | shortDescription | longDescription               | uid        |firstName |lastName     |
-      | AP00001         | Test App         | Long description for Test app |123456      |John      |Doe          |
-    When Administrator want to create a new application with the following attributes
+      | AP00002         | Test App         | Long description for Test app |123456      |John      |Doe          |
+    When Administrator want to update an application with the following attributes
       | codeApplication | shortDescription | longDescription               | uid        |firstName |lastName     |
-      | AP00001         | Test Appupdate   | Long description app update   |654321      |Johnny    |Update       |
+      | AP00002         | Test Appupdate   | Long description app update   |654321      |Johnny    |Update       |
     Then the update is success

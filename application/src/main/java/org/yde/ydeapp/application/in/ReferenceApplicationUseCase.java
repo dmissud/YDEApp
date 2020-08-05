@@ -21,16 +21,24 @@ public interface ReferenceApplicationUseCase {
 
         private final String longDescription;
 
-        private final String nameOfResponsable;
+        private final String uid;
+
+        private final String firstName;
+
+        private final String lastName;
 
         public ReferenceApplicationCmd(@Pattern(regexp = "^(AP[0-9]{5})$") String codeApp,
                                        String shortDescription,
                                        String longDescription,
-                                       String nameOfResponsable) {
+                                       String uid,
+                                       String firstName,
+                                       String lastName) {
             this.codeApp = codeApp;
             this.shortDescription = shortDescription;
             this.longDescription = longDescription;
-            this.nameOfResponsable = nameOfResponsable;
+            this.uid = uid;
+            this.firstName = firstName;
+            this.lastName = lastName;
 
             this.validateSelf();
         }
@@ -41,6 +49,16 @@ public interface ReferenceApplicationUseCase {
 
         public String getLongDescription() { return longDescription; }
 
-        public String getNameOfResponsable() { return nameOfResponsable; }
+        public String getUid() {
+            return uid;
+        }
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
     }
 }

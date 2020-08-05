@@ -9,6 +9,7 @@ import org.yde.ydeapp.application.in.GetApplicationQuery;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.ApplicationIdent;
+import org.yde.ydeapp.domain.Personne;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 
 import java.util.List;
@@ -25,10 +26,11 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
     @Override
     public Application referenceApplication(ReferenceApplicationCmd referenceApplicationCmd) {
 
+        Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
         Application application = new Application.Builder(referenceApplicationCmd.getCodeApp())
             .withShortDescription(referenceApplicationCmd.getShortDescription())
             .withLongDescription(referenceApplicationCmd.getLongDescription())
-            .withResponsable(referenceApplicationCmd.getNameOfResponsable())
+            .withResponsable(personne)
             .build();
         repositoryOfApplication.referenceApplication(application);
         log.trace("Application {} referenced", application.getCodeApplication());
@@ -38,10 +40,12 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
 
     @Override
     public void updateApplication(ReferenceApplicationCmd referenceApplicationCmd) {
+
+        Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
         Application application = getApplication(referenceApplicationCmd.getCodeApp());
         application.setLongDescription(referenceApplicationCmd.getLongDescription());
-        application.setNameOfResponsable(referenceApplicationCmd.getNameOfResponsable());
         application.setShortDescription(referenceApplicationCmd.getShortDescription());
+        application.setResponsable(personne);
 
         repositoryOfApplication.updateApplication(application);
     }
