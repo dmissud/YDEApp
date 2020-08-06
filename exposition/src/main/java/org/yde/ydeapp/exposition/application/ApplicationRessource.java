@@ -31,7 +31,9 @@ public class ApplicationRessource {
         ReferenceApplicationCmd referenceApplicationCmd = new ReferenceApplicationCmd(applicationDesc.getCodeApplication(),
             applicationDesc.getShortDescription(),
             applicationDesc.getLongDescription(),
-            applicationDesc.getNameOfResponsable());
+            applicationDesc.getUid(),
+            applicationDesc.getFirstName(),
+            applicationDesc.getLastName());
 
         Application application = referenceApplicationUseCase.referenceApplication(referenceApplicationCmd);
         URI location = ServletUriComponentsBuilder
@@ -49,7 +51,9 @@ public class ApplicationRessource {
         ReferenceApplicationCmd referenceApplicationCmd = new ReferenceApplicationCmd(applicationDesc.getCodeApplication(),
             applicationDesc.getShortDescription(),
             applicationDesc.getLongDescription(),
-            applicationDesc.getNameOfResponsable());
+            applicationDesc.getUid(),
+            applicationDesc.getFirstName(),
+            applicationDesc.getLastName());
 
         referenceApplicationUseCase.updateApplication(referenceApplicationCmd);
         URI location = ServletUriComponentsBuilder
@@ -70,7 +74,7 @@ public class ApplicationRessource {
         applicationDesc.setCodeApplication(application.getCodeApplication());
         applicationDesc.setShortDescription(application.getShortDescription());
         applicationDesc.setLongDescription(application.getLongDescription());
-        applicationDesc.setNameOfResponsable(application.getNameOfResponsable());
+        applicationDesc.setUid(application.getResponsable().getUid());
 
         return new ResponseEntity<>(applicationDesc, HttpStatus.OK);
     }
