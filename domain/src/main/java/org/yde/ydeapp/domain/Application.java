@@ -37,15 +37,15 @@ public class Application {
         this.responsable = responsable;
     }
 
+    public ApplicationIdent giveApplicationIdent() {
+        return new ApplicationIdent(this.codeApplication, this.shortDescription);
+    }
+
     public static class Builder {
         private final String codeApplication;
         private String shortDescription = "to be completed";
         private String longDescription = "to be completed";
         private Personne responsable = null;
-
-        public ApplicationIdent giveApplicationIdent() {
-            return new ApplicationIdent(this.codeApplication, this.shortDescription);
-        }
 
         public Builder(@NotNull String codeApplication) {
             this.codeApplication = codeApplication;
