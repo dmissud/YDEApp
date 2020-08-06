@@ -16,8 +16,8 @@ public class ApplicationEntity {
 
     private String longDescription;
 
-    private String nameOfResponsable;
-
+    @ManyToOne(cascade = CascadeType.ALL)
+    private PersonneEntity responsable;
 
     public Long getId() { return id; }
 
@@ -43,9 +43,11 @@ public class ApplicationEntity {
         this.longDescription = longDescription;
     }
 
-    public String getNameOfResponsable() { return nameOfResponsable; }
+    public PersonneEntity getResponsable() {
+        return responsable;
+    }
 
-    public void setNameOfResponsable(String nameOfResponsable) {
-        this.nameOfResponsable = nameOfResponsable;
+    public void setResponsable(PersonneEntity responsable) {
+        this.responsable = responsable;
     }
 }

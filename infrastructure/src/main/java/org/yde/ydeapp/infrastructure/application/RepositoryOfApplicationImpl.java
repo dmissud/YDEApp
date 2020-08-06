@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.ApplicationIdent;
+import org.yde.ydeapp.domain.Personne;
 import org.yde.ydeapp.domain.out.EntityAlreadyExist;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
@@ -19,18 +20,23 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
     @Autowired
     RepositoryOfApplicationJpa repositoryOfApplicationJpa;
 
+    @Autowired
+    RepositoryOfPersonneJpa repositoryOfPersonneJpa;
+
     @Override
     public Application retrieveByAppCode(String codeApp) {
         ApplicationEntity applicationEntity = repositoryOfApplicationJpa.findByCodeApp(codeApp);
+
         if (applicationEntity == null) {
             log.debug("Application {} not exist", codeApp);
             throw new EntityNotFound(String.format("Application with %s is not in repository", codeApp));
         }
         log.debug("Application {} load", codeApp);
+        Personne personne = new Personne(applicationEntity.getResponsable().getUid(), applicationEntity.getResponsable().getFirstName(), applicationEntity.getResponsable().getLastName());
         return new Application.Builder(applicationEntity.getCodeApp())
             .withShortDescription(applicationEntity.getShortDescription())
             .withLongDescription(applicationEntity.getLongDescription())
-            .withResponsable(applicationEntity.getNameOfResponsable())
+            .withResponsable(personne)
             .build();
     }
 
@@ -42,12 +48,21 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
             log.debug("Application {} with id {} already exist", applicationEntity.getCodeApp(), applicationEntity.getId());
             throw new EntityAlreadyExist(String.format("Application with %s is in repository", applicationEntity.getCodeApp()));
         }
+        PersonneEntity responsableEntity = repositoryOfPersonneJpa.findByUid(application.getResponsable().getUid());
+        if (responsableEntity == null) {
+            responsableEntity = new PersonneEntity();
+            responsableEntity.setUid(application.getResponsable().getUid());
+            responsableEntity.setFirstName(application.getResponsable().getFirstName());
+            responsableEntity.setLastName(application.getResponsable().getLastName());
+            log.debug("Personne {} create", responsableEntity.getUid());
+        }
 
         applicationEntity = new ApplicationEntity();
         applicationEntity.setCodeApp(application.getCodeApplication());
         applicationEntity.setShortDescription(application.getShortDescription());
         applicationEntity.setLongDescription(application.getLongDescription());
-        applicationEntity.setNameOfResponsable(application.getNameOfResponsable());
+
+        applicationEntity.setResponsable(responsableEntity);
         log.debug("Application {} create", application.getCodeApplication());
 
         repositoryOfApplicationJpa.save(applicationEntity);
@@ -66,10 +81,20 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
             throw new EntityNotFound(String.format("Application with %s is not in repository", application.getCodeApplication()));
         }
 
-        applicationEntity.setCodeApp(application.getCodeApplication());
         applicationEntity.setShortDescription(application.getShortDescription());
         applicationEntity.setLongDescription(application.getLongDescription());
-        applicationEntity.setNameOfResponsable(application.getNameOfResponsable());
+
+        if (!applicationEntity.getResponsable().getUid().equals(application.getResponsable().getUid())) {
+            PersonneEntity responsableEntity = repositoryOfPersonneJpa.findByUid(application.getResponsable().getUid());
+            if (responsableEntity == null) {
+                responsableEntity = new PersonneEntity();
+                responsableEntity.setUid(application.getResponsable().getUid());
+                responsableEntity.setFirstName(application.getResponsable().getFirstName());
+                responsableEntity.setLastName(application.getResponsable().getLastName());
+                log.debug("Personne {} create", responsableEntity.getUid());
+            }
+            applicationEntity.setResponsable(responsableEntity);
+        }
         log.debug("Application {} update", application.getCodeApplication());
 
         repositoryOfApplicationJpa.save(applicationEntity);
