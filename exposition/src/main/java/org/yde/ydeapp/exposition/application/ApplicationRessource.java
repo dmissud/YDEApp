@@ -75,6 +75,8 @@ public class ApplicationRessource {
         applicationDesc.setShortDescription(application.getShortDescription());
         applicationDesc.setLongDescription(application.getLongDescription());
         applicationDesc.setUid(application.getResponsable().getUid());
+        applicationDesc.setFirstName(application.getResponsable().getFirstName());
+        applicationDesc.setLastName(application.getResponsable().getLastName());
 
         return new ResponseEntity<>(applicationDesc, HttpStatus.OK);
     }
