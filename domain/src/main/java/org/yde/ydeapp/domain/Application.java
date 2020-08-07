@@ -12,6 +12,7 @@ public class Application {
     private String shortDescription;
     private String longDescription;
     private Personne responsable;
+    private Note note;
 
     private Application(String codeApplication) {
         this.codeApplication = codeApplication;
@@ -25,6 +26,8 @@ public class Application {
 
     public Personne getResponsable() { return responsable; }
 
+    public Note getNote() { return note; }
+
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
     }
@@ -37,6 +40,8 @@ public class Application {
         this.responsable = responsable;
     }
 
+    public void setNote(Note note) {this.note = note; }
+
     public ApplicationIdent giveApplicationIdent() {
         return new ApplicationIdent(this.codeApplication, this.shortDescription);
     }
@@ -46,6 +51,7 @@ public class Application {
         private String shortDescription = "to be completed";
         private String longDescription = "to be completed";
         private Personne responsable = null;
+        private Note note = null;
 
         public Builder(@NotNull String codeApplication) {
             this.codeApplication = codeApplication;
@@ -67,11 +73,17 @@ public class Application {
             return this;
         }
 
+        public Builder withNote(Note note) {
+            this.note = note;
+            return this;
+        }
+
         public Application build() {
             Application application = new Application(this.codeApplication);
             application.shortDescription = this.shortDescription;
             application.longDescription = this.longDescription;
             application.responsable = this.responsable;
+            application.note = this.note;
             log.trace("New Application Create");
             return application;
         }
