@@ -9,7 +9,7 @@ import javax.validation.constraints.Pattern;
 public interface ReferenceApplicationUseCase {
     Application referenceApplication(ReferenceApplicationCmd referenceApplicationCmd);
 
-    void updateApplication(ReferenceApplicationCmd referenceApplicationCmd);
+    Application updateApplication(String codeApplication, ReferenceApplicationCmd referenceApplicationCmd);
 
     @Validated
     class ReferenceApplicationCmd extends SelfValidating<ReferenceApplicationCmd> {

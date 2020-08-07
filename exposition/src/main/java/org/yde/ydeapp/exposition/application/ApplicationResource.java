@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class ApplicationRessource {
+public class ApplicationResource {
 
     @Autowired
     ReferenceApplicationUseCase referenceApplicationUseCase;
@@ -25,15 +25,10 @@ public class ApplicationRessource {
     @Autowired
     GetApplicationQuery getApplicationQuery;
 
-    @PostMapping("Applications")
+    @PostMapping("applications")
     public ResponseEntity<Void> referenceApplication(@RequestBody ApplicationDesc applicationDesc) {
 
-        ReferenceApplicationCmd referenceApplicationCmd = new ReferenceApplicationCmd(applicationDesc.getCodeApplication(),
-            applicationDesc.getShortDescription(),
-            applicationDesc.getLongDescription(),
-            applicationDesc.getUid(),
-            applicationDesc.getFirstName(),
-            applicationDesc.getLastName());
+        ReferenceApplicationCmd referenceApplicationCmd = buildReferenceApplicationCmdFromApplicationDesc(applicationDesc);
 
         Application application = referenceApplicationUseCase.referenceApplication(referenceApplicationCmd);
         URI location = ServletUriComponentsBuilder
@@ -45,24 +40,15 @@ public class ApplicationRessource {
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping("Applications")
-    public ResponseEntity<Void> updateApplication(@RequestBody ApplicationDesc applicationDesc) {
+    @PutMapping("applications/{codeApplication}")
+    public ResponseEntity<Void> updateApplication(@NotNull @PathVariable("codeApplication") final String codeApplication,
+                                                  @RequestBody ApplicationDesc applicationDesc) {
 
-        ReferenceApplicationCmd referenceApplicationCmd = new ReferenceApplicationCmd(applicationDesc.getCodeApplication(),
-            applicationDesc.getShortDescription(),
-            applicationDesc.getLongDescription(),
-            applicationDesc.getUid(),
-            applicationDesc.getFirstName(),
-            applicationDesc.getLastName());
+        ReferenceApplicationCmd referenceApplicationCmd = buildReferenceApplicationCmdFromApplicationDesc(applicationDesc);
 
-        referenceApplicationUseCase.updateApplication(referenceApplicationCmd);
-        URI location = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{codeApp}")
-            .buildAndExpand(applicationDesc.getCodeApplication())
-            .toUri();
+        referenceApplicationUseCase.updateApplication(codeApplication, referenceApplicationCmd);
 
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.accepted().build();
     }
 
     @GetMapping(value = "applications/{codeApplication}", produces = {"application/json"})
@@ -70,13 +56,7 @@ public class ApplicationRessource {
         @NotNull @PathVariable("codeApplication") final String codeApplication) {
 
         final Application application = getApplicationQuery.getApplication(codeApplication);
-        final ApplicationDesc applicationDesc = new ApplicationDesc();
-        applicationDesc.setCodeApplication(application.getCodeApplication());
-        applicationDesc.setShortDescription(application.getShortDescription());
-        applicationDesc.setLongDescription(application.getLongDescription());
-        applicationDesc.setUid(application.getResponsable().getUid());
-        applicationDesc.setFirstName(application.getResponsable().getFirstName());
-        applicationDesc.setLastName(application.getResponsable().getLastName());
+        final ApplicationDesc applicationDesc = buildApplicationDescFromApplication(application);
 
         return new ResponseEntity<>(applicationDesc, HttpStatus.OK);
     }
@@ -87,6 +67,26 @@ public class ApplicationRessource {
         List<ApplicationIdent> applicationsIdent = getApplicationQuery.getAllApplicationsIdent();
 
         return new ResponseEntity<>(applicationsIdent, HttpStatus.OK);
+    }
+
+    private ApplicationDesc buildApplicationDescFromApplication(Application application) {
+        final ApplicationDesc applicationDesc = new ApplicationDesc();
+        applicationDesc.setCodeApplication(application.getCodeApplication());
+        applicationDesc.setShortDescription(application.getShortDescription());
+        applicationDesc.setLongDescription(application.getLongDescription());
+        applicationDesc.setUid(application.getResponsable().getUid());
+        applicationDesc.setFirstName(application.getResponsable().getFirstName());
+        applicationDesc.setLastName(application.getResponsable().getLastName());
+        return applicationDesc;
+    }
+
+    private ReferenceApplicationCmd buildReferenceApplicationCmdFromApplicationDesc(@RequestBody ApplicationDesc applicationDesc) {
+        return new ReferenceApplicationCmd(applicationDesc.getCodeApplication(),
+            applicationDesc.getShortDescription(),
+            applicationDesc.getLongDescription(),
+            applicationDesc.getUid(),
+            applicationDesc.getFirstName(),
+            applicationDesc.getLastName());
     }
 
 }

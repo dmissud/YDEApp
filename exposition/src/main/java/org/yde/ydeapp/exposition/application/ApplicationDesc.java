@@ -27,19 +27,19 @@ public class ApplicationDesc {
 
     @ApiModelProperty(example = "123456", required = true, value = "Uid of the responsible")
     @NotNull
-    @Pattern(regexp = "^([ a-zA-Z0-9]{1,30})$")
+    @Pattern(regexp = "^([a-zA-Z0-9]{6})$")
     @Size(max = 10)
     private String uid;
 
     @ApiModelProperty(example = "John", required = true, value = "Firstname of the responsible")
     @NotNull
-    @Pattern(regexp = "^([ a-zA-Z0-9]{1,30})$")
+    @Pattern(regexp = "^([a-zA-Z0-9]{1,30})$")
     @Size(max = 30)
     private String firstName;
 
     @ApiModelProperty(example = "Doe", required = true, value = "Lastname of the responsible")
     @NotNull
-    @Pattern(regexp = "^([ a-zA-Z0-9]{1,30})$")
+    @Pattern(regexp = "^([a-zA-Z0-9]{1,30})$")
     @Size(max = 100)
     private String lastName;
 
