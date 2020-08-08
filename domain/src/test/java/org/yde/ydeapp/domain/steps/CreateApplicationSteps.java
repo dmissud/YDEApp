@@ -112,7 +112,7 @@ public class CreateApplicationSteps {
             throw new PendingException("Bad use of Cucumber scenario: update a new Application");
         }
         Personne personne = new Personne(appDescUpdate.getUid(), appDescUpdate.getFirstName(), appDescUpdate.getLastName());
-        Note note = new Note(appDescCreaUpdate.getNoteContent(), appDescCreaUpdate.getNoteVisibility());
+        Note note = new Note(appDescUpdate.getNoteContent(), appDescUpdate.getNoteVisibility());
 
         application.setShortDescription(appDescUpdate.getShortDescription());
         application.setLongDescription(appDescUpdate.getLongDescription());

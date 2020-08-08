@@ -9,6 +9,7 @@ import org.yde.ydeapp.application.in.GetApplicationQuery;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.ApplicationIdent;
+import org.yde.ydeapp.domain.Note;
 import org.yde.ydeapp.domain.Personne;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 
@@ -42,10 +43,12 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
     public Application updateApplication(String codeApplication, ReferenceApplicationCmd referenceApplicationCmd) {
 
         Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
+        Note note = new Note(referenceApplicationCmd.getNoteContent(), referenceApplicationCmd.getNoteVisibility());
         Application application = getApplication(codeApplication);
         application.setLongDescription(referenceApplicationCmd.getLongDescription());
         application.setShortDescription(referenceApplicationCmd.getShortDescription());
         application.setResponsable(personne);
+        application.setNote(note);
 
         repositoryOfApplication.updateApplication(application);
 
