@@ -33,8 +33,8 @@ public class CreateApplicationSteps {
 
     }
 
-    @Given("The application doesn't exist in the repository")
-    public void the_application_doesn_t_exist_in_the_repository() {
+    @Given("The application doesn't exist")
+    public void the_application_doesn_t_exist() {
         application = null;
     }
 
@@ -78,8 +78,8 @@ public class CreateApplicationSteps {
         assertThat(application.getCodeApplication()).isEqualTo(CODE_APPLICATION);
     }
 
-    @Given("The application exist in the repository")
-    public void the_application_exist_in_the_repository(List<ApplicationDataTable> apps) {
+    @Given("The application exist")
+    public void the_application_exist(List<ApplicationDataTable> apps) {
         if (apps.size() == 1) {
             appDescCreaUpdate = apps.get(0);
             application = null;
@@ -88,8 +88,8 @@ public class CreateApplicationSteps {
         }
         Personne personne = new Personne(appDescCreaUpdate.getUid(), appDescCreaUpdate.getFisrtName(), appDescCreaUpdate.getLastName());
         application = new Application.Builder(appDescCreaUpdate.getCodeApplication())
-                .withShortDescription(appDescCreaUpdate.getShortDescription())
-                .withLongDescription(appDescCreaUpdate.getLongDescription())
+            .withShortDescription(appDescCreaUpdate.getShortDescription())
+            .withLongDescription(appDescCreaUpdate.getLongDescription())
                 .withResponsable(personne)
                 .build();
 
