@@ -145,6 +145,9 @@ class ApplicationResourceTest {
             .andExpect(status().isOk());
     }
 
+
+
+
     private ApplicationDesc buildASampleApplicationDescForCreate() {
         ApplicationDesc applicationDesc = new ApplicationDesc();
         applicationDesc.setCodeApplication(CODE_APPLICATION);
@@ -166,4 +169,6 @@ class ApplicationResourceTest {
         applicationDesc.setLastName(LAST_NAME_SECOND);
         return applicationDesc;
     }
+
+
 }
