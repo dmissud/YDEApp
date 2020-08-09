@@ -74,7 +74,7 @@ class ApplicationResourceTest {
             .when(referenceApplicationUseCase.referenceApplication(any()))
             .thenReturn(application);
 
-        ApplicationDesc applicationDesc = buildASampleApplicationDescForUpdate();
+        ApplicationDesc applicationDesc = buildASampleApplicationDescForCreate();
 
         mockMvc
             // When
@@ -97,7 +97,7 @@ class ApplicationResourceTest {
             .when(referenceApplicationUseCase.updateApplication(any(String.class), any()))
             .thenReturn(application_updated);
 
-        ApplicationDesc applicationDesc = buildASampleApplicationDescForCreate();
+        ApplicationDesc applicationDesc = buildASampleApplicationDescForUpdate();
 
         mockMvc
             // When
@@ -117,8 +117,6 @@ class ApplicationResourceTest {
             .when(getApplicationQuery.getApplication(CODE_APPLICATION))
             .thenReturn(application);
 
-        ApplicationDesc applicationDesc = buildASampleApplicationDescForCreate();
-
         mockMvc
             // When
             .perform(MockMvcRequestBuilders.get("/api/applications/" + CODE_APPLICATION)
@@ -134,8 +132,6 @@ class ApplicationResourceTest {
         Mockito
             .when(getApplicationQuery.getApplication(CODE_APPLICATION))
             .thenReturn(application);
-
-        ApplicationDesc applicationDesc = buildASampleApplicationDescForCreate();
 
         mockMvc
             // When
