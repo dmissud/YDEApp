@@ -30,9 +30,7 @@ public class CreateApplicationSteps {
             entry.get("longDescription"),
             entry.get("uid"),
             entry.get("firstName"),
-            entry.get("lastName"),
-            entry.get("noteContent"),
-            entry.get("noteVisibility"));
+            entry.get("lastName"));
 
     }
 
@@ -91,13 +89,11 @@ public class CreateApplicationSteps {
         }
         Personne personne = new Personne(appDescCreaUpdate.getUid(), appDescCreaUpdate.getFirstName(),
                 appDescCreaUpdate.getLastName());
-        Note note = new Note(appDescCreaUpdate.getNoteContent(), appDescCreaUpdate.getNoteVisibility());
 
         application = new Application.Builder(appDescCreaUpdate.getCodeApplication())
                 .withShortDescription(appDescCreaUpdate.getShortDescription())
                 .withLongDescription(appDescCreaUpdate.getLongDescription())
                 .withResponsable(personne)
-                .withNote(note)
                 .build();
 
 
@@ -112,12 +108,10 @@ public class CreateApplicationSteps {
             throw new PendingException("Bad use of Cucumber scenario: update a new Application");
         }
         Personne personne = new Personne(appDescUpdate.getUid(), appDescUpdate.getFirstName(), appDescUpdate.getLastName());
-        Note note = new Note(appDescUpdate.getNoteContent(), appDescUpdate.getNoteVisibility());
 
         application.setShortDescription(appDescUpdate.getShortDescription());
         application.setLongDescription(appDescUpdate.getLongDescription());
         application.setResponsable(personne);
-        application.setNote(note);
 
 
     }
@@ -131,8 +125,7 @@ public class CreateApplicationSteps {
         assertThat(application.getResponsable().getUid()).isEqualTo(appDescUpdate.getUid());
         assertThat(application.getResponsable().getFirstName()).isEqualTo(appDescUpdate.getFirstName());
         assertThat(application.getResponsable().getLastName()).isEqualTo(appDescUpdate.getLastName());
-        assertThat(application.getNote().getNoteContent()).isEqualTo(appDescUpdate.getNoteContent());
-        assertThat(application.getNote().getNoteVisibility()).isEqualTo(appDescUpdate.getNoteVisibility());
+
     }
 
 

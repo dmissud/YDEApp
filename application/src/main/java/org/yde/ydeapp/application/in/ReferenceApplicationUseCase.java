@@ -27,26 +27,19 @@ public interface ReferenceApplicationUseCase {
 
         private final String lastName;
 
-        private final String noteContent;
-
-        private final String noteVisibility;
 
         public ReferenceApplicationCmd(@Pattern(regexp = "^(AP[0-9]{5})$") String codeApp,
                                        String shortDescription,
                                        String longDescription,
                                        String uid,
                                        String firstName,
-                                       String lastName,
-                                       String noteContent,
-                                       String noteVisibility) {
+                                       String lastName) {
             this.codeApp = codeApp;
             this.shortDescription = shortDescription;
             this.longDescription = longDescription;
             this.uid = uid;
             this.firstName = firstName;
             this.lastName = lastName;
-            this.noteContent = noteContent;
-            this.noteVisibility = noteVisibility;
 
             this.validateSelf();
         }
@@ -69,12 +62,5 @@ public interface ReferenceApplicationUseCase {
             return lastName;
         }
 
-        public String getNoteContent() {
-            return noteContent;
-        }
-
-        public String getNoteVisibility() {
-            return noteVisibility;
-        }
     }
 }

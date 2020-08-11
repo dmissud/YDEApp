@@ -86,9 +86,7 @@ public class ApplicationResource {
             applicationDesc.getLongDescription(),
             applicationDesc.getUid(),
             applicationDesc.getFirstName(),
-            applicationDesc.getLastName(),
-            applicationDesc.getContentNote(),
-            applicationDesc.getContentVisibility());
+            applicationDesc.getLastName());
     }
 
 }

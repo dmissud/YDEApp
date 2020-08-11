@@ -43,12 +43,12 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
     public Application updateApplication(String codeApplication, ReferenceApplicationCmd referenceApplicationCmd) {
 
         Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
-        Note note = new Note(referenceApplicationCmd.getNoteContent(), referenceApplicationCmd.getNoteVisibility());
+
         Application application = getApplication(codeApplication);
         application.setLongDescription(referenceApplicationCmd.getLongDescription());
         application.setShortDescription(referenceApplicationCmd.getShortDescription());
         application.setResponsable(personne);
-        application.setNote(note);
+
 
         repositoryOfApplication.updateApplication(application);
 

@@ -4,6 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Application {
     private static final Logger log = LoggerFactory.getLogger(Application.class);
@@ -12,9 +15,11 @@ public class Application {
     private String shortDescription;
     private String longDescription;
     private Personne responsable;
-    private Note note;
+    private Map<String, Note> notes;
+
 
     private Application(String codeApplication) {
+        this.notes = new HashMap<>();
         this.codeApplication = codeApplication;
     }
 
@@ -26,7 +31,6 @@ public class Application {
 
     public Personne getResponsable() { return responsable; }
 
-    public Note getNote() { return note; }
 
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
@@ -40,10 +44,21 @@ public class Application {
         this.responsable = responsable;
     }
 
-    public void setNote(Note note) {this.note = note; }
 
     public ApplicationIdent giveApplicationIdent() {
         return new ApplicationIdent(this.codeApplication, this.shortDescription);
+    }
+
+    public Map<String, Note> retrieveNotes() {
+        return Collections.unmodifiableMap(notes);
+    }
+
+    public void addNote(Note newNote) {
+        if (notes.get(newNote.getNoteTitle()) == null) {
+            notes.put(newNote.getNoteTitle(), newNote);
+        } else {
+            notes.replace(newNote.getNoteTitle(), newNote);
+        }
     }
 
     public static class Builder {
@@ -51,7 +66,6 @@ public class Application {
         private String shortDescription = "to be completed";
         private String longDescription = "to be completed";
         private Personne responsable = null;
-        private Note note = null;
 
         public Builder(@NotNull String codeApplication) {
             this.codeApplication = codeApplication;
@@ -73,17 +87,12 @@ public class Application {
             return this;
         }
 
-        public Builder withNote(Note note) {
-            this.note = note;
-            return this;
-        }
 
         public Application build() {
             Application application = new Application(this.codeApplication);
             application.shortDescription = this.shortDescription;
             application.longDescription = this.longDescription;
             application.responsable = this.responsable;
-            application.note = this.note;
             log.trace("New Application Create");
             return application;
         }

@@ -17,9 +17,9 @@ Feature: Management of a Application
 
   Scenario: Update a existing application
     Given The application exist in the repository
-      | codeApplication | shortDescription | longDescription               | uid        |firstName |lastName     |noteContent  |visibility |
-      | AP00002         | Test App         | Long description for Test app |123456      |John      |Doe          |             |           |
+      | codeApplication | shortDescription | longDescription               | uid        |firstName |lastName     |
+      | AP00002         | Test App         | Long description for Test app |123456      |John      |Doe          |
     When Administrator want to update an application with the following attributes
-      | codeApplication | shortDescription | longDescription               | uid        |firstName |lastName     |noteContent  |visibility |
-      | AP00002         | Test Appupdate   | Long description app update   |654321      |Johnny    |Update       |Read this !  |public     |
+      | codeApplication | shortDescription | longDescription               | uid        |firstName |lastName     |
+      | AP00002         | Test Appupdate   | Long description app update   |654321      |Johnny    |Update       |
     Then the update is success
