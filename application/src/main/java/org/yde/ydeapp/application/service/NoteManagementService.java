@@ -54,12 +54,18 @@ public class NoteManagementService implements ReferenceNoteUseCase,GetNoteQuery 
 
         Application application = repositoryOfApplication.retrieveByAppCode(codeApplication);
         Note note = application.retrieveNoteByTitle(noteTitle);
+
+        log.trace("Note entitled {} has been sent.", note.getNoteTitle());
+
         return note;
     }
 
     @Override
     public List<Note> getApplicationAllNotes(String codeApplication) {
         List<Note> allNotes = (List<Note>) repositoryOfApplication.retrieveByAppCode(codeApplication).retrieveNotes();
+
+        log.trace("Notes list for application {} has been sent.", codeApplication);
+
         return allNotes;
     }
 }
