@@ -11,7 +11,4 @@ public interface GetApplicationQuery {
 
     List<ApplicationIdent> getAllApplicationsIdent();
 
-    //Note getApplicationNoteByTitle(String codeApplication, String titleNote);
-
-    //List<Note> getApplicationAllNotes(String codeApplication);
 }

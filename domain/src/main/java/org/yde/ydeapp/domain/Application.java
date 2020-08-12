@@ -15,7 +15,7 @@ public class Application {
     private String shortDescription;
     private String longDescription;
     private Personne responsable;
-    private Map<String, Note> notes;
+    private final Map<String, Note> notes;
 
 
     private Application(String codeApplication) {
@@ -52,6 +52,11 @@ public class Application {
     public Map<String, Note> retrieveNotes() {
         return Collections.unmodifiableMap(notes);
     }
+
+    public Note retrieveNoteByTitle(String noteTitle) {
+        return notes.get(noteTitle);
+    }
+
 
     public void addNote(Note newNote) {
         if (notes.get(newNote.getNoteTitle()) == null) {
