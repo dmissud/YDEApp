@@ -33,7 +33,7 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
             .withResponsable(personne)
             .build();
         repositoryOfApplication.referenceApplication(application);
-        log.trace("Application {} referenced", application.getCodeApplication());
+        log.debug("Application {} referenced", application.getCodeApplication());
 
         return application;
     }

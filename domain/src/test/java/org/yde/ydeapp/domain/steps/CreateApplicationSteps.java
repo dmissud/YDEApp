@@ -17,13 +17,12 @@ public class CreateApplicationSteps {
 
     public static final String CODE_APPLICATION = "AP00002";
     private ApplicationDataTable appDescCrea = null;
-    private ApplicationDataTable appDescCreaUpdate = null;
     private ApplicationDataTable appDescUpdate = null;
     private Application application;
 
 
     @DataTableType
-    public ApplicationDataTable applicationFataTableEntry(Map<String, String> entry) {
+    public ApplicationDataTable applicationDataTableEntry(Map<String, String> entry) {
         return new ApplicationDataTable(entry.get("codeApplication"),
             entry.get("shortDescription"),
             entry.get("longDescription"),
@@ -80,6 +79,7 @@ public class CreateApplicationSteps {
 
     @Given("The application exist")
     public void the_application_exist(List<ApplicationDataTable> apps) {
+        ApplicationDataTable appDescCreaUpdate = null;
         if (apps.size() == 1) {
             appDescCreaUpdate = apps.get(0);
             application = null;
