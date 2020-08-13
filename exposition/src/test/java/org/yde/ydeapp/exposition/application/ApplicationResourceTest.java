@@ -42,13 +42,15 @@ class ApplicationResourceTest {
     private MockMvc mockMvc;
 
     @MockBean
-    ReferenceApplicationUseCase referenceApplicationUseCase;
+    private ReferenceApplicationUseCase referenceApplicationUseCase;
 
     @MockBean
-    GetApplicationQuery getApplicationQuery;
+    private GetApplicationQuery getApplicationQuery;
 
     @Autowired
     private ObjectMapper objectMapper;
+
+
     private Application application;
     private Application application_updated;
 

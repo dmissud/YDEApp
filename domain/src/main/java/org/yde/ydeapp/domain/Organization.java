@@ -1,35 +1,29 @@
 package org.yde.ydeapp.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Organization {
     private String name;
-    private Organization parent;
-    private List<Organization> childs;
+    private List<Organization> children;
 
     public Organization(String name) {
         this.name = name;
-        parent = null;
-        childs = new ArrayList<>();
+        children = new ArrayList<>();
     }
 
     public void addChild(Organization organization) {
-        childs.add(organization);
-        organization.haveForParent(this);
-    }
-
-    public void haveForParent(Organization organization) {
-        this.parent = organization;
+        children.add(organization);
     }
 
     public int numberOfChild() {
-        return childs.size();
+        return children.size();
     }
 
     public int numberOfOrganizationForThisTree() {
         int totalOfOrganization = 1;
-        for(Organization organization:childs) {
+        for(Organization organization: children) {
             totalOfOrganization = totalOfOrganization + organization.numberOfOrganizationForThisTree();
         }
         return totalOfOrganization;
@@ -37,5 +31,9 @@ public class Organization {
 
     public String getName() {
         return name;
+    }
+
+    public List<Organization> getChildren() {
+        return Collections.unmodifiableList(children);
     }
 }

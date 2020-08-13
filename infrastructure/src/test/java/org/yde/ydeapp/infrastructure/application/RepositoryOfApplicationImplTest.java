@@ -70,11 +70,14 @@ class RepositoryOfApplicationImplTest {
         applicationEntity.setCodeApp(CODE_APP);
         applicationEntity.setShortDescription(SHORT_DESCRIPTION);
         applicationEntity.setLongDescription(LONG_DESCRIPTION);
+
         PersonneEntity personneEntity = new PersonneEntity();
         personneEntity.setUid(UID_OF_RESPONSABLE);
         personneEntity.setFirstName(FIRSTNAME_OF_RESPONSABLE);
         personneEntity.setLastName(LASTNAME_OF_RESPONSABLE);
+
         testEntityManager.persistAndFlush(personneEntity);
+
         applicationEntity.setResponsable(personneEntity);
         testEntityManager.persistAndFlush(applicationEntity);
     }
