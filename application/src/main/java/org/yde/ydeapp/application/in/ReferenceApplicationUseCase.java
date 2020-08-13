@@ -60,5 +60,7 @@ public interface ReferenceApplicationUseCase {
         public String getLastName() {
             return lastName;
         }
+
+
     }
 }

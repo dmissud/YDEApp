@@ -1,8 +1,6 @@
-package org.yde.ydeapp.exposition.refifile;
+package org.yde.ydeapp.interfacerefi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.catalina.webresources.FileResource;
-import org.aspectj.lang.annotation.Before;
 import org.junit.Rule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,21 +9,13 @@ import org.junit.rules.TemporaryFolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.multipart.MultipartFile;
-import org.yde.ydeapp.application.in.ReferenceParseRefiUseCase;
-import org.yde.ydeapp.application.in.StoreFileRefiUseCase;
 
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 @ExtendWith(SpringExtension.class)
@@ -48,10 +38,9 @@ public class RefiFileRessourceTest {
 
 
 
+
     @MockBean
-    ReferenceParseRefiUseCase referenceParseRefiUseCase;
-    @MockBean
-    StoreFileRefiUseCase storeFileRefiUseCase;
+    RepositoryOfRefiImpl repositoryOfRefi;
 
     @Autowired
     private ObjectMapper objectMapper;

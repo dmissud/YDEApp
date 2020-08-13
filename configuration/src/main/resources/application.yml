@@ -28,4 +28,4 @@ logging:
     org.yde.ydeapp: debug
     org.springframework: error
 file:
-  upload-dir: /users/Stagiaire/YDEApp/infrastructure/uploads
+  upload-dir: C://users//Stagiaire//YDEApp//infrastructure//uploads

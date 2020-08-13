@@ -19,6 +19,10 @@
         </dependency>
         <dependency>
             <groupId>org.yde.ydeapp</groupId>
+            <artifactId>interfaceRefi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.yde.ydeapp</groupId>
             <artifactId>infrastructure</artifactId>
         </dependency>
         <!-- Spring dependence -->

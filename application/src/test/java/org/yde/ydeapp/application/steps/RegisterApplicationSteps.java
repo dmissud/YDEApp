@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 
 @CucumberContextConfiguration
 public class RegisterApplicationSteps {
@@ -55,7 +57,7 @@ public class RegisterApplicationSteps {
     @Given("Application with code {string} is not on the repository")
     public void application_with_code_is_not_on_the_repository(String codeApp) {
         Mockito
-                .when(repositoryOfApplication.retrieveByAppCode(codeApp))
+                .when(repositoryOfApplication.retrieveByAppCode(any(String.class)))
                 .thenThrow(new EntityNotFound(String.format("Application : %s", codeApp)));
     }
 
@@ -69,7 +71,8 @@ public class RegisterApplicationSteps {
 
     @Then("a new application is in the repository with code {string}")
     public void a_new_application_is_in_the_repository_with_code(String string) {
-        assertThat(application).isNotNull();
+        Mockito.verify(repositoryOfApplication, Mockito.times(1)).retrieveByAppCode(string);
+
 
     }
 
