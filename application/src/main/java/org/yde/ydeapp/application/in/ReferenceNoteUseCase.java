@@ -13,7 +13,7 @@ public interface ReferenceNoteUseCase {
     Note updateNote(String codeApplication, String noteTitle, ReferenceNoteCmd referenceNoteCmd);
 
     @Validated
-    class ReferenceNoteCmd extends SelfValidating<ReferenceNoteUseCase> {
+    class ReferenceNoteCmd extends SelfValidating<ReferenceNoteCmd> {
 
         @Pattern(regexp = "^(/w{15})$")
         private final String noteTitle;
