@@ -180,7 +180,6 @@ public class RegisterNoteSteps {
 
     }
 
-
     @When("User wants to get a list content with {string} and {string}")
     public void user_wants_to_get_a_list_content_with_and(String noteTitle1, String noteTitle2) {
 
@@ -188,6 +187,6 @@ public class RegisterNoteSteps {
 
     @Then("All notes {string} and {string} are provided")
     public void all_notes_and_are_provided(String noteTitle1, String noteTitle2) {
-       
+
     }
 }
