@@ -6,12 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.ApplicationIdent;
+import org.yde.ydeapp.domain.Note;
 import org.yde.ydeapp.domain.Personne;
 import org.yde.ydeapp.domain.out.EntityAlreadyExist;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
@@ -32,12 +35,25 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
             throw new EntityNotFound(String.format("Application with %s is not in repository", codeApp));
         }
         log.debug("Application {} load", codeApp);
+
+        // Mapping du responsable
         Personne personne = new Personne(applicationEntity.getResponsable().getUid(), applicationEntity.getResponsable().getFirstName(), applicationEntity.getResponsable().getLastName());
-        return new Application.Builder(applicationEntity.getCodeApp())
+
+        Application application = new Application.Builder(applicationEntity.getCodeApp())
             .withShortDescription(applicationEntity.getShortDescription())
             .withLongDescription(applicationEntity.getLongDescription())
             .withResponsable(personne)
             .build();
+
+        // Mapping des Notes
+        for (NoteEntity noteEntity : applicationEntity.getNotes()) {
+            Note note = new Note(noteEntity.getNoteTitle(),
+                    noteEntity.getNoteContent(),
+                    noteEntity.getNoteCreationDate());
+            application.addNote(note);
+        }
+
+        return application;
     }
 
 
@@ -77,7 +93,7 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
     public void updateApplication(Application application) {
         ApplicationEntity applicationEntity = repositoryOfApplicationJpa.findByCodeApp(application.getCodeApplication());
         if (applicationEntity == null) {
-            log.error("Application {} not exist", application.getCodeApplication());
+            log.error("Application {} does not exist", application.getCodeApplication());
             throw new EntityNotFound(String.format("Application with %s is not in repository", application.getCodeApplication()));
         }
 
@@ -95,6 +111,20 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
             }
             applicationEntity.setResponsable(responsableEntity);
         }
+
+        // Mapping des Notes
+
+        List<NoteEntity> notesListEntity = new ArrayList<>();
+        for(Note note : application.retrieveNotes().values()) {
+            NoteEntity noteEntity = new NoteEntity();
+            noteEntity.setNoteTitle(note.getNoteTitle());
+            noteEntity.setNoteContent(note.getNoteContent());
+            noteEntity.setNoteCreationDate(note.getNoteCreationDate());
+            notesListEntity.add(noteEntity);
+
+        }
+        applicationEntity.setNotes(notesListEntity);
+
         log.debug("Application {} update", application.getCodeApplication());
 
         repositoryOfApplicationJpa.save(applicationEntity);
