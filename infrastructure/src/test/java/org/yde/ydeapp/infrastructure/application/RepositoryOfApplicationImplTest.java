@@ -37,6 +37,9 @@ class RepositoryOfApplicationImplTest {
     private static final String NOTE_CREATION_DATE = "01/02/2020";
     private static final String NOTE_CONTENT_UPDATE = "The story continue...";
     private static final String NOTE_CREATION_DATE_UPDATE = "26/03/2020";
+    private static final String NOTE_2ND_TITLE = "Second Note";
+    private static final String NOTE_2ND_CONTENT = "Another story...";
+    private static final String NOTE_2ND_CREATION_DATE = "15/06/2000";
 
 
 
@@ -96,6 +99,12 @@ class RepositoryOfApplicationImplTest {
         noteEntity.setNoteCreationDate(NOTE_CREATION_DATE);
         notes.add(noteEntity);
 
+        noteEntity = new NoteEntity();
+        noteEntity.setNoteTitle(NOTE_2ND_TITLE);
+        noteEntity.setNoteContent(NOTE_2ND_CONTENT);
+        noteEntity.setNoteCreationDate(NOTE_2ND_CREATION_DATE);
+        notes.add(noteEntity);
+
         //testEntityManager.persistAndFlush(personneEntity);
         applicationEntity.setResponsable(personneEntity);
         applicationEntity.setNotes(notes);
@@ -150,7 +159,7 @@ class RepositoryOfApplicationImplTest {
     }
 
     @Test
-    @DisplayName("Update a new note for an existing application")
+    @DisplayName("Create a new note for an existing application")
     void should_save_note_when_application_exists() {
         // Given
         GivenAApplicationEntityExistInBase();
@@ -163,7 +172,7 @@ class RepositoryOfApplicationImplTest {
                 .withResponsable(responsable)
                 .build();
 
-        Note noteUpdate = new Note(NOTE_TITLE, NOTE_CONTENT_UPDATE, NOTE_CREATION_DATE_UPDATE);
+        Note noteUpdate = new Note(NOTE_TITLE, NOTE_CONTENT, NOTE_CREATION_DATE);
         application.addNote(noteUpdate);
 
         repositoryOfApplicationImpl.updateApplication(application);
@@ -176,7 +185,88 @@ class RepositoryOfApplicationImplTest {
         assertThat(((ApplicationEntity) lstApp.get(0)).getNotes()).isNotNull();
         assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().size()).isEqualTo(1);
         assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().get(0).getNoteTitle()).isEqualTo(NOTE_TITLE);
+        assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().get(0).getNoteContent()).isEqualTo(NOTE_CONTENT);
+
+    }
+
+    @Test
+    @DisplayName("Create a new note in an existing Noteslist")
+    void should_save_new_note_when_notes_list_exists() {
+        // Given
+        GivenAApplicationEntityExistInBase();
+
+        // When
+        Personne responsable = new Personne(UID_OF_RESPONSABLE, FIRSTNAME_OF_RESPONSABLE, LASTNAME_OF_RESPONSABLE);
+        Application application = new Application.Builder(CODE_APP)
+                .withShortDescription(SHORT_DESCRIPTION)
+                .withLongDescription(LONG_DESCRIPTION)
+                .withResponsable(responsable)
+                .build();
+
+        Note noteInit = new Note(NOTE_TITLE, NOTE_CONTENT, NOTE_CREATION_DATE);
+        application.addNote(noteInit);
+
+        repositoryOfApplicationImpl.updateApplication(application);
+
+        Note notePlus = new Note(NOTE_2ND_TITLE, NOTE_2ND_CONTENT, NOTE_2ND_CREATION_DATE);
+        application.addNote(notePlus);
+
+        repositoryOfApplicationImpl.updateApplication(application);
+
+        // Then
+        List lstApp = testEntityManager.getEntityManager().createQuery("select c from ApplicationEntity c where c.codeApp = :codeAppAttenduDansQuery")
+                .setParameter("codeAppAttenduDansQuery", CODE_APP)
+                .getResultList();
+        assertThat(lstApp.size()).isEqualTo(1);
+        assertThat(((ApplicationEntity) lstApp.get(0)).getNotes()).isNotNull();
+        assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().size()).isEqualTo(2);
+        assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().get(0).getNoteTitle()).isEqualTo(NOTE_TITLE);
+        assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().get(0).getNoteContent()).isEqualTo(NOTE_CONTENT);
+        assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().get(1).getNoteTitle()).isEqualTo(NOTE_2ND_TITLE);
+        assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().get(1).getNoteContent()).isEqualTo(NOTE_2ND_CONTENT);
+
+    }
+
+    @Test
+    @DisplayName("Update an existing note")
+    void should_update_new_note_when_note_already_exists() {
+        // Given
+        GivenAApplicationEntityExistInBase();
+
+        // When
+        Personne responsable = new Personne(UID_OF_RESPONSABLE, FIRSTNAME_OF_RESPONSABLE, LASTNAME_OF_RESPONSABLE);
+        Application application = new Application.Builder(CODE_APP)
+                .withShortDescription(SHORT_DESCRIPTION)
+                .withLongDescription(LONG_DESCRIPTION)
+                .withResponsable(responsable)
+                .build();
+
+        Note noteInit = new Note(NOTE_TITLE, NOTE_CONTENT, NOTE_CREATION_DATE);
+        application.addNote(noteInit);
+
+        repositoryOfApplicationImpl.updateApplication(application);
+
+        Note notePlus = new Note(NOTE_2ND_TITLE, NOTE_2ND_CONTENT, NOTE_2ND_CREATION_DATE);
+        application.addNote(notePlus);
+
+        repositoryOfApplicationImpl.updateApplication(application);
+
+        noteInit = new Note(NOTE_TITLE, NOTE_CONTENT_UPDATE, NOTE_CREATION_DATE_UPDATE);
+        application.addNote(noteInit);
+
+        repositoryOfApplicationImpl.updateApplication(application);
+
+        // Then
+        List lstApp = testEntityManager.getEntityManager().createQuery("select c from ApplicationEntity c where c.codeApp = :codeAppAttenduDansQuery")
+                .setParameter("codeAppAttenduDansQuery", CODE_APP)
+                .getResultList();
+        assertThat(lstApp.size()).isEqualTo(1);
+        assertThat(((ApplicationEntity) lstApp.get(0)).getNotes()).isNotNull();
+        assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().size()).isEqualTo(2);
+        assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().get(0).getNoteTitle()).isEqualTo(NOTE_TITLE);
         assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().get(0).getNoteContent()).isEqualTo(NOTE_CONTENT_UPDATE);
+        assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().get(1).getNoteTitle()).isEqualTo(NOTE_2ND_TITLE);
+        assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().get(1).getNoteContent()).isEqualTo(NOTE_2ND_CONTENT);
 
     }
 
