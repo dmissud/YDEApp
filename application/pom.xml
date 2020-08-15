@@ -18,6 +18,7 @@
             <artifactId>domain</artifactId>
         </dependency>
 
+
         <!-- Spring dependances -->
         <dependency>
             <groupId>org.springframework</groupId>

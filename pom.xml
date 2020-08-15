@@ -70,8 +70,9 @@
         <module>application</module>
         <module>infrastructure</module>
         <module>exposition</module>
-        <module>configuration</module>
         <module>interfaceRefi</module>
+        <module>configuration</module>
+
     </modules>
 
     <!-- =============================================================== -->

@@ -7,13 +7,13 @@ import com.opencsv.bean.CsvDate;
 import java.util.Date;
 
 public class ApplicationSource {
-    @CsvBindByName(column = "Identifiant")
+    @CsvBindByName(column = "Identifiant", format = "ISO_8859_1")
     private String identifiant;
-    @CsvBindByName(column = "Code AP")
+    @CsvBindByName(column = "Code AP", format = "ISO_8859_1")
     private String codeApp;
-    @CsvBindByName(column = "Libellé court")
+    @CsvBindByName(column = "Libellé court", format = "ISO_8859_1")
     private String shortDescription;
-    @CsvBindByName(column = "Libellé long")
+    @CsvBindByName(column = "Libellé long", format = "ISO_8859_1")
     private String longDescription;
     @CsvBindByName(column = "Code du type d'application")
     private String codeOfType;
@@ -26,21 +26,21 @@ public class ApplicationSource {
     private Date dateOfCreation;
     @CsvBindByName(column = "Date de dernière mise à jour")
     @CsvDate("dd/MM/yyyy")
-    private String dateOfLastUpdate;
+    private Date dateOfLastUpdate;
     @CsvBindByName(column = "Date de fin prévisionnelle")
     @CsvDate("dd/MM/yyyy")
-    private String dateEndProjected;
+    private Date dateEndProjected;
     @CsvBindByName(column = "Application cible")
     private String applicationTaget;
     @CsvBindByName(column = "Date de fin réelle")
     @CsvDate("dd/MM/yyyy")
-    private String dateEndInReality;
+    private Date dateEndInReality;
     @CsvBindByName(column = "Date de début d'exploitation")
     @CsvDate("dd/MM/yyyy")
-    private String dateBeginningExploitation;
+    private Date dateBeginningExploitation;
     @CsvBindByName(column = "Date de fin d'exploitation")
     @CsvDate("dd/MM/yyyy")
-    private String dateEndExploitation;
+    private Date dateEndExploitation;
     @CsvBindByName(column = "Identifiant REFOG Entité propriétaire")
     private String idRefogEntityOwner;
     @CsvBindByName(column = "Code entité propriétaire")
@@ -129,8 +129,8 @@ public class ApplicationSource {
     private String technicalApplication;
 
     public ApplicationSource(String detail, String applicationDetail, String identifiant, String codeApp, String shortDescription, String longDescription, String codeOfType,
-                             String descriptionTypeApplication, String state, Date dateOfCreation, String dateOfLastUpdate,
-                             String dateEndProjected, String applicationTaget, String dateEndInReality, String dateBeginningExploitation, String dateEndExploitation,
+                             String descriptionTypeApplication, String state, Date dateOfCreation, Date dateOfLastUpdate,
+                             Date dateEndProjected, String applicationTaget, Date dateEndInReality, Date dateBeginningExploitation, Date dateEndExploitation,
                              String idRefogEntityOwner, String codeEntityOwner, String labelEntityOwner, String idRefogEntityMOA,
                              String codeEntityMOA, String labelEntityMOA, String idResponsableMOE, String firstNameResponsableMoe,
                              String lastNameResponsableMoe, String codeEntityResponsableMoe, String labelEntityResponsableMoe,
@@ -234,11 +234,11 @@ public class ApplicationSource {
         return dateOfCreation;
     }
 
-    public String getDateOfLastUpdate() {
+    public Date getDateOfLastUpdate() {
         return dateOfLastUpdate;
     }
 
-    public String getDateEndProjected() {
+    public Date getDateEndProjected() {
         return dateEndProjected;
     }
 
@@ -246,15 +246,15 @@ public class ApplicationSource {
         return applicationTaget;
     }
 
-    public String getDateEndInReality() {
+    public Date getDateEndInReality() {
         return dateEndInReality;
     }
 
-    public String getDateBeginningExploitation() {
+    public Date getDateBeginningExploitation() {
         return dateBeginningExploitation;
     }
 
-    public String getDateEndExploitation() {
+    public Date getDateEndExploitation() {
         return dateEndExploitation;
     }
 
@@ -428,5 +428,233 @@ public class ApplicationSource {
 
     public String getTechnicalApplication() {
         return technicalApplication;
+    }
+
+    public void setIdentifiant(String identifiant) {
+        this.identifiant = identifiant;
+    }
+
+    public void setCodeApp(String codeApp) {
+        this.codeApp = codeApp;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
+    public void setLongDescription(String longDescription) {
+        this.longDescription = longDescription;
+    }
+
+    public void setCodeOfType(String codeOfType) {
+        this.codeOfType = codeOfType;
+    }
+
+    public void setDescriptionTypeApplication(String descriptionTypeApplication) {
+        this.descriptionTypeApplication = descriptionTypeApplication;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public void setDateOfCreation(Date dateOfCreation) {
+        this.dateOfCreation = dateOfCreation;
+    }
+
+    public void setDateOfLastUpdate(Date dateOfLastUpdate) {
+        this.dateOfLastUpdate = dateOfLastUpdate;
+    }
+
+    public void setDateEndProjected(Date dateEndProjected) {
+        this.dateEndProjected = dateEndProjected;
+    }
+
+    public void setApplicationTaget(String applicationTaget) {
+        this.applicationTaget = applicationTaget;
+    }
+
+    public void setDateEndInReality(Date dateEndInReality) {
+        this.dateEndInReality = dateEndInReality;
+    }
+
+    public void setDateBeginningExploitation(Date dateBeginningExploitation) {
+        this.dateBeginningExploitation = dateBeginningExploitation;
+    }
+
+    public void setDateEndExploitation(Date dateEndExploitation) {
+        this.dateEndExploitation = dateEndExploitation;
+    }
+
+    public void setIdRefogEntityOwner(String idRefogEntityOwner) {
+        this.idRefogEntityOwner = idRefogEntityOwner;
+    }
+
+    public void setCodeEntityOwner(String codeEntityOwner) {
+        this.codeEntityOwner = codeEntityOwner;
+    }
+
+    public void setLabelEntityOwner(String labelEntityOwner) {
+        this.labelEntityOwner = labelEntityOwner;
+    }
+
+    public void setIdRefogEntityMOA(String idRefogEntityMOA) {
+        this.idRefogEntityMOA = idRefogEntityMOA;
+    }
+
+    public void setCodeEntityMOA(String codeEntityMOA) {
+        this.codeEntityMOA = codeEntityMOA;
+    }
+
+    public void setLabelEntityMOA(String labelEntityMOA) {
+        this.labelEntityMOA = labelEntityMOA;
+    }
+
+    public void setIdResponsableMOE(String idResponsableMOE) {
+        this.idResponsableMOE = idResponsableMOE;
+    }
+
+    public void setFirstNameResponsableMoe(String firstNameResponsableMoe) {
+        this.firstNameResponsableMoe = firstNameResponsableMoe;
+    }
+
+    public void setLastNameResponsableMoe(String lastNameResponsableMoe) {
+        this.lastNameResponsableMoe = lastNameResponsableMoe;
+    }
+
+    public void setCodeEntityResponsableMoe(String codeEntityResponsableMoe) {
+        this.codeEntityResponsableMoe = codeEntityResponsableMoe;
+    }
+
+    public void setLabelEntityResponsableMoe(String labelEntityResponsableMoe) {
+        this.labelEntityResponsableMoe = labelEntityResponsableMoe;
+    }
+
+    public void setIdRefogEntityMoe(String idRefogEntityMoe) {
+        this.idRefogEntityMoe = idRefogEntityMoe;
+    }
+
+    public void setCodeEntityMoe(String codeEntityMoe) {
+        this.codeEntityMoe = codeEntityMoe;
+    }
+
+    public void setLabelEntityMoe(String labelEntityMoe) {
+        this.labelEntityMoe = labelEntityMoe;
+    }
+
+    public void setIdRefogEntityProduction(String idRefogEntityProduction) {
+        this.idRefogEntityProduction = idRefogEntityProduction;
+    }
+
+    public void setCodeEntityProduction(String codeEntityProduction) {
+        this.codeEntityProduction = codeEntityProduction;
+    }
+
+    public void setLabelEntityProduction(String labelEntityProduction) {
+        this.labelEntityProduction = labelEntityProduction;
+    }
+
+    public void setCodeAttachmentUnderSector(String codeAttachmentUnderSector) {
+        this.codeAttachmentUnderSector = codeAttachmentUnderSector;
+    }
+
+    public void setLabelAttachmentUnderSector(String labelAttachmentUnderSector) {
+        this.labelAttachmentUnderSector = labelAttachmentUnderSector;
+    }
+
+    public void setCodeAttachmentSector(String codeAttachmentSector) {
+        this.codeAttachmentSector = codeAttachmentSector;
+    }
+
+    public void setLabelAttachmentSector(String labelAttachmentSector) {
+        this.labelAttachmentSector = labelAttachmentSector;
+    }
+
+    public void setCodeAttachmentPatrimony(String codeAttachmentPatrimony) {
+        this.codeAttachmentPatrimony = codeAttachmentPatrimony;
+    }
+
+    public void setLabelAttachmentPatrimony(String labelAttachmentPatrimony) {
+        this.labelAttachmentPatrimony = labelAttachmentPatrimony;
+    }
+
+    public void setCodeAttachmentDPP(String codeAttachmentDPP) {
+        this.codeAttachmentDPP = codeAttachmentDPP;
+    }
+
+    public void setLabelAttachmentDPP(String labelAttachmentDPP) {
+        this.labelAttachmentDPP = labelAttachmentDPP;
+    }
+
+    public void setLabelFunctionalCluster(String labelFunctionalCluster) {
+        this.labelFunctionalCluster = labelFunctionalCluster;
+    }
+
+    public void setLabelOfSourcingMode(String labelOfSourcingMode) {
+        this.labelOfSourcingMode = labelOfSourcingMode;
+    }
+
+    public void setPrivilegeInformation(String privilegeInformation) {
+        this.privilegeInformation = privilegeInformation;
+    }
+
+    public void setPersonalData(String personalData) {
+        this.personalData = personalData;
+    }
+
+    public void setServiceClass(String serviceClass) {
+        this.serviceClass = serviceClass;
+    }
+
+    public void setAvailability(String availability) {
+        this.availability = availability;
+    }
+
+    public void setRPO(String RPO) {
+        this.RPO = RPO;
+    }
+
+    public void setRTO(String RTO) {
+        this.RTO = RTO;
+    }
+
+    public void setIntegrity(String integrity) {
+        this.integrity = integrity;
+    }
+
+    public void setPrivacy(String privacy) {
+        this.privacy = privacy;
+    }
+
+    public void setTraceability(String traceability) {
+        this.traceability = traceability;
+    }
+
+    public void setBusinessCriticality(String businessCriticality) {
+        this.businessCriticality = businessCriticality;
+    }
+
+    public void setContinuityLevel(String continuityLevel) {
+        this.continuityLevel = continuityLevel;
+    }
+
+    public void setDerogation(String derogation) {
+        this.derogation = derogation;
+    }
+
+    public void setDateOfValidationOfServiceDefinition(String dateOfValidationOfServiceDefinition) {
+        this.dateOfValidationOfServiceDefinition = dateOfValidationOfServiceDefinition;
+    }
+
+    public void setTypeOfSolution(String typeOfSolution) {
+        this.typeOfSolution = typeOfSolution;
+    }
+
+    public void setNameOfFirmware(String nameOfFirmware) {
+        this.nameOfFirmware = nameOfFirmware;
+    }
+
+    public void setTechnicalApplication(String technicalApplication) {
+        this.technicalApplication = technicalApplication;
     }
 }
