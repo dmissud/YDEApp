@@ -29,11 +29,11 @@ public class RepositoryOfRefiImpl implements StoreFileRefi {
 
     @Autowired
     ReferenceApplicationUseCase referenceApplicationUseCase;
-
+    String result = null;
 
     @Override
     public String storeRefiFile(MultipartFile refiFile) {
-        String result = null;
+
         CSVReader csvReader=null;
 
         try
@@ -81,7 +81,8 @@ public class RepositoryOfRefiImpl implements StoreFileRefi {
 
     @Override
     public String storeRefiLight(MultipartFile refiFile) {
-        String result = null;
+
+        int compteur = 0;
         CSVReader csvReader=null;
 
         try
@@ -121,6 +122,10 @@ public class RepositoryOfRefiImpl implements StoreFileRefi {
                                 applicationSourceLight.getLastNameResponsableMoe());
 
                 Application application = referenceApplicationUseCase.referenceApplication(referenceApplicationCmd);
+
+                if (application !=null){
+                    compteur ++;
+                }
             }
 
 
@@ -130,6 +135,8 @@ public class RepositoryOfRefiImpl implements StoreFileRefi {
         {
             ee.printStackTrace();
         }
+        result = "le nombre d'applications créés est de " + compteur;
+
         return result;
     }
 

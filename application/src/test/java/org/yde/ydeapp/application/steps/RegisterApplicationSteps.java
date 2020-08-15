@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase.ReferenceApplicationCmd;
 import org.yde.ydeapp.application.service.ApplicationManagementService;
 import org.yde.ydeapp.domain.Application;
@@ -31,7 +32,7 @@ public class RegisterApplicationSteps {
     @InjectMocks
     private ApplicationManagementService applicationManagementService;
 
-    @Mock
+    @Mock 
     private RepositoryOfApplication repositoryOfApplication;
 
 
@@ -63,10 +64,13 @@ public class RegisterApplicationSteps {
 
     @When("The administrator enrich the repository with this application with this data")
     public void the_administrator_enrich_the_repository_with_this_application_with_this_data(List<ReferenceApplicationCmd> apps) {
+
         if (apps.size() != 1) {
             throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
         }
+
         application = applicationManagementService.referenceApplication(apps.get(0));
+
     }
 
     @Then("a new application is in the repository with code {string}")

@@ -1,5 +1,8 @@
 package org.yde.ydeapp.interfacerefi;
 
+
+
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,6 +13,14 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
+import static org.junit.Assert.assertEquals;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import java.io.*;
+
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -18,20 +29,34 @@ public class RepositoryOfRefiImplTest {
     @Autowired
     RepositoryOfRefiImpl repositoryOfRefiimpl;
 
+    public RepositoryOfRefiImplTest() throws IOException {
+    }
+
 
     @Test
-    @DisplayName("file in infrastructure")
-    void create_the_file_in_the_infratructure(){
+    @DisplayName("read file with 7 columns")
+    void create_the_file_in_the_infratructure() throws IOException {
 
         //Given
-        MultipartFile fileRefi = new MockMultipartFile("fileRefi", "fileRefi.csv", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
-        System.out.println("test");
+        MultipartFile multipartFile1 = new MockMultipartFile("test.csv","test.csv","text/csv",
+                new FileInputStream(new File("src/test/resources/fileRefiLight.txt")));
+
+
         //When
-        repositoryOfRefiimpl.storeRefiFile(fileRefi);
+        final String result = repositoryOfRefiimpl.storeRefiLight(multipartFile1);
         //then
-        Assertions.assertThat(!fileRefi.isEmpty());
+        assertEquals ("le nombre d'applications créés est de 1",result);
 
     }
+
+
+
+
+
+
+
+
+     
 
 
 }
