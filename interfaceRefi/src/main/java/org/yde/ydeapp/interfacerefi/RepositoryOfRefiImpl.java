@@ -38,7 +38,7 @@ public class RepositoryOfRefiImpl implements StoreFileRefi {
 
         try
         {
-            
+
             InputStream is = refiFile.getInputStream();
             HeaderColumnNameMappingStrategy<ApplicationSource> strategy
                     = new HeaderColumnNameMappingStrategy<>();

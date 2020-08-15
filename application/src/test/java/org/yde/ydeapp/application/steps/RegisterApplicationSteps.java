@@ -70,8 +70,8 @@ public class RegisterApplicationSteps {
     }
 
     @Then("a new application is in the repository with code {string}")
-    public void a_new_application_is_in_the_repository_with_code(String string) {
-        Mockito.verify(repositoryOfApplication, Mockito.times(1)).retrieveByAppCode(string);
+    public void a_new_application_is_in_the_repository_with_code(String codeApp) {
+        Mockito.verify(repositoryOfApplication, Mockito.times(1)).retrieveByAppCode(codeApp);
 
 
     }

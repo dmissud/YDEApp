@@ -25,19 +25,31 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
 
     @Override
     public Application referenceApplication(ReferenceApplicationCmd referenceApplicationCmd) {
-
+        Application application = getApplication(referenceApplicationCmd.getCodeApp());
         Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
-        Application application = new Application.Builder(referenceApplicationCmd.getCodeApp())
-            .withShortDescription(referenceApplicationCmd.getShortDescription())
-            .withLongDescription(referenceApplicationCmd.getLongDescription())
-            .withResponsable(personne)
-            .build();
-        repositoryOfApplication.referenceApplication(application);
-        log.trace("Application {} referenced", application.getCodeApplication());
+        if (application == null) {
 
-        return application;
+
+            Application applicationNew = new Application.Builder(referenceApplicationCmd.getCodeApp())
+                    .withShortDescription(referenceApplicationCmd.getShortDescription())
+                    .withLongDescription(referenceApplicationCmd.getLongDescription())
+                    .withResponsable(personne)
+                    .build();
+            repositoryOfApplication.referenceApplication(applicationNew);
+            log.trace("Application {} referenced", applicationNew.getCodeApplication());
+
+            return application;
+        } else {
+            application.setLongDescription(referenceApplicationCmd.getLongDescription());
+            application.setShortDescription(referenceApplicationCmd.getShortDescription());
+            application.setResponsable(personne);
+
+            repositoryOfApplication.updateApplication(application);
+
+            return application;
+        }
+
     }
-
     @Override
     public Application updateApplication(String codeApplication, ReferenceApplicationCmd referenceApplicationCmd) {
 
