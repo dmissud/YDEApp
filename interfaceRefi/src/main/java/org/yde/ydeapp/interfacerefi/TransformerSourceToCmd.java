@@ -14,8 +14,9 @@ public class TransformerSourceToCmd implements CollectionApplicationCmd {
     private CsvToBean csvToBean;
     public TransformerSourceToCmd (InputStreamReader inputStreamReader) {
 
-         //   HeaderColumnNameMappingStrategy<ApplicationSourcePosition> strategy
-        //            = new HeaderColumnNameMappingStrategy<>();
+
+
+
         ColumnPositionMappingStrategy strategy = new  ColumnPositionMappingStrategy();
             strategy.setType(ApplicationSourcePosition.class);
 
@@ -23,6 +24,7 @@ public class TransformerSourceToCmd implements CollectionApplicationCmd {
                     .withSeparator(';')
                     .withMappingStrategy(strategy)
                     .withType(ApplicationSourcePosition.class)
+                    .withSkipLines(1)
                     .build();
 
 

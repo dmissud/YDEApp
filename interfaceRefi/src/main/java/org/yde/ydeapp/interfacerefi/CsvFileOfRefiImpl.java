@@ -13,6 +13,7 @@ import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase.ReferenceApplicationCmd;
 
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
 @Component
@@ -32,7 +33,7 @@ public class CsvFileOfRefiImpl implements StoreFileRefi {
 
         try {
             return new TransformerSourceToCmd
-                    (new InputStreamReader(refiFile.getInputStream(), "ISO_8859_1"));
+                    (new InputStreamReader(refiFile.getInputStream(), StandardCharsets.ISO_8859_1));
 
         } catch (Exception ee) {
             ee.printStackTrace();
