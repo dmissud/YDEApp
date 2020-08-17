@@ -30,7 +30,7 @@ public class ApplicationResource {
 
         ReferenceApplicationCmd referenceApplicationCmd = buildReferenceApplicationCmdFromApplicationDesc(applicationDesc);
 
-        Application application = referenceApplicationUseCase.referenceApplication(referenceApplicationCmd);
+        Application application = referenceApplicationUseCase.referenceOrUpdateApplication(referenceApplicationCmd);
         URI location = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{codeApp}")

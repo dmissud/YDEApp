@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.yde.ydeapp.application.in.CollectionApplicationCmd;
 import org.yde.ydeapp.application.in.GetApplicationQuery;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.domain.Application;
@@ -24,30 +25,41 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
     RepositoryOfApplication repositoryOfApplication;
 
     @Override
-    public Application referenceApplication(ReferenceApplicationCmd referenceApplicationCmd) {
-        final Application application = repositoryOfApplication.retrieveByAppCode(referenceApplicationCmd.getCodeApp());
+    public void referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd) {
+
+        for(ReferenceApplicationCmd referenceApplicationCmd: collectionApplicationCmd){
+            referenceOrUpdateApplication(referenceApplicationCmd);
+        }
+
+    }
+
+    @Override
+    public Application referenceOrUpdateApplication(ReferenceApplicationCmd referenceApplicationCmd) {
+        Application application;
         Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
-        if (application == null) {
-            Application applicationNew = new Application.Builder(referenceApplicationCmd.getCodeApp())
+
+
+        application = repositoryOfApplication.retrieveByAppCode(referenceApplicationCmd.getCodeApp());
+        if (application != null) {
+            log.trace("Application {} updated", application.getCodeApplication());
+            application.setLongDescription(referenceApplicationCmd.getLongDescription());
+            application.setShortDescription(referenceApplicationCmd.getShortDescription());
+            application.setResponsable(personne);
+            repositoryOfApplication.updateApplication(application);
+        } else {
+            application = new Application.Builder(referenceApplicationCmd.getCodeApp())
                     .withShortDescription(referenceApplicationCmd.getShortDescription())
                     .withLongDescription(referenceApplicationCmd.getLongDescription())
                     .withResponsable(personne)
                     .build();
-            repositoryOfApplication.referenceApplication(applicationNew);
-            log.trace("Application {} referenced", applicationNew.getCodeApplication());
-
-            return application;
-        } else {
-            application.setLongDescription(referenceApplicationCmd.getLongDescription());
-            application.setShortDescription(referenceApplicationCmd.getShortDescription());
-            application.setResponsable(personne);
-
-            repositoryOfApplication.updateApplication(application);
-
-            return application;
+            log.trace("Application {} created", application.getCodeApplication());
+            repositoryOfApplication.referenceApplication(application);
         }
 
+        return application;
     }
+
+
     @Override
     public Application updateApplication(String codeApplication, ReferenceApplicationCmd referenceApplicationCmd) {
 

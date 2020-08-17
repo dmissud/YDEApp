@@ -2,12 +2,12 @@ package org.yde.ydeapp.interfacerefi;
 
 
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
+import org.yde.ydeapp.application.in.CollectionApplicationCmd;
 
 public interface StoreFileRefi {
-    String storeRefiFile(MultipartFile refiFile);
-    String storeRefiLight(MultipartFile refiFile);
+    void storeRefiFile(MultipartFile refiFile);
+    CollectionApplicationCmd giveTransformerSourceToCmd();
+    //String storeRefiLight(MultipartFile refiFile);
 
 
 }

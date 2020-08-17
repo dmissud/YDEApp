@@ -7,7 +7,8 @@ import org.yde.ydeapp.domain.Application;
 import javax.validation.constraints.Pattern;
 
 public interface ReferenceApplicationUseCase {
-    Application referenceApplication(ReferenceApplicationCmd referenceApplicationCmd);
+    void referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd);
+    Application referenceOrUpdateApplication(ReferenceApplicationCmd referenceApplicationCmd);
 
     Application updateApplication(String codeApplication, ReferenceApplicationCmd referenceApplicationCmd);
 

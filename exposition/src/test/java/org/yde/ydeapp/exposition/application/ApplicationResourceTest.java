@@ -71,7 +71,7 @@ class ApplicationResourceTest {
     void testReferenceApplication() throws Exception {
         // Given
         Mockito
-            .when(referenceApplicationUseCase.referenceApplication(any()))
+            .when(referenceApplicationUseCase.referenceOrUpdateApplication(any()))
             .thenReturn(application);
 
         ApplicationDesc applicationDesc = buildASampleApplicationDescForUpdate();
