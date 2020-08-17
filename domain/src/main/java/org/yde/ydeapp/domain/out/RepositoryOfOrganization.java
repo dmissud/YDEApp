@@ -3,7 +3,7 @@ package org.yde.ydeapp.domain.out;
 import org.yde.ydeapp.domain.Organization;
 
 public interface RepositoryOfOrganization {
-    Organization retrieveByName(String organizationName);
+    Organization retrieveByIdRefog(String organizationIdRefog);
 
-    void referenceOrganization(Organization root);
+    void referenceOrganization(Organization organization);
 }

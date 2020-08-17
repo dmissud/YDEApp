@@ -17,7 +17,7 @@ public class CreateOrganizationSteps {
 
     @DataTableType
     public OrganizationDataTable organizationDataTableEntry(Map<String, String> entry) {
-        return new OrganizationDataTable(entry.get("Organization name"));
+        return new OrganizationDataTable(entry.get("idRefog"), entry.get("Organization name"));
     }
 
 
@@ -26,15 +26,15 @@ public class CreateOrganizationSteps {
         this.organization = null;
     }
 
-    @When("Administrator want to create a new organization with name {string}")
-    public void administrator_want_to_create_a_new_organization_with_name(String nameOrganization) {
-        this.organization = new Organization(nameOrganization);
+    @When("Administrator want to create a new organization with idRefog {string} and with name {string}")
+    public void administrator_want_to_create_a_new_organization_with_name(String idRefog, String nameOrganization) {
+        this.organization = new Organization(idRefog, nameOrganization);
     }
 
     @When("with the list of organisation in childs")
     public void with_the_list_of_organisation_in_childs(List<OrganizationDataTable> organizationChilds) {
-        for(OrganizationDataTable organizationChild : organizationChilds) {
-            this.organization.addChild(new Organization(organizationChild.name));
+        for (OrganizationDataTable organizationChild : organizationChilds) {
+            this.organization.addChild(new Organization(organizationChild.idRefog, organizationChild.name));
         }
     }
 
@@ -45,8 +45,11 @@ public class CreateOrganizationSteps {
 
     private class OrganizationDataTable {
         private String name;
-        public OrganizationDataTable(String name) {
+        private String idRefog;
+
+        public OrganizationDataTable(String idRefog, String name) {
             this.name = name;
+            this.idRefog = idRefog;
         }
     }
 }

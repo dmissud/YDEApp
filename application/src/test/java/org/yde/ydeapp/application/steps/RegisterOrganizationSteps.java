@@ -12,7 +12,6 @@ import org.yde.ydeapp.application.in.ReferenceOrganizationUseCase;
 import org.yde.ydeapp.application.in.ReferenceOrganizationUseCase.ReferenceOrganisationCmd;
 import org.yde.ydeapp.application.service.OrganizationManagementService;
 import org.yde.ydeapp.domain.Organization;
-import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfOrganization;
 
 import java.util.ArrayList;
@@ -41,13 +40,13 @@ public class RegisterOrganizationSteps {
         organization = null;
     }
 
-    @When("Administrator want to create a new organization Tree based on organization with name {string}")
-    public void administrator_want_to_create_a_new_organization_tree_based_on_organization_with_name(String organizationName) {
+    @When("Administrator want to create a new organization Tree based on organization with idRefog {String} and with name {string}")
+    public void administrator_want_to_create_a_new_organization_tree_based_on_organization_with_name(String idRefog, String organizationName) {
         Mockito
-            .when(repositoryOfOrganization.retrieveByName(organizationName))
-            .thenThrow(new EntityNotFound(""));
+            .when(repositoryOfOrganization.retrieveByIdRefog(idRefog))
+            .thenReturn(null);
 
-        ReferenceOrganisationCmd referenceOrganisationCmd = new ReferenceOrganisationCmd(organizationName, new ArrayList<>());
+        ReferenceOrganisationCmd referenceOrganisationCmd = new ReferenceOrganisationCmd(idRefog, organizationName, new ArrayList<>());
         organization = referenceOrganizationUseCase.referenceOrganization(referenceOrganisationCmd);
     }
 

@@ -9,6 +9,9 @@ public class OrganizationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(unique = true)
+    private String idRefog;
+
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -20,6 +23,14 @@ public class OrganizationEntity {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getIdRefog() {
+        return idRefog;
+    }
+
+    public void setIdRefog(String idRefog) {
+        this.idRefog = idRefog;
     }
 
     public String getName() {
@@ -37,4 +48,5 @@ public class OrganizationEntity {
     public void setChildren(List<OrganizationEntity> children) {
         this.children = children;
     }
+
 }

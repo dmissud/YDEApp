@@ -22,6 +22,7 @@ public class OrganizationManagementService implements ReferenceOrganizationUseCa
 
     @Override
     public Organization referenceOrganization(ReferenceOrganisationCmd referenceOrganisationCmd) {
+        referenceOrganisationCmd.validate();
         Organization root = buildOrganization(referenceOrganisationCmd);
         repositoryOfOrganization.referenceOrganization(root);
         log.debug("Reference of the organization {}", root.getName());
@@ -29,15 +30,18 @@ public class OrganizationManagementService implements ReferenceOrganizationUseCa
     }
 
     private Organization buildOrganization(ReferenceOrganisationCmd referenceOrganisationCmd) {
+        referenceOrganisationCmd.validate();
         Organization organization;
         try {
-            repositoryOfOrganization.retrieveByName(referenceOrganisationCmd.getOrganizationName());
+            repositoryOfOrganization.retrieveByIdRefog(referenceOrganisationCmd.getOrganizationName());
             throw new EntityAlreadyExist(String.format("The organization %s all ready exist", referenceOrganisationCmd.getOrganizationName()));
         } catch (EntityNotFound ex) {
-            organization = new Organization(referenceOrganisationCmd.getOrganizationName());
+            organization = new Organization(referenceOrganisationCmd.getIdRefog(), referenceOrganisationCmd.getOrganizationName());
             log.debug("Build of the organization {}", organization.getName());
-            for (ReferenceOrganisationCmd referenceOrganisationCmdChild : referenceOrganisationCmd.getChildren()) {
-                organization.addChild(buildOrganization(referenceOrganisationCmdChild));
+            if (referenceOrganisationCmd.getChildren() != null) {
+                for (ReferenceOrganisationCmd referenceOrganisationCmdChild : referenceOrganisationCmd.getChildren()) {
+                    organization.addChild(buildOrganization(referenceOrganisationCmdChild));
+                }
             }
         }
         return organization;

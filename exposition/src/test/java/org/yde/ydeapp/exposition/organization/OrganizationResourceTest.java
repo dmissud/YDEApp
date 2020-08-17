@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class OrganizationResourceTest {
 
     public static final String ORGANIZATION_ONE = "Organization One";
+    public static final String ORGANIZATION_IDREFOG_ONE = "100000";
     @Autowired
     private MockMvc mockMvc;
 
@@ -40,7 +41,7 @@ class OrganizationResourceTest {
 
     @BeforeEach
     void setup() {
-        organization = new Organization(ORGANIZATION_ONE);
+        organization = new Organization(ORGANIZATION_IDREFOG_ONE, ORGANIZATION_ONE);
     }
 
     @Test
@@ -51,7 +52,7 @@ class OrganizationResourceTest {
             .when(referenceOrganizationUseCase.referenceOrganization(any()))
             .thenReturn(organization);
 
-        ReferenceOrganisationCmd referenceOrganisationCmd = new ReferenceOrganisationCmd(ORGANIZATION_ONE, new ArrayList<>());
+        ReferenceOrganisationCmd referenceOrganisationCmd = new ReferenceOrganisationCmd(ORGANIZATION_IDREFOG_ONE, ORGANIZATION_ONE, new ArrayList<>());
 
         mockMvc
             // When

@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.yde.ydeapp.domain.Organization;
-import org.yde.ydeapp.infrastructure.application.ApplicationEntity;
 
 import java.util.List;
 
@@ -23,9 +22,13 @@ class RepositoryOfOrganizationImplTest {
 
     private static final String NAME_ORGANIZATION_NOT_EXIST = "-Organization not exist-";
     public static final String ORGANIZATION_ALONE = "Organization Alone";
+    public static final String ORGANIZATION_IDREFOG_ALONE = "100000";
     public static final String ORGANIZATION_ROOT = "Root Organization";
+    public static final String ORGANIZATION_IDREFOG_ROOT = "200000";
     public static final String ORGANIZATION_CHILD_ONE = "Children the FIRST";
+    public static final String ORGANIZATION_IDREFOG_CHILD_ONE = "200010";
     public static final String ORGANIZATION_CHILD_TWO = "Children the SECOND";
+    public static final String ORGANIZATION_IDREFOG_CHILD_TWO = "200020";
 
     @Autowired
     private TestEntityManager testEntityManager;
@@ -39,7 +42,7 @@ class RepositoryOfOrganizationImplTest {
         // Given
         // No organization in th erepository
         // When
-        Throwable thrown = catchThrowable(() -> repositoryOfOrganizationImpl.retrieveByName(NAME_ORGANIZATION_NOT_EXIST));
+        Throwable thrown = catchThrowable(() -> repositoryOfOrganizationImpl.retrieveByIdRefog(NAME_ORGANIZATION_NOT_EXIST));
 
         // Then
         Assertions.assertThat(thrown).as("Essai recherche organization pas présente en base").hasMessage(String.format("Organization %s is not present in the Repository", NAME_ORGANIZATION_NOT_EXIST));
@@ -48,7 +51,7 @@ class RepositoryOfOrganizationImplTest {
     @Test
     void when_i_create_a_single_organization_i_have_a_new_entity() {
         // Given
-        Organization organization = new Organization(ORGANIZATION_ALONE);
+        Organization organization = new Organization(ORGANIZATION_IDREFOG_ALONE, ORGANIZATION_ALONE);
 
         // When
         repositoryOfOrganizationImpl.referenceOrganization(organization);
@@ -65,9 +68,9 @@ class RepositoryOfOrganizationImplTest {
     @Test
     void when_i_create_a_tree_organization_i_have_a_new_set_of_entity() {
         // Given
-        Organization organization = new Organization(ORGANIZATION_ROOT);
-        organization.addChild(new Organization(ORGANIZATION_CHILD_ONE));
-        organization.addChild(new Organization(ORGANIZATION_CHILD_TWO));
+        Organization organization = new Organization(ORGANIZATION_IDREFOG_ALONE, ORGANIZATION_ROOT);
+        organization.addChild(new Organization(ORGANIZATION_IDREFOG_CHILD_ONE, ORGANIZATION_CHILD_ONE));
+        organization.addChild(new Organization(ORGANIZATION_IDREFOG_CHILD_TWO, ORGANIZATION_CHILD_TWO));
 
         // When
         repositoryOfOrganizationImpl.referenceOrganization(organization);

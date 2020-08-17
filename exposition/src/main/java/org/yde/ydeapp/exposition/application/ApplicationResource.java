@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.yde.ydeapp.application.in.GetApplicationQuery;
+import org.yde.ydeapp.application.in.ApplicationQuery;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase.ReferenceApplicationCmd;
 import org.yde.ydeapp.domain.Application;
@@ -23,7 +23,7 @@ public class ApplicationResource {
     ReferenceApplicationUseCase referenceApplicationUseCase;
 
     @Autowired
-    GetApplicationQuery getApplicationQuery;
+    ApplicationQuery applicationQuery;
 
     @PostMapping("applications")
     public ResponseEntity<Void> referenceApplication(@RequestBody ApplicationDesc applicationDesc) {
@@ -55,7 +55,7 @@ public class ApplicationResource {
     public ResponseEntity<ApplicationDesc> retrieveApplicationByCodeApplication(
         @NotNull @PathVariable("codeApplication") final String codeApplication) {
 
-        final Application application = getApplicationQuery.getApplication(codeApplication);
+        final Application application = applicationQuery.getApplication(codeApplication);
         final ApplicationDesc applicationDesc = buildApplicationDescFromApplication(application);
 
         return new ResponseEntity<>(applicationDesc, HttpStatus.OK);
@@ -64,7 +64,7 @@ public class ApplicationResource {
     @GetMapping(value = "applications", produces = {"application/json"})
     public ResponseEntity<List<ApplicationIdent>> retrieveAllApplication() {
 
-        List<ApplicationIdent> applicationsIdent = getApplicationQuery.getAllApplicationsIdent();
+        List<ApplicationIdent> applicationsIdent = applicationQuery.getAllApplicationsIdent();
 
         return new ResponseEntity<>(applicationsIdent, HttpStatus.OK);
     }

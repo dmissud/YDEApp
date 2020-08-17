@@ -5,10 +5,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class Organization {
+    public String getIdRefog() { return idRefog; }
+
+    private String idRefog;
     private String name;
     private List<Organization> children;
 
-    public Organization(String name) {
+    public Organization(String idRefog, String name) {
+        this.idRefog = idRefog;
         this.name = name;
         children = new ArrayList<>();
     }

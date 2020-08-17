@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.yde.ydeapp.application.in.GetApplicationQuery;
+import org.yde.ydeapp.application.in.ApplicationQuery;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.ApplicationIdent;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class ApplicationManagementService implements ReferenceApplicationUseCase, GetApplicationQuery {
+public class ApplicationManagementService implements ReferenceApplicationUseCase, ApplicationQuery {
 
     private final Logger log = LoggerFactory.getLogger(ApplicationManagementService.class);
 
@@ -25,7 +25,7 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
 
     @Override
     public Application referenceApplication(ReferenceApplicationCmd referenceApplicationCmd) {
-
+        referenceApplicationCmd.validate();
         Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
         Application application = new Application.Builder(referenceApplicationCmd.getCodeApp())
             .withShortDescription(referenceApplicationCmd.getShortDescription())
@@ -40,11 +40,12 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
 
     @Override
     public Application updateApplication(String codeApplication, ReferenceApplicationCmd referenceApplicationCmd) {
-
-        Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
+        referenceApplicationCmd.validate();
         Application application = getApplication(codeApplication);
         application.setLongDescription(referenceApplicationCmd.getLongDescription());
         application.setShortDescription(referenceApplicationCmd.getShortDescription());
+
+        Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
         application.setResponsable(personne);
 
         repositoryOfApplication.updateApplication(application);

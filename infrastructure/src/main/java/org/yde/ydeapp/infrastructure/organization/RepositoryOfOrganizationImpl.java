@@ -16,18 +16,18 @@ public class RepositoryOfOrganizationImpl implements RepositoryOfOrganization {
     RepositoryOfOrganizationJpa repositoryOfOrganizationJpa;
 
     @Override
-    public Organization retrieveByName(String organizationName) {
-        OrganizationEntity organizationEntity = repositoryOfOrganizationJpa.findByName(organizationName);
+    public Organization retrieveByIdRefog(String organizationIdRefog) {
+        OrganizationEntity organizationEntity = repositoryOfOrganizationJpa.findByIdRefog(organizationIdRefog);
 
         if (organizationEntity == null) {
-            throw new EntityNotFound(String.format("Organization %s is not present in the Repository", organizationName));
+            throw new EntityNotFound(String.format("Organization %s is not present in the Repository", organizationIdRefog));
         }
 
         return mapEntityToDomain(organizationEntity);
     }
 
     private Organization mapEntityToDomain(OrganizationEntity organizationEntity) {
-        Organization organization = new Organization(organizationEntity.getName());
+        Organization organization = new Organization(organizationEntity.getIdRefog(), organizationEntity.getName());
         for (OrganizationEntity organisationEntityChild : organizationEntity.getChildren()) {
             organization.addChild(mapEntityToDomain(organisationEntityChild));
         }
@@ -40,12 +40,13 @@ public class RepositoryOfOrganizationImpl implements RepositoryOfOrganization {
     }
 
     private OrganizationEntity mapDomainToEntity(Organization organization) {
-        OrganizationEntity organizationEntity = repositoryOfOrganizationJpa.findByName(organization.getName());
+        OrganizationEntity organizationEntity = repositoryOfOrganizationJpa.findByIdRefog(organization.getName());
 
         List<OrganizationEntity> children;
         if (organizationEntity == null) {
             organizationEntity = new OrganizationEntity();
             organizationEntity.setName(organization.getName());
+            organizationEntity.setIdRefog(organization.getIdRefog());
         }
 
         children = new ArrayList<>();

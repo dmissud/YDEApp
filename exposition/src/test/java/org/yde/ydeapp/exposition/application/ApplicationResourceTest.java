@@ -14,7 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.yde.ydeapp.application.in.GetApplicationQuery;
+import org.yde.ydeapp.application.in.ApplicationQuery;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.Personne;
@@ -45,7 +45,7 @@ class ApplicationResourceTest {
     private ReferenceApplicationUseCase referenceApplicationUseCase;
 
     @MockBean
-    private GetApplicationQuery getApplicationQuery;
+    private ApplicationQuery applicationQuery;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -93,7 +93,7 @@ class ApplicationResourceTest {
     void testUpdateApplication() throws Exception {
         // Given
         Mockito
-            .when(getApplicationQuery.getApplication(CODE_APPLICATION))
+            .when(applicationQuery.getApplication(CODE_APPLICATION))
             .thenReturn(application);
         Mockito
             .when(referenceApplicationUseCase.updateApplication(any(String.class), any()))
@@ -116,7 +116,7 @@ class ApplicationResourceTest {
     void testRetrieveApplicationByCodeApplication() throws Exception {
         // Given
         Mockito
-            .when(getApplicationQuery.getApplication(CODE_APPLICATION))
+            .when(applicationQuery.getApplication(CODE_APPLICATION))
             .thenReturn(application);
 
         mockMvc
@@ -132,7 +132,7 @@ class ApplicationResourceTest {
     void testRetrieveAllApplication() throws Exception {
         // Given
         Mockito
-            .when(getApplicationQuery.getApplication(CODE_APPLICATION))
+            .when(applicationQuery.getApplication(CODE_APPLICATION))
             .thenReturn(application);
 
         mockMvc
