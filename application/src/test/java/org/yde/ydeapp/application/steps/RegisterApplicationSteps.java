@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase.ReferenceApplicationCmd;
+import org.yde.ydeapp.application.in.StateCmdEnum;
 import org.yde.ydeapp.application.service.ApplicationManagementService;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.out.EntityNotFound;
@@ -34,7 +35,7 @@ public class RegisterApplicationSteps {
 
 
 
-    private Application application;
+    private StateCmdEnum stateCmdEnum;
 
     @Before
     public void setup() {
@@ -66,7 +67,7 @@ public class RegisterApplicationSteps {
             throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
         }
 
-        application = applicationManagementService.referenceOrUpdateApplication(apps.get(0));
+        stateCmdEnum = applicationManagementService.referenceOrUpdateApplication(apps.get(0));
 
     }
 

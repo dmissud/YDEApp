@@ -2,15 +2,15 @@ package org.yde.ydeapp.interfacerefi;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.yde.ydeapp.application.in.CollectionApplicationCmd;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
+import org.yde.ydeapp.application.in.ResultOfCollection;
 
 
 import java.net.URI;
@@ -25,36 +25,24 @@ public class RefiRessource {
     @Autowired
     ReferenceApplicationUseCase referenceApplicationUseCase;
 
-//    @PostMapping("/uploadRefiLight")
-//    public String uploadFileLight(@RequestParam("file") MultipartFile fileRefi) {
-//
-//        String resultParse= storeFileRefi.storeRefiLight(fileRefi);
-//
-//        URI location = ServletUriComponentsBuilder
-//                .fromCurrentRequest()
-//                .path(fileRefi.getName())
-//                .buildAndExpand(resultParse)
-//                .toUri();
-//
-//
-//        return resultParse;
-//
-//    }
 
     @PostMapping("/uploadRefi")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile fileRefi) {
+    public ResponseEntity<StatRefiFileDto> uploadFile(@RequestParam("file") MultipartFile fileRefi) {
 
         storeFileRefi.storeRefiFile(fileRefi);
-        referenceApplicationUseCase.referenceOrUpdateCollectionOfApplication(storeFileRefi.giveTransformerSourceToCmd());
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path(fileRefi.getName())
-                .buildAndExpand("jj")
-                .toUri();
+        TransformerSourceToCmd transformerSourceToCmd = (TransformerSourceToCmd) storeFileRefi.giveTransformerSourceToCmd();
+        ResultOfCollection resultOfCollection = referenceApplicationUseCase.referenceOrUpdateCollectionOfApplication(transformerSourceToCmd);
 
 
-        return ResponseEntity.created(location).build();
+        final StatTraitementRefiFile statTraitementRefiFile = transformerSourceToCmd.giveResult();
+        StatRefiFileDto statRefiFileDto = new StatRefiFileDto(statTraitementRefiFile.getStatReadLineFile(),
+                statTraitementRefiFile.getStatRejetedLinefile(),
+                resultOfCollection.getReferenceCounter(),
+                resultOfCollection.getUpdateCounter(),
+                resultOfCollection.getIgnoreCounter());
+
+
+        return new ResponseEntity<>(statRefiFileDto, HttpStatus.OK);
 
     }
 

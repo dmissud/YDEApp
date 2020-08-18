@@ -3,7 +3,6 @@ package org.yde.ydeapp.interfacerefi;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
-import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import org.yde.ydeapp.application.in.CollectionApplicationCmd;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 
@@ -12,12 +11,10 @@ import java.util.Iterator;
 
 public class TransformerSourceToCmd implements CollectionApplicationCmd {
     private CsvToBean csvToBean;
+    private StatTraitementRefiFile statTraitementRefiFile = new StatTraitementRefiFile();
+
     public TransformerSourceToCmd (InputStreamReader inputStreamReader) {
-
-
-
-
-        ColumnPositionMappingStrategy strategy = new  ColumnPositionMappingStrategy();
+    ColumnPositionMappingStrategy strategy = new  ColumnPositionMappingStrategy();
             strategy.setType(ApplicationSourcePosition.class);
 
             this.csvToBean = new CsvToBeanBuilder(inputStreamReader)
@@ -26,12 +23,15 @@ public class TransformerSourceToCmd implements CollectionApplicationCmd {
                     .withType(ApplicationSourcePosition.class)
                     .withSkipLines(1)
                     .build();
-
-
-
     }
+
+    public final StatTraitementRefiFile giveResult() {
+        return new StatTraitementRefiFile(this.statTraitementRefiFile);
+    }
+
     @Override
     public Iterator<ReferenceApplicationUseCase.ReferenceApplicationCmd> iterator() {
+        statTraitementRefiFile = new StatTraitementRefiFile();
         return new IteratorRefiFile();
     }
 
@@ -46,15 +46,19 @@ public class TransformerSourceToCmd implements CollectionApplicationCmd {
             findNextValidApplicationSourcePosition();
         }
 
-        private void findNextValidApplicationSourcePosition() {
+        private StatTraitementRefiFile findNextValidApplicationSourcePosition() {
+
             if (csvIterator.hasNext()) {
                 applicationSourcePosition = csvIterator.next();
+                statTraitementRefiFile.addReadLine();
                 if (applicationSourcePosition.getState().equals("Désactivée")) {
+                    statTraitementRefiFile.addRejetedLine();
                     findNextValidApplicationSourcePosition();
                 }
             } else {
                 applicationSourcePosition = null;
             }
+            return statTraitementRefiFile;
         }
 
         @Override

@@ -8,6 +8,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.yde.ydeapp.application.in.GetApplicationQuery;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase.ReferenceApplicationCmd;
+import org.yde.ydeapp.application.in.StateCmdEnum;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.ApplicationIdent;
 
@@ -25,20 +26,7 @@ public class ApplicationResource {
     @Autowired
     GetApplicationQuery getApplicationQuery;
 
-    @PostMapping("applications")
-    public ResponseEntity<Void> referenceApplication(@RequestBody ApplicationDesc applicationDesc) {
-
-        ReferenceApplicationCmd referenceApplicationCmd = buildReferenceApplicationCmdFromApplicationDesc(applicationDesc);
-
-        Application application = referenceApplicationUseCase.referenceOrUpdateApplication(referenceApplicationCmd);
-        URI location = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{codeApp}")
-            .buildAndExpand(application.getCodeApplication())
-            .toUri();
-
-        return ResponseEntity.created(location).build();
-    }
+    
 
     @PutMapping("applications/{codeApplication}")
     public ResponseEntity<Void> updateApplication(@NotNull @PathVariable("codeApplication") final String codeApplication,
