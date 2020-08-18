@@ -71,8 +71,8 @@ class ApplicationResourceTest {
     void testReferenceApplication() throws Exception {
         // Given
         Mockito
-            .when(referenceApplicationUseCase.referenceApplication(any()))
-            .thenReturn(application);
+                .when(getApplicationQuery.getApplication(CODE_APPLICATION))
+                .thenReturn(application);
 
         ApplicationDesc applicationDesc = buildASampleApplicationDescForUpdate();
 
@@ -145,6 +145,9 @@ class ApplicationResourceTest {
             .andExpect(status().isOk());
     }
 
+
+
+
     private ApplicationDesc buildASampleApplicationDescForCreate() {
         ApplicationDesc applicationDesc = new ApplicationDesc();
         applicationDesc.setCodeApplication(CODE_APPLICATION);
@@ -166,4 +169,6 @@ class ApplicationResourceTest {
         applicationDesc.setLastName(LAST_NAME_SECOND);
         return applicationDesc;
     }
+
+
 }

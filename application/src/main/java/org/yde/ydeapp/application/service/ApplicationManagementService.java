@@ -5,8 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.yde.ydeapp.application.in.GetApplicationQuery;
-import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
+import org.yde.ydeapp.application.in.*;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.ApplicationIdent;
 import org.yde.ydeapp.domain.Personne;
@@ -23,20 +22,63 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
     @Autowired
     RepositoryOfApplication repositoryOfApplication;
 
+
     @Override
-    public Application referenceApplication(ReferenceApplicationCmd referenceApplicationCmd) {
+    public ResultOfCollection referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd) {
+        ResultOfCollection resultOfCollection=new ResultOfCollection();
+        for(ReferenceApplicationCmd referenceApplicationCmd: collectionApplicationCmd){
+            StateCmdEnum stateCmdEnum = referenceOrUpdateApplication(referenceApplicationCmd);
+            switch (stateCmdEnum) {
+                case IGNORE:
+                    resultOfCollection.AddIgnore();
+                    break;
+                case UPDATE:
+                    resultOfCollection.AddUpdate();
+                    break;
+                case REFERENCE:
+                    resultOfCollection.AddReference();
+                    break;
+                default:
+                    break;
 
-        Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
-        Application application = new Application.Builder(referenceApplicationCmd.getCodeApp())
-            .withShortDescription(referenceApplicationCmd.getShortDescription())
-            .withLongDescription(referenceApplicationCmd.getLongDescription())
-            .withResponsable(personne)
-            .build();
-        repositoryOfApplication.referenceApplication(application);
-        log.trace("Application {} referenced", application.getCodeApplication());
+            }
 
-        return application;
+
+
+        }
+        return resultOfCollection;
+
     }
+
+    @Override
+    public StateCmdEnum referenceOrUpdateApplication(ReferenceApplicationCmd referenceApplicationCmd) {
+        Application application;
+        Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
+
+        StateCmdEnum stateCmd;
+        application = repositoryOfApplication.retrieveByAppCode(referenceApplicationCmd.getCodeApp());
+        if (application != null) {
+            log.trace("Application {} updated", application.getCodeApplication());
+            application.setLongDescription(referenceApplicationCmd.getLongDescription());
+            application.setShortDescription(referenceApplicationCmd.getShortDescription());
+            application.setResponsable(personne);
+            repositoryOfApplication.updateApplication(application);
+            stateCmd = StateCmdEnum.UPDATE;
+
+        } else {
+            application = new Application.Builder(referenceApplicationCmd.getCodeApp())
+                    .withShortDescription(referenceApplicationCmd.getShortDescription())
+                    .withLongDescription(referenceApplicationCmd.getLongDescription())
+                    .withResponsable(personne)
+                    .build();
+            log.trace("Application {} created", application.getCodeApplication());
+            repositoryOfApplication.referenceApplication(application);
+            stateCmd = StateCmdEnum.REFERENCE;
+
+        }
+       return  stateCmd;
+    }
+
 
     @Override
     public Application updateApplication(String codeApplication, ReferenceApplicationCmd referenceApplicationCmd) {

@@ -7,7 +7,8 @@ import org.yde.ydeapp.domain.Application;
 import javax.validation.constraints.Pattern;
 
 public interface ReferenceApplicationUseCase {
-    Application referenceApplication(ReferenceApplicationCmd referenceApplicationCmd);
+    ResultOfCollection referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd);
+    StateCmdEnum referenceOrUpdateApplication(ReferenceApplicationCmd referenceApplicationCmd);
 
     Application updateApplication(String codeApplication, ReferenceApplicationCmd referenceApplicationCmd);
 
@@ -60,5 +61,7 @@ public interface ReferenceApplicationUseCase {
         public String getLastName() {
             return lastName;
         }
+
+
     }
 }
