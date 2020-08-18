@@ -29,15 +29,16 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
 
         if (applicationEntity == null) {
             log.debug("Application {} not exist", codeApp);
-            throw new EntityNotFound(String.format("Application with %s is not in repository", codeApp));
+            return null;
         }
+
         log.debug("Application {} load", codeApp);
         Personne personne = new Personne(applicationEntity.getResponsable().getUid(), applicationEntity.getResponsable().getFirstName(), applicationEntity.getResponsable().getLastName());
         return new Application.Builder(applicationEntity.getCodeApp())
-            .withShortDescription(applicationEntity.getShortDescription())
-            .withLongDescription(applicationEntity.getLongDescription())
-            .withResponsable(personne)
-            .build();
+                .withShortDescription(applicationEntity.getShortDescription())
+                .withLongDescription(applicationEntity.getLongDescription())
+                .withResponsable(personne)
+                .build();
     }
 
 

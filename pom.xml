@@ -70,7 +70,9 @@
         <module>application</module>
         <module>infrastructure</module>
         <module>exposition</module>
+        <module>interfaceRefi</module>
         <module>configuration</module>
+
     </modules>
 
     <!-- =============================================================== -->
@@ -97,6 +99,11 @@
             <dependency>
                 <groupId>org.yde.ydeapp</groupId>
                 <artifactId>exposition</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.yde.ydeapp</groupId>
+                <artifactId>interfaceRefi</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
