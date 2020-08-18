@@ -54,15 +54,15 @@ class RepositoryOfApplicationImplTest {
     }
 
     @Test
-    @DisplayName("Have a exception when try to find a non exist application")
-    void When_Application_not_exist_i_have_a_EntityNotExist_Exception() {
+    @DisplayName("Have a null return when try to find a non exist application")
+    void When_Application_not_exist_i_have_a_null_value() {
         // Given
 
         // When
-        Throwable thrown = catchThrowable(() -> repositoryOfApplicationImpl.retrieveByAppCode(CODE_APP_NOT_EXIST));
+        Application application = repositoryOfApplicationImpl.retrieveByAppCode(CODE_APP_NOT_EXIST);
 
         // Then
-        Assertions.assertThat(thrown).as("Essai recherche application pas présente en base").hasMessage(String.format("Application with %s is not in repository", CODE_APP_NOT_EXIST));
+        Assertions.assertThat(application).isNull();
     }
 
     private void GivenAApplicationEntityExistInBase() {

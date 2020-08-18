@@ -37,15 +37,15 @@ class RepositoryOfOrganizationImplTest {
     private RepositoryOfOrganizationImpl repositoryOfOrganizationImpl;
 
     @Test
-    @DisplayName("Have a exception when try to find a non exist organization")
-    void when_organization_not_exist_i_have_a_EntityNotExist_Exception() {
+    @DisplayName("Have a null value when try to find a non exist organization")
+    void when_organization_not_exist_i_have_a_null_value() {
         // Given
         // No organization in th erepository
         // When
-        Throwable thrown = catchThrowable(() -> repositoryOfOrganizationImpl.retrieveByIdRefog(NAME_ORGANIZATION_NOT_EXIST));
+        Organization organization = repositoryOfOrganizationImpl.retrieveByIdRefog(NAME_ORGANIZATION_NOT_EXIST);
 
         // Then
-        Assertions.assertThat(thrown).as("Essai recherche organization pas présente en base").hasMessage(String.format("Organization %s is not present in the Repository", NAME_ORGANIZATION_NOT_EXIST));
+        Assertions.assertThat(organization).isNull();
     }
 
     @Test

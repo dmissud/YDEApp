@@ -9,7 +9,6 @@ import javax.validation.constraints.Pattern;
 public interface ReferenceApplicationUseCase {
     ResultOfCollection referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd);
     StateCmdEnum referenceOrUpdateApplication(ReferenceApplicationCmd referenceApplicationCmd);
-
     Application updateApplication(String codeApplication, ReferenceApplicationCmd referenceApplicationCmd);
 
     @Validated

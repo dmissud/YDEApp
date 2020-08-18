@@ -19,7 +19,7 @@ import java.io.*;
 public class CsvFileOfRefiImplTest {
 
     @Autowired
-    CsvFileOfRefiImpl csvFileOfRefiimpl;
+    CsvFileOfRefiImpl csvFileOfRefiImpl;
 
     public CsvFileOfRefiImplTest() throws IOException {
     }
