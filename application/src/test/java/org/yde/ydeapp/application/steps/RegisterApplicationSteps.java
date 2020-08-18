@@ -44,7 +44,7 @@ public class RegisterApplicationSteps {
     @DataTableType
     public ReferenceApplicationCmd applicationFataTableEntry(Map<String, String> entry) {
         return new ReferenceApplicationCmd(entry.get("codeApplication"),
-                entry.get("shortDescription"),
+                entry.get("idRefog"),
                 entry.get("longDescription"),
                 entry.get("uid"),
                 entry.get("firstName"),

@@ -22,20 +22,35 @@ public class OrganizationManagementService implements ReferenceOrganizationUseCa
 
     @Override
     public Organization referenceOrganization(ReferenceOrganisationCmd referenceOrganisationCmd) {
+        Organization rootOrganization = buildOrganization(referenceOrganisationCmd);
+
+        repositoryOfOrganization.storeOrganization(rootOrganization);
+        log.debug("Reference of the organization {}", rootOrganization.getName());
+
+        return rootOrganization;
+    }
+
+    @Override
+    public Organization updateOrganization(ReferenceOrganisationCmd referenceOrganisationCmd) {
         referenceOrganisationCmd.validate();
-        Organization root = buildOrganization(referenceOrganisationCmd);
-        repositoryOfOrganization.referenceOrganization(root);
-        log.debug("Reference of the organization {}", root.getName());
-        return root;
+        Organization organization = repositoryOfOrganization.retrieveByIdRefog(referenceOrganisationCmd.getIdRefog());
+        if (organization == null) {
+            throw new EntityNotFound(String.format("The organization %s Not found", referenceOrganisationCmd.getOrganizationName()));
+        }
+        organization.setName(referenceOrganisationCmd.getOrganizationName());
+
+        repositoryOfOrganization.storeOrganization(organization);
+        log.debug("Update of the organization {}", organization.getName());
+
+        return organization;
     }
 
     private Organization buildOrganization(ReferenceOrganisationCmd referenceOrganisationCmd) {
         referenceOrganisationCmd.validate();
-        Organization organization;
-        try {
-            repositoryOfOrganization.retrieveByIdRefog(referenceOrganisationCmd.getOrganizationName());
+        Organization organization = repositoryOfOrganization.retrieveByIdRefog(referenceOrganisationCmd.getIdRefog());
+        if (organization != null) {
             throw new EntityAlreadyExist(String.format("The organization %s all ready exist", referenceOrganisationCmd.getOrganizationName()));
-        } catch (EntityNotFound ex) {
+        } else {
             organization = new Organization(referenceOrganisationCmd.getIdRefog(), referenceOrganisationCmd.getOrganizationName());
             log.debug("Build of the organization {}", organization.getName());
             if (referenceOrganisationCmd.getChildren() != null) {

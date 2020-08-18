@@ -19,11 +19,11 @@ public class RepositoryOfOrganizationImpl implements RepositoryOfOrganization {
     public Organization retrieveByIdRefog(String organizationIdRefog) {
         OrganizationEntity organizationEntity = repositoryOfOrganizationJpa.findByIdRefog(organizationIdRefog);
 
-        if (organizationEntity == null) {
-            throw new EntityNotFound(String.format("Organization %s is not present in the Repository", organizationIdRefog));
+        if (organizationEntity != null) {
+            return mapEntityToDomain(organizationEntity);
+        } else {
+            return null;
         }
-
-        return mapEntityToDomain(organizationEntity);
     }
 
     private Organization mapEntityToDomain(OrganizationEntity organizationEntity) {
@@ -35,21 +35,20 @@ public class RepositoryOfOrganizationImpl implements RepositoryOfOrganization {
     }
 
     @Override
-    public void referenceOrganization(Organization organization) {
+    public void storeOrganization(Organization organization) {
         repositoryOfOrganizationJpa.save(mapDomainToEntity(organization));
     }
 
     private OrganizationEntity mapDomainToEntity(Organization organization) {
-        OrganizationEntity organizationEntity = repositoryOfOrganizationJpa.findByIdRefog(organization.getName());
+        OrganizationEntity organizationEntity = repositoryOfOrganizationJpa.findByIdRefog(organization.getIdRefog());
 
-        List<OrganizationEntity> children;
         if (organizationEntity == null) {
             organizationEntity = new OrganizationEntity();
             organizationEntity.setName(organization.getName());
             organizationEntity.setIdRefog(organization.getIdRefog());
         }
 
-        children = new ArrayList<>();
+        List<OrganizationEntity> children = new ArrayList<>();
 
         for (Organization organizationChild : organization.getChildren()) {
             children.add(mapDomainToEntity(organizationChild));

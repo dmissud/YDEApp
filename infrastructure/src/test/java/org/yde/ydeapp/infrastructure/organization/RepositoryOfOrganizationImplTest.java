@@ -54,7 +54,7 @@ class RepositoryOfOrganizationImplTest {
         Organization organization = new Organization(ORGANIZATION_IDREFOG_ALONE, ORGANIZATION_ALONE);
 
         // When
-        repositoryOfOrganizationImpl.referenceOrganization(organization);
+        repositoryOfOrganizationImpl.storeOrganization(organization);
 
         // Then
         // Then
@@ -73,7 +73,7 @@ class RepositoryOfOrganizationImplTest {
         organization.addChild(new Organization(ORGANIZATION_IDREFOG_CHILD_TWO, ORGANIZATION_CHILD_TWO));
 
         // When
-        repositoryOfOrganizationImpl.referenceOrganization(organization);
+        repositoryOfOrganizationImpl.storeOrganization(organization);
 
         // Then
         List lstApp = testEntityManager.getEntityManager().createQuery("select c from OrganizationEntity c where c.name = :nameAttenduDansQuery")

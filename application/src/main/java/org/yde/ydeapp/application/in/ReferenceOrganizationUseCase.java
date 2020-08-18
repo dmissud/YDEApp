@@ -6,10 +6,13 @@ import org.yde.ydeapp.domain.Organization;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ReferenceOrganizationUseCase {
     Organization referenceOrganization(ReferenceOrganisationCmd referenceOrganisationCmd);
+
+    Organization updateOrganization(ReferenceOrganisationCmd referenceOrganisationCmd);
 
     @Validated
     class ReferenceOrganisationCmd extends SelfValidating<ReferenceOrganisationCmd> {
@@ -21,7 +24,7 @@ public interface ReferenceOrganizationUseCase {
         @Pattern(regexp = "^([0-9]{8})$")
         private final String idRefog;
 
-        private final List<ReferenceOrganisationCmd> children;
+        private List<ReferenceOrganisationCmd> children;
 
         public ReferenceOrganisationCmd(String organizationName,
                                         String idRefog,
@@ -38,6 +41,7 @@ public interface ReferenceOrganizationUseCase {
                 this.children.forEach(ReferenceOrganisationCmd::validate);
             }
         }
+
         public String getOrganizationName() {
             return organizationName;
         }

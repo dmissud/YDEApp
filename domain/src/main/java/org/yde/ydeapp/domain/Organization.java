@@ -17,6 +17,10 @@ public class Organization {
         children = new ArrayList<>();
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void addChild(Organization organization) {
         children.add(organization);
     }
