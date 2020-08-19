@@ -55,9 +55,9 @@ class OrganizationResourceTest {
     void when_i_reference_a_new_organization_http_status_is_created() throws Exception {
         // Given
 
-        ReferenceOrganisationCmd referenceOrganisationCmd = new ReferenceOrganisationCmd(ORGANIZATION_IDREFOG_ONE, ORGANIZATION_ONE, new ArrayList<>());
+        ReferenceOrganisationCmd referenceOrganisationCmd = new ReferenceOrganisationCmd(ORGANIZATION_ONE, ORGANIZATION_IDREFOG_ONE, new ArrayList<>());
         Mockito
-            .when(referenceOrganizationUseCase.referenceOrganization(referenceOrganisationCmd))
+            .when(referenceOrganizationUseCase.referenceOrganization(any(ReferenceOrganisationCmd.class)))
             .thenReturn(organization);
 
         mockMvc
