@@ -20,3 +20,7 @@ Feature: Organization management
     When Administrator want change the name of the  organization with idRefog "10000000"  with "New name"
     Then tne name of the organization "10000000" is "New name"
 
+  Scenario: retrieve a organization with child
+    Given The organization with idRefog "10000000" and with name "DEP 01" exist in the repository
+    When Administrator want to consult a organization Tree based on organization with idRefog "10000000"
+    Then a new organization tree exist with base "DEP 01" with a total of "0" Childs and "1" Organizations

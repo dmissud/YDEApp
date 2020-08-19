@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.yde.ydeapp.application.in.OrganizationQuery;
 import org.yde.ydeapp.application.in.ReferenceOrganizationUseCase;
 import org.yde.ydeapp.application.in.ReferenceOrganizationUseCase.ReferenceOrganisationCmd;
 import org.yde.ydeapp.domain.Organization;
@@ -28,16 +29,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class OrganizationResourceTest {
 
     public static final String ORGANIZATION_ONE = "Organization One";
-    public static final String ORGANIZATION_IDREFOG_ONE = "100000";
+    public static final String ORGANIZATION_IDREFOG_ONE = "10000000";
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private ReferenceOrganizationUseCase referenceOrganizationUseCase;
-    private Organization organization;
+
+    @MockBean
+    private OrganizationQuery organizationQuery;
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    private Organization organization;
+
 
     @BeforeEach
     void setup() {
@@ -46,13 +52,13 @@ class OrganizationResourceTest {
 
     @Test
     @DisplayName("Reference a new organization")
-    void testReferenceOrganization() throws Exception {
+    void when_i_reference_a_new_organization_http_status_is_created() throws Exception {
         // Given
-        Mockito
-            .when(referenceOrganizationUseCase.referenceOrganization(any()))
-            .thenReturn(organization);
 
         ReferenceOrganisationCmd referenceOrganisationCmd = new ReferenceOrganisationCmd(ORGANIZATION_IDREFOG_ONE, ORGANIZATION_ONE, new ArrayList<>());
+        Mockito
+            .when(referenceOrganizationUseCase.referenceOrganization(referenceOrganisationCmd))
+            .thenReturn(organization);
 
         mockMvc
             // When
@@ -64,4 +70,19 @@ class OrganizationResourceTest {
             .andExpect(status().is((HttpStatus.CREATED.value())));
     }
 
+    @Test
+    @DisplayName("Retrieve a organization")
+    void when_i_retrieve_the_detail_of_a_organization_http_status_is_ok() throws Exception {
+        // Given
+        Mockito
+            .when(organizationQuery.getOrganizationTree(any()))
+            .thenReturn(organization);
+
+        mockMvc
+            // When
+            .perform(MockMvcRequestBuilders.get("/api/organizations/" + ORGANIZATION_IDREFOG_ONE)
+                .accept(MediaType.APPLICATION_JSON))
+            // Then
+            .andExpect(status().isOk());
+    }
 }

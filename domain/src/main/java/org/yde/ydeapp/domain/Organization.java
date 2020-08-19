@@ -5,9 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Organization {
-    public String getIdRefog() { return idRefog; }
-
-    private String idRefog;
+    private final String idRefog;
     private String name;
     private List<Organization> children;
 
@@ -20,6 +18,9 @@ public class Organization {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getIdRefog() { return idRefog; }
+
 
     public void addChild(Organization organization) {
         children.add(organization);

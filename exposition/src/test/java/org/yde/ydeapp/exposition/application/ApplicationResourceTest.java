@@ -73,7 +73,7 @@ class ApplicationResourceTest {
     void testReferenceApplication() throws Exception {
         // Given
         Mockito
-                .when(getApplicationQuery.getApplication(CODE_APPLICATION))
+                .when(applicationQuery.getApplication(CODE_APPLICATION))
                 .thenReturn(application);
 
         ApplicationDesc applicationDesc = buildASampleApplicationDescForCreate();
