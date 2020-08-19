@@ -36,10 +36,11 @@ public class RefiRessource {
 
         final StatTraitementRefiFile statTraitementRefiFile = transformerSourceToCmd.giveResult();
         StatRefiFileDto statRefiFileDto = new StatRefiFileDto(statTraitementRefiFile.getStatReadLineFile(),
-                statTraitementRefiFile.getStatRejetedLinefile(),
-                resultOfCollection.getReferenceCounter(),
-                resultOfCollection.getUpdateCounter(),
-                resultOfCollection.getIgnoreCounter());
+            statTraitementRefiFile.getStatRejetedLinefile(),
+            resultOfCollection.getReferenceCounter(),
+            resultOfCollection.getUpdateCounter(),
+            resultOfCollection.getIgnoreCounter(),
+            resultOfCollection.getNoMoreUpdated());
 
 
         return new ResponseEntity<>(statRefiFileDto, HttpStatus.OK);
