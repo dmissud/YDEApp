@@ -107,6 +107,20 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
             }
             applicationEntity.setResponsable(responsableEntity);
         }
+
+        if (!applicationEntity.getOrganisation().getIdRefog().equals(application.getOrganizationIdent().getIdRefog())) {
+            OrganizationEntity organizationEntity = repositoryOfOrganizationJpa.findByIdRefog(application.getOrganizationIdent().getIdRefog());
+            if (organizationEntity != null) {
+                organizationEntity.getApplications().add(applicationEntity);
+                applicationEntity.getOrganisation().getApplications().remove(applicationEntity);
+                applicationEntity.setOrganisation(organizationEntity);
+                log.debug("Organization {} link   to application {}", organizationEntity.getName(), applicationEntity.getCodeApp());
+            } else {
+                throw new EntityNotFound(String.format("Organization %s in not in the repository, coundn't link %s to",
+                    application.getOrganizationIdent().getIdRefog(), applicationEntity.getCodeApp() ));
+            }
+        }
+
         log.debug("Application {} update", application.getCodeApplication());
 
         repositoryOfApplicationJpa.save(applicationEntity);
