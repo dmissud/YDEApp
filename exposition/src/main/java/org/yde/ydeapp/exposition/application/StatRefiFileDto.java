@@ -1,4 +1,4 @@
-package org.yde.ydeapp.interfacerefi;
+package org.yde.ydeapp.exposition.application;
 
 public class StatRefiFileDto {
     private int statReadLineFile;

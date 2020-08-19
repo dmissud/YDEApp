@@ -129,6 +129,13 @@
                 <version>${cucumber.version}</version>
                 <scope>test</scope>
             </dependency>
+            <!-- module traitement fichier csv -->
+            <dependency>
+                <groupId>com.opencsv</groupId>
+                <artifactId>opencsv</artifactId>
+                <version>5.0</version>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
             <dependency>
                 <groupId>io.cucumber</groupId>

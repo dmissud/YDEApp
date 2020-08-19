@@ -18,6 +18,12 @@
             <artifactId>application</artifactId>
         </dependency>
 
+        <!-- module traitement fichier csv -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+        </dependency>
+
         <!-- Spring dependence -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -61,12 +67,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.opencsv</groupId>
-            <artifactId>opencsv</artifactId>
-            <version>5.0</version>
-            <scope>compile</scope>
-        </dependency>
+
 
     </dependencies>
 </project>

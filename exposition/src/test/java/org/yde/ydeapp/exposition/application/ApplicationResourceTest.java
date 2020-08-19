@@ -69,26 +69,6 @@ class ApplicationResourceTest {
     }
 
     @Test
-    @DisplayName("Reference a new application")
-    void testReferenceApplication() throws Exception {
-        // Given
-        Mockito
-                .when(applicationQuery.getApplication(CODE_APPLICATION))
-                .thenReturn(application);
-
-        ApplicationDesc applicationDesc = buildASampleApplicationDescForCreate();
-
-        mockMvc
-            // When
-            .perform(MockMvcRequestBuilders.post("/api/applications")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(applicationDesc)))
-            // Then
-            .andExpect(status().is((HttpStatus.CREATED.value())));
-    }
-
-    @Test
     @DisplayName("Update a application")
     void testUpdateApplication() throws Exception {
         // Given
