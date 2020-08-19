@@ -2,9 +2,11 @@ package org.yde.ydeapp.infrastructure.organization;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.yde.ydeapp.domain.ApplicationIdent;
 import org.yde.ydeapp.domain.Organization;
-import org.yde.ydeapp.domain.out.EntityNotFound;
+import org.yde.ydeapp.domain.OrganizationIdent;
 import org.yde.ydeapp.domain.out.RepositoryOfOrganization;
+import org.yde.ydeapp.infrastructure.application.ApplicationEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +28,17 @@ public class RepositoryOfOrganizationImpl implements RepositoryOfOrganization {
         }
     }
 
+    @Override
+    public OrganizationIdent retriveIdentByIdRefog(String idRefog) {
+        return repositoryOfOrganizationJpa.retrieveOrganizationIdent(idRefog);
+    }
+
     private Organization mapEntityToDomain(OrganizationEntity organizationEntity) {
         Organization organization = new Organization(organizationEntity.getIdRefog(), organizationEntity.getName());
+        for(ApplicationEntity applicationEntity : organizationEntity.getApplications()) {
+            ApplicationIdent applicationIdent = new ApplicationIdent(applicationEntity.getCodeApp(), applicationEntity.getShortDescription());
+            organization.addApplication(applicationIdent);
+        }
         for (OrganizationEntity organisationEntityChild : organizationEntity.getChildren()) {
             organization.addChild(mapEntityToDomain(organisationEntityChild));
         }
@@ -44,9 +55,9 @@ public class RepositoryOfOrganizationImpl implements RepositoryOfOrganization {
 
         if (organizationEntity == null) {
             organizationEntity = new OrganizationEntity();
-            organizationEntity.setName(organization.getName());
             organizationEntity.setIdRefog(organization.getIdRefog());
         }
+        organizationEntity.setName(organization.getName());
 
         List<OrganizationEntity> children = new ArrayList<>();
 

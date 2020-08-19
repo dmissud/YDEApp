@@ -1,18 +1,18 @@
 package org.yde.ydeapp.domain;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Organization {
     private final String idRefog;
     private String name;
     private List<Organization> children;
+    private Map<String, ApplicationIdent> applications;
 
     public Organization(String idRefog, String name) {
         this.idRefog = idRefog;
         this.name = name;
         children = new ArrayList<>();
+        applications = new HashMap<>();
     }
 
     public void setName(String name) {
@@ -44,5 +44,17 @@ public class Organization {
 
     public List<Organization> getChildren() {
         return Collections.unmodifiableList(children);
+    }
+
+    public void addApplication(ApplicationIdent applicationIdent) {
+        if (applications.containsKey(applicationIdent.getCodeApplication())) {
+            applications.replace(applicationIdent.getCodeApplication(), applicationIdent);
+        } else {
+            applications.put(applicationIdent.getCodeApplication(), applicationIdent);
+        }
+    }
+
+    public Collection<ApplicationIdent> giveApplications() {
+        return applications.values();
     }
 }

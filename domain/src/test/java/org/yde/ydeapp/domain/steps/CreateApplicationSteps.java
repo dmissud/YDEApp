@@ -7,6 +7,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.Personne;
+import org.yde.ydeapp.domain.OrganizationIdent;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CreateApplicationSteps {
 
     public static final String CODE_APPLICATION = "AP00002";
+
     private ApplicationDataTable appDescCrea = null;
     private ApplicationDataTable appDescUpdate = null;
     private Application application;
@@ -28,7 +30,8 @@ public class CreateApplicationSteps {
             entry.get("longDescription"),
             entry.get("uid"),
             entry.get("firstName"),
-            entry.get("lastName"));
+            entry.get("lastName"),
+            entry.get("IdRefogOrganization"));
 
     }
 
@@ -45,11 +48,13 @@ public class CreateApplicationSteps {
         } else {
             throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
         }
+        OrganizationIdent organizationIdent = new OrganizationIdent(appDescCrea.getIdRefogOrganization(), "Organization Name");
         Personne personne = new Personne(appDescCrea.getUid(), appDescCrea.getFisrtName(), appDescCrea.getLastName());
         application = new Application.Builder(appDescCrea.getCodeApplication())
             .withShortDescription(appDescCrea.getShortDescription())
             .withLongDescription(appDescCrea.getLongDescription())
             .withResponsable(personne)
+            .withOrganization(organizationIdent)
             .build();
     }
 
@@ -59,10 +64,12 @@ public class CreateApplicationSteps {
         assertThat(application.getCodeApplication()).isEqualTo(appDescCrea.getCodeApplication());
         assertThat(application.getShortDescription()).isEqualTo(appDescCrea.getShortDescription());
         assertThat(application.getLongDescription()).isEqualTo(appDescCrea.getLongDescription());
+        assertThat(application.getResponsable()).isNotNull();
         assertThat(application.getResponsable().getUid()).isEqualTo(appDescCrea.getUid());
         assertThat(application.getResponsable().getFirstName()).isEqualTo(appDescCrea.getFisrtName());
         assertThat(application.getResponsable().getLastName()).isEqualTo(appDescCrea.getLastName());
-
+        assertThat(application.getOrganizationIdent()).isNotNull();
+        assertThat(application.getOrganizationIdent().getIdRefog()).isEqualTo(appDescCrea.getIdRefogOrganization());
     }
 
     @When("Administrator want to create a new application with only code app AP00002")
@@ -79,7 +86,7 @@ public class CreateApplicationSteps {
 
     @Given("The application exist")
     public void the_application_exist(List<ApplicationDataTable> apps) {
-        ApplicationDataTable appDescCreaUpdate = null;
+        ApplicationDataTable appDescCreaUpdate;
         if (apps.size() == 1) {
             appDescCreaUpdate = apps.get(0);
             application = null;
@@ -87,15 +94,16 @@ public class CreateApplicationSteps {
             throw new PendingException("Bad use of Cucumber scenario: create a new Application");
         }
         Personne personne = new Personne(appDescCreaUpdate.getUid(), appDescCreaUpdate.getFisrtName(), appDescCreaUpdate.getLastName());
+        OrganizationIdent organizationIdent = new OrganizationIdent(appDescCreaUpdate.getIdRefogOrganization(), "Orga Name");
         application = new Application.Builder(appDescCreaUpdate.getCodeApplication())
             .withShortDescription(appDescCreaUpdate.getShortDescription())
             .withLongDescription(appDescCreaUpdate.getLongDescription())
-                .withResponsable(personne)
-                .build();
+            .withResponsable(personne)
+            .withOrganization(organizationIdent)
+            .build();
 
 
     }
-
 
 
     @When("Administrator want to update an application with the following attributes")
@@ -107,12 +115,14 @@ public class CreateApplicationSteps {
             throw new PendingException("Bad use of Cucumber scenario: update a new Application");
         }
         Personne personne = new Personne(appDescUpdate.getUid(), appDescUpdate.getFisrtName(), appDescUpdate.getLastName());
-        application.setShortDescription(appDescUpdate.getShortDescription());
-        application.setLongDescription(appDescUpdate.getLongDescription());
-        application.setResponsable(personne);
-
+        OrganizationIdent organizationIdent = new OrganizationIdent(appDescUpdate.getIdRefogOrganization(), "Orga Name");
+        application.updateShortDescription(appDescUpdate.getShortDescription());
+        application.updateLongDescription(appDescUpdate.getLongDescription());
+        application.updateResponsable(personne);
+        application.updateOrganization(organizationIdent);
 
     }
+
     @Then("the update is success")
     public void the_update_is_success() {
         // Write code here that turns the phrase above into concrete actions

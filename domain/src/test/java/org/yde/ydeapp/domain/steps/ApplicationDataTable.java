@@ -7,15 +7,20 @@ public class ApplicationDataTable {
     private final String uid;
     private final String fisrtName;
     private final String lastName;
+    private final String idRefogOrganization;
 
-    public ApplicationDataTable(String codeApplication, String shortDescription, String longDescription, String uid,String fisrtName,String lastName) {
+    public String getIdRefogOrganization() {
+        return idRefogOrganization;
+    }
+
+    public ApplicationDataTable(String codeApplication, String shortDescription, String longDescription, String uid, String fisrtName, String lastName, String idRefogOrganization) {
         this.codeApplication = codeApplication;
         this.shortDescription = shortDescription;
         this.longDescription = longDescription;
         this.uid = uid;
         this.fisrtName= fisrtName;
         this.lastName=lastName;
-
+        this.idRefogOrganization = idRefogOrganization;
     }
 
     public String getCodeApplication() { return codeApplication; }

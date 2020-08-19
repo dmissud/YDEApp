@@ -5,8 +5,8 @@ Feature: Management of a Application
   Scenario: Create a new Application
     Given The application doesn't exist
     When Administrator want to create a new application with the following attributes
-      | codeApplication | shortDescription | longDescription               | uid    | firstName | lastName |
-      | AP00001         | Test App         | Long description for Test app | 123456 | John      | Doe      |
+      | codeApplication | shortDescription | longDescription               | uid    | firstName | lastName | IdRefogOrganization |
+      | AP00001         | Test App         | Long description for Test app | 123456 | John      | Doe      | 10000000            |
 
     Then the create is success
 
@@ -17,9 +17,9 @@ Feature: Management of a Application
 
   Scenario: Update a existing application
     Given The application exist
-      | codeApplication | shortDescription | longDescription               | uid    | firstName | lastName |
-      | AP00002         | Test App         | Long description for Test app | 123456 | John      | Doe      |
+      | codeApplication | shortDescription | longDescription               | uid    | firstName | lastName | IdRefogOrganization |
+      | AP00002         | Test App         | Long description for Test app | 123456 | John      | Doe      | 10000000            |
     When Administrator want to update an application with the following attributes
-      | codeApplication | shortDescription | longDescription             | uid    | firstName | lastName |
-      | AP00002         | Test Appupdate   | Long description app update | 654321 | Johnny    | Update   |
+      | codeApplication | shortDescription | longDescription             | uid    | firstName | lastName | IdRefogOrganization |
+      | AP00002         | Test Appupdate   | Long description app update | 654321 | Johnny    | Update   | 10000000            |
     Then the update is success

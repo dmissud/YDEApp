@@ -4,6 +4,8 @@ public class ResultOfCollection {
     private int referenceCounter;
     private int updateCounter;
     private int ignoreCounter;
+    private int noMoreUpdated;
+
 
     public int getReferenceCounter() {
         return referenceCounter;
@@ -29,17 +31,27 @@ public class ResultOfCollection {
         this.ignoreCounter = ignoreCounter;
     }
 
-    public void AddReference (){
+    public int getNoMoreUpdated() {
+        return noMoreUpdated;
+    }
+
+    public void setNoMoreUpdated(int noMoreUpdated) {
+        this.noMoreUpdated = noMoreUpdated;
+    }
+    public void addReference(){
         referenceCounter ++;
 
     }
-    public void AddUpdate (){
+    public void addUpdate(){
         updateCounter ++;
 
     }
-    public void AddIgnore (){
+    public void addIgnore(){
         ignoreCounter ++;
 
     }
 
+    public void addNoMoreUpdated() {
+        noMoreUpdated++;
+    }
 }

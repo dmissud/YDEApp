@@ -1,5 +1,7 @@
 package org.yde.ydeapp.infrastructure.organization;
 
+import org.yde.ydeapp.infrastructure.application.ApplicationEntity;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -17,12 +19,23 @@ public class OrganizationEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrganizationEntity> children;
 
+    @OneToMany(mappedBy = "organisation", cascade = CascadeType.ALL)
+    private List<ApplicationEntity> applications;
+
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public List<ApplicationEntity> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(List<ApplicationEntity> applications) {
+        this.applications = applications;
     }
 
     public String getIdRefog() {
