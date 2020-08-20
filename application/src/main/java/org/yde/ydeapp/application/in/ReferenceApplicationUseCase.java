@@ -27,9 +27,10 @@ public interface ReferenceApplicationUseCase {
 
         private final String lastName;
 
+        @Pattern(regexp = "^([0-9]{8})$")
         private final String idRefOrganizationMoe;
 
-        public ReferenceApplicationCmd(@Pattern(regexp = "^(AP[0-9]{5})$") String codeApp,
+        public ReferenceApplicationCmd(String codeApp,
                                        String shortDescription,
                                        String longDescription,
                                        String uid,

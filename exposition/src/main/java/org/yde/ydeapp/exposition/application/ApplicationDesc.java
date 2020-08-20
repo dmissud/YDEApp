@@ -48,6 +48,13 @@ public class ApplicationDesc {
     @Size(max = 8)
     private String organizationIdent;
 
+    @ApiModelProperty(example = "10000000", required = true, value = "Id réference organization MOE")
+    @NotNull
+    @Pattern(regexp = "^([a-zA-Z0-9]{8})$")
+    @Size(max = 8)
+    private String idRefOrganizationMoe;
+
+
     public String getCodeApplication() { return codeApplication; }
 
     public void setCodeApplication(String codeApplication) {
@@ -96,5 +103,13 @@ public class ApplicationDesc {
 
     public void setOrganizationIdent(String organizationIdent) {
         this.organizationIdent = organizationIdent;
+    }
+
+    public String getIdRefOrganizationMoe() {
+        return idRefOrganizationMoe;
+    }
+
+    public void setIdRefOrganizationMoe(String idRefOrganizationMoe) {
+        this.idRefOrganizationMoe = idRefOrganizationMoe;
     }
 }
