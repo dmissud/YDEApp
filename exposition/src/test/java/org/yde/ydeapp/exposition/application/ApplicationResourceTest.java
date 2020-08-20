@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.yde.ydeapp.application.in.ApplicationQuery;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.domain.Application;
+import org.yde.ydeapp.domain.OrganizationIdent;
 import org.yde.ydeapp.domain.Personne;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -32,11 +33,14 @@ class ApplicationResourceTest {
     public static final String UID_FIRST = "123456";
     public static final String FIRST_NAME_FIRST = "Jhon";
     public static final String LAST_NAME_FIRST = "Doe";
+    public static final String ID_REFOG_MOE_FIRST = "10000000";
     public static final String A_SHORT_DESCRIPTION_UPDATE = "A update of short description";
     public static final String A_LONG_DESCRIPTION_UPDATE = "A update of long long description";
     public static final String UID_SECOND = "654321";
     public static final String FIRST_NAME_SECOND = "Alexander";
     public static final String LAST_NAME_SECOND = "TheGreat";
+    public static final String ID_REFOG_MOE_SECOND = "10000000";
+    public static final String NAME_OF_ORGA_MOE = "NameOfOrgaMOE";
 
     @Autowired
     private MockMvc mockMvc;
@@ -57,15 +61,17 @@ class ApplicationResourceTest {
     @BeforeEach
     void setup() {
         application = new Application.Builder(CODE_APPLICATION)
-            .withShortDescription(A_SHORT_DESCRIPTION_INIT)
-            .withLongDescription(A_LONG_DESCRIPTION_INIT)
-            .withResponsable(new Personne(UID_FIRST, FIRST_NAME_FIRST, LAST_NAME_FIRST))
-            .build();
+                .withShortDescription(A_SHORT_DESCRIPTION_INIT)
+                .withLongDescription(A_LONG_DESCRIPTION_INIT)
+                .withResponsable(new Personne(UID_FIRST, FIRST_NAME_FIRST, LAST_NAME_FIRST))
+                .withOrganization(new OrganizationIdent(ID_REFOG_MOE_FIRST, NAME_OF_ORGA_MOE))
+                .build();
         application_updated = new Application.Builder(CODE_APPLICATION)
-            .withShortDescription(A_SHORT_DESCRIPTION_INIT)
-            .withLongDescription(A_LONG_DESCRIPTION_INIT)
-            .withResponsable(new Personne(UID_FIRST, FIRST_NAME_FIRST, LAST_NAME_FIRST))
-            .build();
+                .withShortDescription(A_SHORT_DESCRIPTION_INIT)
+                .withLongDescription(A_LONG_DESCRIPTION_INIT)
+                .withResponsable(new Personne(UID_FIRST, FIRST_NAME_FIRST, LAST_NAME_FIRST))
+                .withOrganization(new OrganizationIdent(ID_REFOG_MOE_FIRST, NAME_OF_ORGA_MOE))
+                .build();
     }
 
     @Test
@@ -73,22 +79,22 @@ class ApplicationResourceTest {
     void testUpdateApplication() throws Exception {
         // Given
         Mockito
-            .when(applicationQuery.getApplication(CODE_APPLICATION))
-            .thenReturn(application);
+                .when(applicationQuery.getApplication(CODE_APPLICATION))
+                .thenReturn(application);
         Mockito
-            .when(referenceApplicationUseCase.updateApplication(any(String.class), any()))
-            .thenReturn(application_updated);
+                .when(referenceApplicationUseCase.updateApplication(any(String.class), any()))
+                .thenReturn(application_updated);
 
         ApplicationDesc applicationDesc = buildASampleApplicationDescForUpdate();
 
         mockMvc
-            // When
-            .perform(MockMvcRequestBuilders.put("/api/applications/" + CODE_APPLICATION)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(applicationDesc)))
-            // Then
-            .andExpect(status().is((HttpStatus.ACCEPTED.value())));
+                // When
+                .perform(MockMvcRequestBuilders.put("/api/applications/" + CODE_APPLICATION)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(applicationDesc)))
+                // Then
+                .andExpect(status().is((HttpStatus.ACCEPTED.value())));
     }
 
     @Test
@@ -96,15 +102,15 @@ class ApplicationResourceTest {
     void testRetrieveApplicationByCodeApplication() throws Exception {
         // Given
         Mockito
-            .when(applicationQuery.getApplication(CODE_APPLICATION))
-            .thenReturn(application);
+                .when(applicationQuery.getApplication(CODE_APPLICATION))
+                .thenReturn(application);
 
         mockMvc
-            // When
-            .perform(MockMvcRequestBuilders.get("/api/applications/" + CODE_APPLICATION)
-                .accept(MediaType.APPLICATION_JSON))
-            // Then
-            .andExpect(status().isOk());
+                // When
+                .perform(MockMvcRequestBuilders.get("/api/applications/" + CODE_APPLICATION)
+                        .accept(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -112,18 +118,16 @@ class ApplicationResourceTest {
     void testRetrieveAllApplication() throws Exception {
         // Given
         Mockito
-            .when(applicationQuery.getApplication(CODE_APPLICATION))
-            .thenReturn(application);
+                .when(applicationQuery.getApplication(CODE_APPLICATION))
+                .thenReturn(application);
 
         mockMvc
-            // When
-            .perform(MockMvcRequestBuilders.get("/api/applications/")
-                .accept(MediaType.APPLICATION_JSON))
-            // Then
-            .andExpect(status().isOk());
+                // When
+                .perform(MockMvcRequestBuilders.get("/api/applications/")
+                        .accept(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isOk());
     }
-
-
 
 
     private ApplicationDesc buildASampleApplicationDescForCreate() {
@@ -134,6 +138,7 @@ class ApplicationResourceTest {
         applicationDesc.setUid(UID_FIRST);
         applicationDesc.setFirstName(FIRST_NAME_FIRST);
         applicationDesc.setLastName(LAST_NAME_FIRST);
+        applicationDesc.setOrganizationIdent(ID_REFOG_MOE_FIRST);
         return applicationDesc;
     }
 
@@ -145,6 +150,7 @@ class ApplicationResourceTest {
         applicationDesc.setUid(UID_SECOND);
         applicationDesc.setFirstName(FIRST_NAME_SECOND);
         applicationDesc.setLastName(LAST_NAME_SECOND);
+        applicationDesc.setOrganizationIdent(ID_REFOG_MOE_SECOND);
         return applicationDesc;
     }
 

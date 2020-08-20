@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.application.in.ResultOfCollection;
+import org.yde.ydeapp.interfacerefi.StoreFileRefi;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +31,8 @@ public class CsvFileOfRefiImplTest {
     @Autowired
     MockMvc mockMvc;
 
-
+    @MockBean
+    StoreFileRefi storeFileRefi;
 
 
     @Autowired
@@ -51,8 +53,7 @@ public class CsvFileOfRefiImplTest {
     void create_the_file_in_the_infratructure() throws Exception {
 
         //Given
-        MockMultipartFile multipartFile1 = new MockMultipartFile("epita.csv","epita.csv","text/csv",
-                new FileInputStream(new File("src/test/resources/epita.csv")));
+        MockMultipartFile multipartFile1 = new MockMultipartFile("creation.csv", new FileInputStream(new File("src/test/resources/creation.csv")));
 
 
         //When

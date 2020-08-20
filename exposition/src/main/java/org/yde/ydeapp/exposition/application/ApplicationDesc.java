@@ -42,6 +42,11 @@ public class ApplicationDesc {
     @Pattern(regexp = "^([a-zA-Z0-9]{1,30})$")
     @Size(max = 100)
     private String lastName;
+    @ApiModelProperty(example = "Doe", required = true, value = "Lastname of the responsible")
+    @NotNull
+    @Pattern(regexp = "^([0-9]{8})$")
+    @Size(max = 8)
+    private String organizationIdent;
 
     public String getCodeApplication() { return codeApplication; }
 
@@ -83,5 +88,13 @@ public class ApplicationDesc {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getOrganizationIdent() {
+        return organizationIdent;
+    }
+
+    public void setOrganizationIdent(String organizationIdent) {
+        this.organizationIdent = organizationIdent;
     }
 }
