@@ -71,7 +71,7 @@ public class TransformerSourceToCmd implements CollectionApplicationCmd {
             ReferenceApplicationUseCase.ReferenceApplicationCmd referenceApplicationCmd =
                     new ReferenceApplicationUseCase.ReferenceApplicationCmd(applicationSourcePosition.getCodeApp(), applicationSourcePosition.getShortLibelle(),
                             applicationSourcePosition.getLongLibelle(), applicationSourcePosition.getIdResponsableMOE(), applicationSourcePosition.getFirstNameResponsableMoe(),
-                            applicationSourcePosition.getLastNameResponsableMoe(),applicationSourcePosition.getCodeEntityMoe());
+                            applicationSourcePosition.getLastNameResponsableMoe(),applicationSourcePosition.getIdRefogEntityMoe());
 
             findNextValidApplicationSourcePosition();
 

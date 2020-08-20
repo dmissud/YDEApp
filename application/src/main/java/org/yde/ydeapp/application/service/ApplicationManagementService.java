@@ -23,7 +23,9 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
     private final Logger log = LoggerFactory.getLogger(ApplicationManagementService.class);
 
     @Autowired
-    RepositoryOfApplication repositoryOfApplication;
+    private RepositoryOfApplication repositoryOfApplication;
+
+    @Autowired
     private RepositoryOfOrganization repositoryOforganization;
 
     @Override
