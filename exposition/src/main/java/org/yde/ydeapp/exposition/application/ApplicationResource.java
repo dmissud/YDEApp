@@ -4,16 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.yde.ydeapp.application.in.ApplicationQuery;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase.ReferenceApplicationCmd;
-import org.yde.ydeapp.application.in.StateCmdEnum;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.ApplicationIdent;
 
 import javax.validation.constraints.NotNull;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -40,13 +37,13 @@ public class ApplicationResource {
     }
 
     @GetMapping(value = "applications/{codeApplication}", produces = {"application/json"})
-    public ResponseEntity<ApplicationDesc> retrieveApplicationByCodeApplication(
+    public ResponseEntity<Application> retrieveApplicationByCodeApplication(
         @NotNull @PathVariable("codeApplication") final String codeApplication) {
 
         final Application application = applicationQuery.getApplication(codeApplication);
         final ApplicationDesc applicationDesc = buildApplicationDescFromApplication(application);
 
-        return new ResponseEntity<>(applicationDesc, HttpStatus.OK);
+        return new ResponseEntity<>(application, HttpStatus.OK);
     }
 
     @GetMapping(value = "applications", produces = {"application/json"})

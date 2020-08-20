@@ -54,7 +54,7 @@ public class Organization {
         }
     }
 
-    public Collection<ApplicationIdent> giveApplications() {
+    public Collection<ApplicationIdent> getApplications() {
         return applications.values();
     }
 }
