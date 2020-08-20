@@ -3,8 +3,6 @@ package org.yde.ydeapp.domain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.constraints.NotNull;
-
 public class Application {
     private static final Logger log = LoggerFactory.getLogger(Application.class);
 
@@ -57,7 +55,7 @@ public class Application {
         private Personne responsable = null;
         private OrganizationIdent organizationIdent;
 
-        public Builder(@NotNull String codeApplication) {
+        public Builder(String codeApplication) {
             this.codeApplication = codeApplication;
             log.trace("New builder Application");
         }

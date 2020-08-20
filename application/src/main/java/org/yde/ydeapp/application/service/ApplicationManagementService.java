@@ -123,7 +123,11 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
 
     @Override
     public Application getApplication(String codeApplication) {
-        return repositoryOfApplication.retrieveByAppCode(codeApplication);
+        Application application = repositoryOfApplication.retrieveByAppCode(codeApplication);
+        if (application == null) {
+            throw new EntityNotFound(String.format("Application with %s is not in the Repository", codeApplication));
+        }
+        return application;
     }
 
     @Override

@@ -25,10 +25,10 @@ public class ApplicationResource {
     @Autowired
     ApplicationQuery applicationQuery;
 
-
     @GetMapping(value = "applications/{codeApplication}", produces = {"application/json"})
     public ResponseEntity<Application> retrieveApplicationByCodeApplication(
-        @NotNull @PathVariable("codeApplication") final String codeApplication) {
+        @NotNull
+        @PathVariable("codeApplication") final String codeApplication) {
 
         final Application application = applicationQuery.getApplication(codeApplication);
 
