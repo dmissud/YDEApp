@@ -15,10 +15,8 @@ import org.yde.ydeapp.application.in.ReferenceApplicationUseCase.ReferenceApplic
 import org.yde.ydeapp.application.in.StateCmdEnum;
 import org.yde.ydeapp.application.service.ApplicationManagementService;
 import org.yde.ydeapp.domain.Application;
-import org.yde.ydeapp.domain.Organization;
 import org.yde.ydeapp.domain.OrganizationIdent;
 import org.yde.ydeapp.domain.Personne;
-import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 import org.yde.ydeapp.domain.out.RepositoryOfOrganization;
 
@@ -55,9 +53,7 @@ public class RegisterApplicationSteps {
         return new ReferenceApplicationCmd(entry.get("codeApplication"),
             entry.get("idRefog"),
             entry.get("longDescription"),
-            entry.get("uid"),
-            entry.get("firstName"),
-            entry.get("lastName"),
+            new ReferenceApplicationCmd.ResponsableCmd(entry.get("uid"), entry.get("firstName"), entry.get("lastName")),
             entry.get("idRefogMoe"));
     }
 

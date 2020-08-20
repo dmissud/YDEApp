@@ -75,29 +75,6 @@ class ApplicationResourceTest {
     }
 
     @Test
-    @DisplayName("Update a application")
-    void testUpdateApplication() throws Exception {
-        // Given
-        Mockito
-                .when(applicationQuery.getApplication(CODE_APPLICATION))
-                .thenReturn(application);
-        Mockito
-                .when(referenceApplicationUseCase.updateApplication(any(String.class), any()))
-                .thenReturn(application_updated);
-
-        ApplicationDesc applicationDesc = buildASampleApplicationDescForUpdate();
-
-        mockMvc
-                // When
-                .perform(MockMvcRequestBuilders.put("/api/applications/" + CODE_APPLICATION)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(applicationDesc)))
-                // Then
-                .andExpect(status().is((HttpStatus.ACCEPTED.value())));
-    }
-
-    @Test
     @DisplayName("Consult a application")
     void testRetrieveApplicationByCodeApplication() throws Exception {
         // Given
@@ -128,31 +105,5 @@ class ApplicationResourceTest {
                 // Then
                 .andExpect(status().isOk());
     }
-
-
-    private ApplicationDesc buildASampleApplicationDescForCreate() {
-        ApplicationDesc applicationDesc = new ApplicationDesc();
-        applicationDesc.setCodeApplication(CODE_APPLICATION);
-        applicationDesc.setShortDescription(A_SHORT_DESCRIPTION_INIT);
-        applicationDesc.setLongDescription(A_LONG_DESCRIPTION_INIT);
-        applicationDesc.setUid(UID_FIRST);
-        applicationDesc.setFirstName(FIRST_NAME_FIRST);
-        applicationDesc.setLastName(LAST_NAME_FIRST);
-        applicationDesc.setOrganizationIdent(ID_REFOG_MOE_FIRST);
-        return applicationDesc;
-    }
-
-    private ApplicationDesc buildASampleApplicationDescForUpdate() {
-        ApplicationDesc applicationDesc = new ApplicationDesc();
-        applicationDesc.setCodeApplication(CODE_APPLICATION);
-        applicationDesc.setShortDescription(A_SHORT_DESCRIPTION_UPDATE);
-        applicationDesc.setLongDescription(A_LONG_DESCRIPTION_UPDATE);
-        applicationDesc.setUid(UID_SECOND);
-        applicationDesc.setFirstName(FIRST_NAME_SECOND);
-        applicationDesc.setLastName(LAST_NAME_SECOND);
-        applicationDesc.setOrganizationIdent(ID_REFOG_MOE_SECOND);
-        return applicationDesc;
-    }
-
 
 }

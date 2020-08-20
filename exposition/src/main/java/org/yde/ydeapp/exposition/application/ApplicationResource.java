@@ -3,10 +3,12 @@ package org.yde.ydeapp.exposition.application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.yde.ydeapp.application.in.ApplicationQuery;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
-import org.yde.ydeapp.application.in.ReferenceApplicationUseCase.ReferenceApplicationCmd;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.ApplicationIdent;
 
@@ -23,25 +25,12 @@ public class ApplicationResource {
     @Autowired
     ApplicationQuery applicationQuery;
 
-    
-
-    @PutMapping("applications/{codeApplication}")
-    public ResponseEntity<Void> updateApplication(@NotNull @PathVariable("codeApplication") final String codeApplication,
-                                                  @RequestBody ApplicationDesc applicationDesc) {
-
-        ReferenceApplicationCmd referenceApplicationCmd = buildReferenceApplicationCmdFromApplicationDesc(applicationDesc);
-
-        referenceApplicationUseCase.updateApplication(codeApplication, referenceApplicationCmd);
-
-        return ResponseEntity.accepted().build();
-    }
 
     @GetMapping(value = "applications/{codeApplication}", produces = {"application/json"})
     public ResponseEntity<Application> retrieveApplicationByCodeApplication(
         @NotNull @PathVariable("codeApplication") final String codeApplication) {
 
         final Application application = applicationQuery.getApplication(codeApplication);
-        final ApplicationDesc applicationDesc = buildApplicationDescFromApplication(application);
 
         return new ResponseEntity<>(application, HttpStatus.OK);
     }
@@ -52,27 +41,6 @@ public class ApplicationResource {
         List<ApplicationIdent> applicationsIdent = applicationQuery.getAllApplicationsIdent();
 
         return new ResponseEntity<>(applicationsIdent, HttpStatus.OK);
-    }
-
-    private ApplicationDesc buildApplicationDescFromApplication(Application application) {
-        final ApplicationDesc applicationDesc = new ApplicationDesc();
-        applicationDesc.setCodeApplication(application.getCodeApplication());
-        applicationDesc.setShortDescription(application.getShortDescription());
-        applicationDesc.setLongDescription(application.getLongDescription());
-        applicationDesc.setUid(application.getResponsable().getUid());
-        applicationDesc.setFirstName(application.getResponsable().getFirstName());
-        applicationDesc.setLastName(application.getResponsable().getLastName());
-        return applicationDesc;
-    }
-
-    private ReferenceApplicationCmd buildReferenceApplicationCmdFromApplicationDesc(@RequestBody ApplicationDesc applicationDesc) {
-        return new ReferenceApplicationCmd(applicationDesc.getCodeApplication(),
-            applicationDesc.getShortDescription(),
-            applicationDesc.getLongDescription(),
-            applicationDesc.getUid(),
-            applicationDesc.getFirstName(),
-            applicationDesc.getLastName(),
-            applicationDesc.getOrganizationIdent());
     }
 
 }
