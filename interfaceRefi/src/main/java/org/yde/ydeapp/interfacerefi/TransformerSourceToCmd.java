@@ -6,18 +6,12 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import org.yde.ydeapp.application.in.CollectionApplicationCmd;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 
-import javax.swing.*;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class TransformerSourceToCmd implements CollectionApplicationCmd {
-    private CsvToBean csvToBean;
+    private final CsvToBean csvToBean;
     private StatTraitementRefiFile statTraitementRefiFile = new StatTraitementRefiFile();
 
     public TransformerSourceToCmd(InputStreamReader inputStreamReader) {
@@ -36,14 +30,6 @@ public class TransformerSourceToCmd implements CollectionApplicationCmd {
         return new StatTraitementRefiFile(this.statTraitementRefiFile);
     }
 
-    public TransformerSourceToCmd(StatTraitementRefiFile statTraitementRefiFile) {
-        this.statTraitementRefiFile = statTraitementRefiFile;
-    }
-
-    public void setStatTraitementRefiFile(StatTraitementRefiFile statTraitementRefiFile) {
-        this.statTraitementRefiFile = statTraitementRefiFile;
-    }
-
     @Override
     public Iterator<ReferenceApplicationUseCase.ReferenceApplicationCmd> iterator() {
         statTraitementRefiFile = new StatTraitementRefiFile();
@@ -55,7 +41,6 @@ public class TransformerSourceToCmd implements CollectionApplicationCmd {
 
         private ApplicationSourcePosition applicationSourcePosition;
         private final Iterator<ApplicationSourcePosition> csvIterator;
-        private String desactiveISO = null;
 
         public IteratorRefiFile() {
             this.csvIterator = csvToBean.iterator();

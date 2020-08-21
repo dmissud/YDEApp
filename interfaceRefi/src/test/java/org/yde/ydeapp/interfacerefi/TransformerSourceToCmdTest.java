@@ -7,43 +7,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.application.service.ApplicationManagementService;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 class TransformerSourceToCmdTest {
 
-    @Autowired
-    TransformerSourceToCmd transformerSourceToCmd;
-    @MockBean
-    ApplicationManagementService applicationManagementService;
-
 
     @Test
-    @DisplayName("when_the_file_containt_five_commande_they_read_five_line")
-    void when_the_file_containt_five_commande_they_read_five_line() throws Exception {
+    @DisplayName("when_the_file_containt_nine_commande_they_read_nine_line")
+    void when_the_file_containt_nine_commande_they_read_nine_line() throws Exception {
         //given
 
         FileInputStream fis = new FileInputStream("src/test/resources/creation.csv");
         MultipartFile multipartFile1 = new MockMultipartFile("file", fis);
 
         InputStreamReader inputStreamReader = new InputStreamReader(multipartFile1.getInputStream(), StandardCharsets.ISO_8859_1);
-       StatTraitementRefiFile statTraitementRefiFile= new StatTraitementRefiFile();
-        TransformerSourceToCmd transformerSourceToCmd=new TransformerSourceToCmd(statTraitementRefiFile);
 
-        for (int i = 0; i <5 ; i++) {
-            statTraitementRefiFile.addReadLine();
+
+        TransformerSourceToCmd transformerSourceToCmd=new TransformerSourceToCmd(inputStreamReader);
+
+        for (ReferenceApplicationUseCase.ReferenceApplicationCmd cmd : transformerSourceToCmd) {
+            cmd.validate();
         }
 
         //when
 
-        statTraitementRefiFile=transformerSourceToCmd.giveResult();
+        StatTraitementRefiFile statTraitementRefiFile = transformerSourceToCmd.giveResult();
 
         //then
-        Assertions.assertThat(statTraitementRefiFile.getStatReadLineFile()).isEqualTo(5);
+        Assertions.assertThat(statTraitementRefiFile.getStatReadLineFile()).isEqualTo(9);
 
     }
 
@@ -57,8 +53,11 @@ class TransformerSourceToCmdTest {
         InputStreamReader inputStreamReader = new InputStreamReader(multipartFile1.getInputStream(), StandardCharsets.ISO_8859_1);
         TransformerSourceToCmd transformerSourceToCmd =new TransformerSourceToCmd(inputStreamReader);
         //when
-        transformerSourceToCmd.iterator();
+        for (ReferenceApplicationUseCase.ReferenceApplicationCmd cmd : transformerSourceToCmd) {
+            cmd.validate();
+        }
         //then
+        Assertions.assertThat(transformerSourceToCmd.giveResult().getStatReadLineFile()).isEqualTo(1);
         Assertions.assertThat(transformerSourceToCmd.giveResult().getStatRejetedLinefile()).isEqualTo(1);
 
     }
@@ -71,11 +70,15 @@ class TransformerSourceToCmdTest {
 
         InputStreamReader inputStreamReader = new InputStreamReader(multipartFile1.getInputStream(), StandardCharsets.ISO_8859_1);
         TransformerSourceToCmd transformerSourceToCmd =new TransformerSourceToCmd(inputStreamReader);
-        //when
-        transformerSourceToCmd.iterator();
-        //then
-        Assertions.assertThat(transformerSourceToCmd.giveResult().getStatRejetedLinefile()).isEqualTo(1);
 
+        //when
+        for (ReferenceApplicationUseCase.ReferenceApplicationCmd cmd : transformerSourceToCmd) {
+            cmd.validate();
+        }
+
+        //then
+        Assertions.assertThat(transformerSourceToCmd.giveResult().getStatReadLineFile()).isEqualTo(1);
+        Assertions.assertThat(transformerSourceToCmd.giveResult().getStatRejetedLinefile()).isEqualTo(1);
     }
     @Test
     @DisplayName( "when iterate commande with application correct " )
@@ -87,9 +90,12 @@ class TransformerSourceToCmdTest {
         InputStreamReader inputStreamReader = new InputStreamReader(multipartFile1.getInputStream(), StandardCharsets.ISO_8859_1);
         TransformerSourceToCmd transformerSourceToCmd =new TransformerSourceToCmd(inputStreamReader);
         //when
-        transformerSourceToCmd.iterator();
+        for (ReferenceApplicationUseCase.ReferenceApplicationCmd cmd : transformerSourceToCmd) {
+            cmd.validate();
+        }
         //then
         Assertions.assertThat(transformerSourceToCmd.giveResult().getStatReadLineFile()).isEqualTo(1);
+        Assertions.assertThat(transformerSourceToCmd.giveResult().getStatRejetedLinefile()).isZero();
 
     }
 }
