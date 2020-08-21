@@ -7,18 +7,21 @@ public class ApplicationDataTable {
     private final String uid;
     private final String firstName;
     private final String lastName;
+    private final String idRefogOrganization;
 
-    public ApplicationDataTable(String codeApplication, String shortDescription, String longDescription, String uid,
-                                String firstName,String lastName) {
+    public String getIdRefogOrganization() {
+        return idRefogOrganization;
+    }
+
+    public ApplicationDataTable(String codeApplication, String shortDescription, String longDescription, String uid, String firstName, String lastName, String idRefogOrganization) {
         this.codeApplication = codeApplication;
         this.shortDescription = shortDescription;
         this.longDescription = longDescription;
         this.uid = uid;
         this.firstName = firstName;
         this.lastName = lastName;
-
+        this.idRefogOrganization = idRefogOrganization;
     }
-
 
     public String getCodeApplication() { return codeApplication; }
 
@@ -37,6 +40,4 @@ public class ApplicationDataTable {
     public String getLastName() {
         return lastName;
     }
-
-
 }

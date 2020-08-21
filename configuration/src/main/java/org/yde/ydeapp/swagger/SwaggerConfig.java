@@ -12,16 +12,17 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.regex;
+
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-
+    public static final String DEFAULT_INCLUDE_PATTERN ="/api/.*";
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).select() //
-            .apis(RequestHandlerSelectors.basePackage("org.yde.ydeapp.exposition"))
-            .paths(Predicates.not(PathSelectors.regex("/error.*"))) //
-            .build() //
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.regex("/api/.*")).build()//
             .apiInfo(apiInfo());
     }
 

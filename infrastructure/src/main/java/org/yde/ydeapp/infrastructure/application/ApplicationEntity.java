@@ -20,6 +20,17 @@ public class ApplicationEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     private PersonneEntity responsable;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private OrganizationEntity organisation;
+
+    public OrganizationEntity getOrganisation() {
+        return organisation;
+    }
+
+    public void setOrganisation(OrganizationEntity organisation) {
+        this.organisation = organisation;
+    }
+
     @ElementCollection
     private List<NoteEntity> notes;
 

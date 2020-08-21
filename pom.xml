@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.1.RELEASE</version>
+        <version>2.3.3.RELEASE</version>
     </parent>
 
     <!-- =============================================================== -->
@@ -70,7 +70,9 @@
         <module>application</module>
         <module>infrastructure</module>
         <module>exposition</module>
+        <module>interfaceRefi</module>
         <module>configuration</module>
+
     </modules>
 
     <!-- =============================================================== -->
@@ -101,6 +103,11 @@
             </dependency>
             <dependency>
                 <groupId>org.yde.ydeapp</groupId>
+                <artifactId>interfaceRefi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.yde.ydeapp</groupId>
                 <artifactId>configuration</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -121,6 +128,12 @@
                 <artifactId>cucumber-java</artifactId>
                 <version>${cucumber.version}</version>
                 <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.opencsv</groupId>
+                <artifactId>opencsv</artifactId>
+                <version>5.2</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
             <dependency>
@@ -168,11 +181,6 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
     </dependencies>
 

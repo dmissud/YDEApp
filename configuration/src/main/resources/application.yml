@@ -15,9 +15,16 @@ spring:
     username: yde_users
     password: yde_users
     driverClassName: org.postgresql.Driver
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
 server:
   port: 9090
 logging:
   level:
     org.yde.ydeapp: debug
     org.springframework: error
+

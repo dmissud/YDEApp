@@ -3,7 +3,6 @@ package org.yde.ydeapp.domain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +14,7 @@ public class Application {
     private String shortDescription;
     private String longDescription;
     private Personne responsable;
+    private OrganizationIdent organizationIdent;
     private final Map<String, Note> notes;
 
 
@@ -31,22 +31,29 @@ public class Application {
 
     public Personne getResponsable() { return responsable; }
 
-
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
     }
 
-    public void setLongDescription(String longDescription) {
+    public void updateLongDescription(String longDescription) {
         this.longDescription = longDescription;
     }
 
-    public void setResponsable(Personne responsable) {
+    public void updateResponsable(Personne responsable) {
         this.responsable = responsable;
     }
 
 
     public ApplicationIdent giveApplicationIdent() {
         return new ApplicationIdent(this.codeApplication, this.shortDescription);
+    }
+
+    public OrganizationIdent getOrganizationIdent() {
+        return organizationIdent;
+    }
+
+    public void updateOrganization(OrganizationIdent organizationIdent) {
+        this.organizationIdent = organizationIdent;
     }
 
     public Map<String, Note> retrieveNotes() {
@@ -71,8 +78,9 @@ public class Application {
         private String shortDescription = "to be completed";
         private String longDescription = "to be completed";
         private Personne responsable = null;
+        private OrganizationIdent organizationIdent;
 
-        public Builder(@NotNull String codeApplication) {
+        public Builder(String codeApplication) {
             this.codeApplication = codeApplication;
             log.trace("New builder Application");
         }
@@ -92,12 +100,17 @@ public class Application {
             return this;
         }
 
+        public Builder withOrganization(OrganizationIdent organizationIdent) {
+            this.organizationIdent = organizationIdent;
+            return this;
+        }
 
         public Application build() {
             Application application = new Application(this.codeApplication);
             application.shortDescription = this.shortDescription;
             application.longDescription = this.longDescription;
             application.responsable = this.responsable;
+            application.organizationIdent = this.organizationIdent;
             log.trace("New Application Create");
             return application;
         }

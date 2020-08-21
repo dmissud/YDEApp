@@ -6,7 +6,7 @@ import org.yde.ydeapp.domain.Note;
 
 import java.util.List;
 
-public interface GetApplicationQuery {
+public interface ApplicationQuery {
     Application getApplication(String codeApplication);
 
     List<ApplicationIdent> getAllApplicationsIdent();
