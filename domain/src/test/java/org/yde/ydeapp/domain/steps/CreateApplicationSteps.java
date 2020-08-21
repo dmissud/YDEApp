@@ -123,7 +123,7 @@ public class CreateApplicationSteps {
         application.updateLongDescription(appDescUpdate.getLongDescription());
         application.updateResponsable(personne);
         application.updateOrganization(organizationIdent);
-        application.setShortDescription(appDescUpdate.getShortDescription());
+        application.updateShortDescription(appDescUpdate.getShortDescription());
         application.updateLongDescription(appDescUpdate.getLongDescription());
         application.updateResponsable(personne);
 

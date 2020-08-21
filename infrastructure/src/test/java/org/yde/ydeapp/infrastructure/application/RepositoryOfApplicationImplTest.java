@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.yde.ydeapp.domain.Application;
+import org.yde.ydeapp.domain.Note;
 import org.yde.ydeapp.domain.OrganizationIdent;
 import org.yde.ydeapp.domain.Personne;
 import org.yde.ydeapp.infrastructure.organization.OrganizationEntity;
@@ -74,7 +75,7 @@ class RepositoryOfApplicationImplTest {
     }
 
     @Test
-    @DisplayName("Throw a new exception when trying to find an unknown application")
+    @DisplayName("Have null  when trying to find an unknown application")
     void When_Application_is_unknown_i_get_an_EntityNotExist_Exception() {
         // Given
 
@@ -82,38 +83,6 @@ class RepositoryOfApplicationImplTest {
         Application application = repositoryOfApplicationImpl.retrieveByAppCode(CODE_APP_NOT_EXIST);
 
         // Then
-        Assertions.assertThat(thrown).as("Essai recherche application pas présente en base").hasMessage(String.format("Application with %s is not in repository", CODE_APP_NOT_EXIST));
-    }
-
-    private void GivenAApplicationEntityExistInBase() {
-        ApplicationEntity applicationEntity = new ApplicationEntity();
-        applicationEntity.setCodeApp(CODE_APP);
-        applicationEntity.setShortDescription(SHORT_DESCRIPTION);
-        applicationEntity.setLongDescription(LONG_DESCRIPTION);
-
-        PersonneEntity personneEntity = new PersonneEntity();
-        personneEntity.setUid(UID_OF_RESPONSABLE);
-        personneEntity.setFirstName(FIRSTNAME_OF_RESPONSABLE);
-        personneEntity.setLastName(LASTNAME_OF_RESPONSABLE);
-
-        List<NoteEntity> notes = new ArrayList<>();
-        NoteEntity noteEntity = new NoteEntity();
-        noteEntity.setNoteTitle(NOTE_TITLE);
-        noteEntity.setNoteContent(NOTE_CONTENT);
-        noteEntity.setNoteCreationDate(NOTE_CREATION_DATE);
-        notes.add(noteEntity);
-
-        noteEntity = new NoteEntity();
-        noteEntity.setNoteTitle(NOTE_2ND_TITLE);
-        noteEntity.setNoteContent(NOTE_2ND_CONTENT);
-        noteEntity.setNoteCreationDate(NOTE_2ND_CREATION_DATE);
-        notes.add(noteEntity);
-
-        //testEntityManager.persistAndFlush(personneEntity);
-        applicationEntity.setResponsable(personneEntity);
-        applicationEntity.setNotes(notes);
-
-        testEntityManager.persistAndFlush(applicationEntity);
         Assertions.assertThat(application).isNull();
     }
 
@@ -211,7 +180,7 @@ class RepositoryOfApplicationImplTest {
             .setParameter("idRefogAttenduDansQuery", ID_REFOG_MOE)
             .getResultList();
         assertThat(lstOrga.size()).isEqualTo(1);
-        assertThat(((OrganizationEntity)lstOrga.get(0)).getApplications().size()).isZero();
+        assertThat(((OrganizationEntity) lstOrga.get(0)).getApplications().size()).isZero();
     }
 
     private void givenOrganizationExitInBase(String idRefogMoeOther, String nameOfMoeOther) {
@@ -244,6 +213,19 @@ class RepositoryOfApplicationImplTest {
         personneEntity.setLastName(LASTNAME_OF_RESPONSABLE);
 
         applicationEntity.setResponsable(personneEntity);
+        List<NoteEntity> notes = new ArrayList<>();
+        NoteEntity noteEntity = new NoteEntity();
+        noteEntity.setNoteTitle(NOTE_TITLE);
+        noteEntity.setNoteContent(NOTE_CONTENT);
+        noteEntity.setNoteCreationDate(NOTE_CREATION_DATE);
+        notes.add(noteEntity);
+
+        noteEntity = new NoteEntity();
+        noteEntity.setNoteTitle(NOTE_2ND_TITLE);
+        noteEntity.setNoteContent(NOTE_2ND_CONTENT);
+        noteEntity.setNoteCreationDate(NOTE_2ND_CREATION_DATE);
+        notes.add(noteEntity);
+        applicationEntity.setNotes(notes);
 
         testEntityManager.persistAndFlush(applicationEntity);
     }
@@ -252,15 +234,18 @@ class RepositoryOfApplicationImplTest {
     @DisplayName("Create a new note for an existing application")
     void should_save_note_when_application_exists() {
         // Given
-        GivenAApplicationEntityExistInBase();
+        givenAApplicationEntityExistInBase();
 
         // When
+        OrganizationIdent organizationIdent = new OrganizationIdent(ID_REFOG_MOE, NAME_OF_MOE);
+
         Personne responsable = new Personne(UID_OF_RESPONSABLE, FIRSTNAME_OF_RESPONSABLE, LASTNAME_OF_RESPONSABLE);
         Application application = new Application.Builder(CODE_APP)
-                .withShortDescription(SHORT_DESCRIPTION)
-                .withLongDescription(LONG_DESCRIPTION)
-                .withResponsable(responsable)
-                .build();
+            .withShortDescription(SHORT_DESCRIPTION)
+            .withLongDescription(LONG_DESCRIPTION)
+            .withResponsable(responsable)
+            .withOrganization(organizationIdent)
+            .build();
 
         Note noteUpdate = new Note(NOTE_TITLE, NOTE_CONTENT, NOTE_CREATION_DATE);
         application.addNote(noteUpdate);
@@ -269,8 +254,8 @@ class RepositoryOfApplicationImplTest {
 
         // Then
         List lstApp = testEntityManager.getEntityManager().createQuery("select c from ApplicationEntity c where c.codeApp = :codeAppAttenduDansQuery")
-                .setParameter("codeAppAttenduDansQuery", CODE_APP)
-                .getResultList();
+            .setParameter("codeAppAttenduDansQuery", CODE_APP)
+            .getResultList();
         assertThat(lstApp.size()).isEqualTo(1);
         assertThat(((ApplicationEntity) lstApp.get(0)).getNotes()).isNotNull();
         assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().size()).isEqualTo(1);
@@ -283,15 +268,17 @@ class RepositoryOfApplicationImplTest {
     @DisplayName("Create a new note in an existing Noteslist")
     void should_save_new_note_when_notes_list_exists() {
         // Given
-        GivenAApplicationEntityExistInBase();
+        givenAApplicationEntityExistInBase();
 
         // When
         Personne responsable = new Personne(UID_OF_RESPONSABLE, FIRSTNAME_OF_RESPONSABLE, LASTNAME_OF_RESPONSABLE);
+        OrganizationIdent organizationIdent = new OrganizationIdent(ID_REFOG_MOE, NAME_OF_MOE);
         Application application = new Application.Builder(CODE_APP)
-                .withShortDescription(SHORT_DESCRIPTION)
-                .withLongDescription(LONG_DESCRIPTION)
-                .withResponsable(responsable)
-                .build();
+            .withShortDescription(SHORT_DESCRIPTION)
+            .withLongDescription(LONG_DESCRIPTION)
+            .withResponsable(responsable)
+            .withOrganization(organizationIdent)
+            .build();
 
         Note noteInit = new Note(NOTE_TITLE, NOTE_CONTENT, NOTE_CREATION_DATE);
         application.addNote(noteInit);
@@ -305,8 +292,8 @@ class RepositoryOfApplicationImplTest {
 
         // Then
         List lstApp = testEntityManager.getEntityManager().createQuery("select c from ApplicationEntity c where c.codeApp = :codeAppAttenduDansQuery")
-                .setParameter("codeAppAttenduDansQuery", CODE_APP)
-                .getResultList();
+            .setParameter("codeAppAttenduDansQuery", CODE_APP)
+            .getResultList();
         assertThat(lstApp.size()).isEqualTo(1);
         assertThat(((ApplicationEntity) lstApp.get(0)).getNotes()).isNotNull();
         assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().size()).isEqualTo(2);
@@ -321,15 +308,17 @@ class RepositoryOfApplicationImplTest {
     @DisplayName("Update an existing note")
     void should_update_new_note_when_note_already_exists() {
         // Given
-        GivenAApplicationEntityExistInBase();
+        givenAApplicationEntityExistInBase();
 
         // When
         Personne responsable = new Personne(UID_OF_RESPONSABLE, FIRSTNAME_OF_RESPONSABLE, LASTNAME_OF_RESPONSABLE);
+        OrganizationIdent organizationIdent = new OrganizationIdent(ID_REFOG_MOE, NAME_OF_MOE);
         Application application = new Application.Builder(CODE_APP)
-                .withShortDescription(SHORT_DESCRIPTION)
-                .withLongDescription(LONG_DESCRIPTION)
-                .withResponsable(responsable)
-                .build();
+            .withShortDescription(SHORT_DESCRIPTION)
+            .withLongDescription(LONG_DESCRIPTION)
+            .withResponsable(responsable)
+            .withOrganization(organizationIdent)
+            .build();
 
         Note noteInit = new Note(NOTE_TITLE, NOTE_CONTENT, NOTE_CREATION_DATE);
         application.addNote(noteInit);
@@ -348,8 +337,8 @@ class RepositoryOfApplicationImplTest {
 
         // Then
         List lstApp = testEntityManager.getEntityManager().createQuery("select c from ApplicationEntity c where c.codeApp = :codeAppAttenduDansQuery")
-                .setParameter("codeAppAttenduDansQuery", CODE_APP)
-                .getResultList();
+            .setParameter("codeAppAttenduDansQuery", CODE_APP)
+            .getResultList();
         assertThat(lstApp.size()).isEqualTo(1);
         assertThat(((ApplicationEntity) lstApp.get(0)).getNotes()).isNotNull();
         assertThat(((ApplicationEntity) lstApp.get(0)).getNotes().size()).isEqualTo(2);

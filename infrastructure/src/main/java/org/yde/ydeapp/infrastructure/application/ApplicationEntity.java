@@ -1,5 +1,7 @@
 package org.yde.ydeapp.infrastructure.application;
 
+import org.yde.ydeapp.infrastructure.organization.OrganizationEntity;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -66,7 +68,7 @@ public class ApplicationEntity {
         this.responsable = responsable;
     }
 
-    public List<NoteEntity> getNotes() { return notes; };
+    public List<NoteEntity> getNotes() { return notes; }
 
     public void setNotes(List<NoteEntity> notes) { this.notes = notes; }
 

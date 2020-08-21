@@ -31,7 +31,7 @@ public class Application {
 
     public Personne getResponsable() { return responsable; }
 
-    public void setShortDescription(String shortDescription) {
+    public void updateShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
     }
 
