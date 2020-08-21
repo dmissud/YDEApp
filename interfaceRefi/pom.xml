@@ -18,28 +18,28 @@
             <artifactId>application</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.yde.ydeapp</groupId>
+            <artifactId>infrastructure</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- module traitement fichier csv -->
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
         </dependency>
 
-        <!-- Spring dependence -->
+        <!-- Spring dependances -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
         </dependency>
-
-        <!-- springfox-swagger2 dependencies -->
+        <!-- Spring Transaction -->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-        </dependency>
-
 
         <!-- test dependencies -->
         <dependency>
