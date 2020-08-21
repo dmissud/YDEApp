@@ -8,21 +8,22 @@ import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 
 import java.io.InputStreamReader;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class TransformerSourceToCmd implements CollectionApplicationCmd {
-    private CsvToBean csvToBean;
+    private final CsvToBean csvToBean;
     private StatTraitementRefiFile statTraitementRefiFile = new StatTraitementRefiFile();
 
-    public TransformerSourceToCmd (InputStreamReader inputStreamReader) {
-    ColumnPositionMappingStrategy strategy = new  ColumnPositionMappingStrategy();
-            strategy.setType(ApplicationSourcePosition.class);
+    public TransformerSourceToCmd(InputStreamReader inputStreamReader) {
+        ColumnPositionMappingStrategy strategy = new ColumnPositionMappingStrategy();
+        strategy.setType(ApplicationSourcePosition.class);
 
-            this.csvToBean = new CsvToBeanBuilder(inputStreamReader)
-                    .withSeparator(';')
-                    .withMappingStrategy(strategy)
-                    .withType(ApplicationSourcePosition.class)
-                    .withSkipLines(1)
-                    .build();
+        this.csvToBean = new CsvToBeanBuilder(inputStreamReader)
+                .withSeparator(';')
+                .withMappingStrategy(strategy)
+                .withType(ApplicationSourcePosition.class)
+                .withSkipLines(1)
+                .build();
     }
 
     public final StatTraitementRefiFile giveResult() {
@@ -51,7 +52,8 @@ public class TransformerSourceToCmd implements CollectionApplicationCmd {
             if (csvIterator.hasNext()) {
                 applicationSourcePosition = csvIterator.next();
                 statTraitementRefiFile.addReadLine();
-                if (applicationSourcePosition.getState().equals("Désactivée")) {
+
+                if (applicationSourcePosition.getState().equals("Désactivée") || applicationSourcePosition.getCodeOfTypeOfApplication().equals("SU")) {
                     statTraitementRefiFile.addRejetedLine();
                     findNextValidApplicationSourcePosition();
                 }
@@ -68,14 +70,24 @@ public class TransformerSourceToCmd implements CollectionApplicationCmd {
 
         @Override
         public ReferenceApplicationUseCase.ReferenceApplicationCmd next() {
-            ReferenceApplicationUseCase.ReferenceApplicationCmd referenceApplicationCmd =
-                    new ReferenceApplicationUseCase.ReferenceApplicationCmd(applicationSourcePosition.getCodeApp(), applicationSourcePosition.getShortLibelle(),
-                            applicationSourcePosition.getLongLibelle(), applicationSourcePosition.getIdResponsableMOE(), applicationSourcePosition.getFirstNameResponsableMoe(),
-                            applicationSourcePosition.getLastNameResponsableMoe());
+            if (applicationSourcePosition != null) {
+                ReferenceApplicationUseCase.ReferenceApplicationCmd referenceApplicationCmd =
+                        new ReferenceApplicationUseCase.ReferenceApplicationCmd(
+                                applicationSourcePosition.getCodeApp(),
+                                applicationSourcePosition.getShortLibelle(),
+                                applicationSourcePosition.getLongLibelle(),
+                                new ReferenceApplicationUseCase.ReferenceApplicationCmd.ResponsableCmd(
+                                        applicationSourcePosition.getIdResponsableMOE(),
+                                        applicationSourcePosition.getFirstNameResponsableMoe(),
+                                        applicationSourcePosition.getLastNameResponsableMoe()),
+                                applicationSourcePosition.getIdRefogEntityMoe());
 
-            findNextValidApplicationSourcePosition();
+                findNextValidApplicationSourcePosition();
+                return referenceApplicationCmd;
+            } else {
+                throw new NoSuchElementException("No more Cmd in the file");
+            }
 
-            return referenceApplicationCmd;
         }
 
         @Override

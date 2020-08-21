@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.ApplicationIdent;
+import org.yde.ydeapp.domain.OrganizationIdent;
 import org.yde.ydeapp.domain.Personne;
 import org.yde.ydeapp.domain.out.EntityAlreadyExist;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
+import org.yde.ydeapp.infrastructure.organization.OrganizationEntity;
+import org.yde.ydeapp.infrastructure.organization.RepositoryOfOrganizationJpa;
 
 import java.util.List;
 
@@ -23,6 +26,9 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
     @Autowired
     RepositoryOfPersonneJpa repositoryOfPersonneJpa;
 
+    @Autowired
+    RepositoryOfOrganizationJpa repositoryOfOrganizationJpa;
+
     @Override
     public Application retrieveByAppCode(String codeApp) {
         ApplicationEntity applicationEntity = repositoryOfApplicationJpa.findByCodeApp(codeApp);
@@ -34,11 +40,14 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
 
         log.debug("Application {} load", codeApp);
         Personne personne = new Personne(applicationEntity.getResponsable().getUid(), applicationEntity.getResponsable().getFirstName(), applicationEntity.getResponsable().getLastName());
+        OrganizationIdent organizationIdent = new OrganizationIdent(applicationEntity.getOrganisation().getIdRefog(), applicationEntity.getOrganisation().getName());
+
         return new Application.Builder(applicationEntity.getCodeApp())
-                .withShortDescription(applicationEntity.getShortDescription())
-                .withLongDescription(applicationEntity.getLongDescription())
-                .withResponsable(personne)
-                .build();
+            .withShortDescription(applicationEntity.getShortDescription())
+            .withLongDescription(applicationEntity.getLongDescription())
+            .withResponsable(personne)
+            .withOrganization(organizationIdent)
+            .build();
     }
 
 
@@ -58,12 +67,14 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
             log.debug("Personne {} create", responsableEntity.getUid());
         }
 
+        OrganizationEntity organizationEntity = repositoryOfOrganizationJpa.findByIdRefog(application.getOrganizationIdent().getIdRefog());
         applicationEntity = new ApplicationEntity();
         applicationEntity.setCodeApp(application.getCodeApplication());
         applicationEntity.setShortDescription(application.getShortDescription());
         applicationEntity.setLongDescription(application.getLongDescription());
-
+        applicationEntity.setOrganisation(organizationEntity);
         applicationEntity.setResponsable(responsableEntity);
+        organizationEntity.getApplications().add(applicationEntity);
         log.debug("Application {} create", application.getCodeApplication());
 
         repositoryOfApplicationJpa.save(applicationEntity);
@@ -85,6 +96,31 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
         applicationEntity.setShortDescription(application.getShortDescription());
         applicationEntity.setLongDescription(application.getLongDescription());
 
+        updateResponsableRelationShip(application, applicationEntity);
+
+        updateOrganizationRelationShip(application, applicationEntity);
+
+        log.debug("Application {} update", application.getCodeApplication());
+
+        repositoryOfApplicationJpa.save(applicationEntity);
+    }
+
+    private void updateOrganizationRelationShip(Application application, ApplicationEntity applicationEntity) {
+        if (!applicationEntity.getOrganisation().getIdRefog().equals(application.getOrganizationIdent().getIdRefog())) {
+            OrganizationEntity organizationEntity = repositoryOfOrganizationJpa.findByIdRefog(application.getOrganizationIdent().getIdRefog());
+            if (organizationEntity != null) {
+                organizationEntity.getApplications().add(applicationEntity);
+                applicationEntity.getOrganisation().getApplications().remove(applicationEntity);
+                applicationEntity.setOrganisation(organizationEntity);
+                log.debug("Organization {} link   to application {}", organizationEntity.getName(), applicationEntity.getCodeApp());
+            } else {
+                throw new EntityNotFound(String.format("Organization %s in not in the repository, coundn't link %s to",
+                    application.getOrganizationIdent().getIdRefog(), applicationEntity.getCodeApp() ));
+            }
+        }
+    }
+
+    private void updateResponsableRelationShip(Application application, ApplicationEntity applicationEntity) {
         if (!applicationEntity.getResponsable().getUid().equals(application.getResponsable().getUid())) {
             PersonneEntity responsableEntity = repositoryOfPersonneJpa.findByUid(application.getResponsable().getUid());
             if (responsableEntity == null) {
@@ -96,8 +132,5 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
             }
             applicationEntity.setResponsable(responsableEntity);
         }
-        log.debug("Application {} update", application.getCodeApplication());
-
-        repositoryOfApplicationJpa.save(applicationEntity);
     }
 }

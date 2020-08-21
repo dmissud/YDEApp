@@ -8,86 +8,113 @@ import org.springframework.transaction.annotation.Transactional;
 import org.yde.ydeapp.application.in.*;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.ApplicationIdent;
+import org.yde.ydeapp.domain.OrganizationIdent;
 import org.yde.ydeapp.domain.Personne;
+import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
+import org.yde.ydeapp.domain.out.RepositoryOfOrganization;
 
 import java.util.List;
 
 @Service
 @Transactional
-public class ApplicationManagementService implements ReferenceApplicationUseCase, GetApplicationQuery {
+public class ApplicationManagementService implements ReferenceApplicationUseCase, ApplicationQuery {
 
     private final Logger log = LoggerFactory.getLogger(ApplicationManagementService.class);
 
     @Autowired
-    RepositoryOfApplication repositoryOfApplication;
+    private RepositoryOfApplication repositoryOfApplication;
 
+    @Autowired
+    private RepositoryOfOrganization repositoryOforganization;
 
     @Override
     public ResultOfCollection referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd) {
-        ResultOfCollection resultOfCollection=new ResultOfCollection();
-        for(ReferenceApplicationCmd referenceApplicationCmd: collectionApplicationCmd){
+        ResultOfCollection resultOfCollection = new ResultOfCollection();
+        for (ReferenceApplicationCmd referenceApplicationCmd : collectionApplicationCmd) {
             StateCmdEnum stateCmdEnum = referenceOrUpdateApplication(referenceApplicationCmd);
             switch (stateCmdEnum) {
                 case IGNORE:
-                    resultOfCollection.AddIgnore();
+                    resultOfCollection.addIgnore();
                     break;
                 case UPDATE:
-                    resultOfCollection.AddUpdate();
+                    resultOfCollection.addUpdate();
                     break;
                 case REFERENCE:
-                    resultOfCollection.AddReference();
+                    resultOfCollection.addReference();
+                    break;
+                case NO_MORE_UPDATED:
+                    resultOfCollection.addNoMoreUpdated();
                     break;
                 default:
                     break;
 
             }
-
-
-
         }
         return resultOfCollection;
-
     }
 
     @Override
     public StateCmdEnum referenceOrUpdateApplication(ReferenceApplicationCmd referenceApplicationCmd) {
-        Application application;
+        StateCmdEnum stateCmd;
+
+        referenceApplicationCmd.validate();
+
         Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
 
-        StateCmdEnum stateCmd;
-        application = repositoryOfApplication.retrieveByAppCode(referenceApplicationCmd.getCodeApp());
-        if (application != null) {
-            log.trace("Application {} updated", application.getCodeApplication());
-            application.setLongDescription(referenceApplicationCmd.getLongDescription());
-            application.setShortDescription(referenceApplicationCmd.getShortDescription());
-            application.setResponsable(personne);
-            repositoryOfApplication.updateApplication(application);
-            stateCmd = StateCmdEnum.UPDATE;
+        OrganizationIdent organizationIdent = repositoryOforganization.retriveIdentByIdRefog(referenceApplicationCmd.getIdRefOrganizationMoe());
+        Application application = repositoryOfApplication.retrieveByAppCode(referenceApplicationCmd.getCodeApp());
 
+        if (organizationIdent == null) {
+            if (application == null) {
+                stateCmd = StateCmdEnum.IGNORE;
+                log.trace("Application {} ignored. {} not in", referenceApplicationCmd.getCodeApp(), referenceApplicationCmd.getIdRefOrganizationMoe());
+            } else {
+                stateCmd = StateCmdEnum.NO_MORE_UPDATED;
+                log.trace("Application {} not updated. {} no more in", referenceApplicationCmd.getCodeApp(), referenceApplicationCmd.getIdRefOrganizationMoe());
+            }
         } else {
-            application = new Application.Builder(referenceApplicationCmd.getCodeApp())
+            if (application != null) {
+                log.trace("Application {} updated", application.getCodeApplication());
+                application.updateLongDescription(referenceApplicationCmd.getLongDescription());
+                application.updateShortDescription(referenceApplicationCmd.getShortDescription());
+                application.updateResponsable(personne);
+                application.updateOrganization(organizationIdent);
+                repositoryOfApplication.updateApplication(application);
+                stateCmd = StateCmdEnum.UPDATE;
+            } else {
+                application = new Application.Builder(referenceApplicationCmd.getCodeApp())
                     .withShortDescription(referenceApplicationCmd.getShortDescription())
                     .withLongDescription(referenceApplicationCmd.getLongDescription())
                     .withResponsable(personne)
+                    .withOrganization(organizationIdent)
                     .build();
-            log.trace("Application {} created", application.getCodeApplication());
-            repositoryOfApplication.referenceApplication(application);
-            stateCmd = StateCmdEnum.REFERENCE;
-
+                log.trace("Application {} created", application.getCodeApplication());
+                repositoryOfApplication.referenceApplication(application);
+                stateCmd = StateCmdEnum.REFERENCE;
+            }
         }
-       return  stateCmd;
+        return stateCmd;
     }
-
 
     @Override
     public Application updateApplication(String codeApplication, ReferenceApplicationCmd referenceApplicationCmd) {
+        referenceApplicationCmd.validate();
+        OrganizationIdent organizationIdent = repositoryOforganization.retriveIdentByIdRefog(referenceApplicationCmd.getIdRefOrganizationMoe());
+        if (organizationIdent == null) {
+            throw new EntityNotFound(String.format("Organization %s is not in", referenceApplicationCmd.getIdRefOrganizationMoe()));
+        }
+        Application application = repositoryOfApplication.retrieveByAppCode(codeApplication);
+        if (application == null) {
+            throw new EntityNotFound(String.format("Application %s is not in", referenceApplicationCmd.getCodeApp()));
+        }
+
+        application.updateLongDescription(referenceApplicationCmd.getLongDescription());
+        application.updateShortDescription(referenceApplicationCmd.getShortDescription());
+        application.updateOrganization(organizationIdent);
 
         Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
-        Application application = getApplication(codeApplication);
-        application.setLongDescription(referenceApplicationCmd.getLongDescription());
-        application.setShortDescription(referenceApplicationCmd.getShortDescription());
-        application.setResponsable(personne);
+        application.updateResponsable(personne);
 
         repositoryOfApplication.updateApplication(application);
 
@@ -96,7 +123,11 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
 
     @Override
     public Application getApplication(String codeApplication) {
-        return repositoryOfApplication.retrieveByAppCode(codeApplication);
+        Application application = repositoryOfApplication.retrieveByAppCode(codeApplication);
+        if (application == null) {
+            throw new EntityNotFound(String.format("Application with %s is not in the Repository", codeApplication));
+        }
+        return application;
     }
 
     @Override

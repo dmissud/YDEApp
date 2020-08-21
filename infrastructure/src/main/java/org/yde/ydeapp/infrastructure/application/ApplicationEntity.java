@@ -1,5 +1,7 @@
 package org.yde.ydeapp.infrastructure.application;
 
+import org.yde.ydeapp.infrastructure.organization.OrganizationEntity;
+
 import javax.persistence.*;
 
 @Entity
@@ -18,6 +20,17 @@ public class ApplicationEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private PersonneEntity responsable;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private OrganizationEntity organisation;
+
+    public OrganizationEntity getOrganisation() {
+        return organisation;
+    }
+
+    public void setOrganisation(OrganizationEntity organisation) {
+        this.organisation = organisation;
+    }
 
     public Long getId() { return id; }
 

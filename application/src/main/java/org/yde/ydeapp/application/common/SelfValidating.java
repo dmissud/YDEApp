@@ -1,5 +1,7 @@
 package org.yde.ydeapp.application.common;
 
+import org.yde.ydeapp.domain.out.BusinessException;
+
 import javax.validation.*;
 import java.util.Set;
 
@@ -10,6 +12,10 @@ public abstract class SelfValidating<T> {
     public SelfValidating() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
+    }
+
+    public void validate() {
+        this.validateSelf();
     }
 
     /**

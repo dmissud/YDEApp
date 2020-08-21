@@ -1,4 +1,4 @@
-package org.yde.ydeapp.interfacerefi;
+package org.yde.ydeapp.exposition.application;
 
 public class StatRefiFileDto {
     private int statReadLineFile;
@@ -6,14 +6,20 @@ public class StatRefiFileDto {
     private int referenceCounter;
     private int updateCounter;
     private int ignoreCounter;
+    private int noMoreUpdated;
 
-    public StatRefiFileDto(int statReadLineFile, int statRejetedLinefile, int referenceCounter, int updateCounter, int ignoreCounter) {
+    public StatRefiFileDto(int statReadLineFile, int statRejetedLinefile, int referenceCounter, int updateCounter, int ignoreCounter, int noMoreUpdated) {
         this.statReadLineFile = statReadLineFile;
         this.statRejetedLinefile = statRejetedLinefile;
         this.referenceCounter = referenceCounter;
         this.updateCounter = updateCounter;
         this.ignoreCounter = ignoreCounter;
+        this.noMoreUpdated = noMoreUpdated;
     }
+
+    public int getNoMoreUpdated() { return noMoreUpdated; }
+
+    public void setNoMoreUpdated(int noMoreUpdated) { this.noMoreUpdated = noMoreUpdated; }
 
     public int getStatReadLineFile() {
         return statReadLineFile;
@@ -58,11 +64,12 @@ public class StatRefiFileDto {
     @Override
     public String toString() {
         return "StatRefiFileDto{" +
-                "statReadLineFile=" + statReadLineFile +
-                ", statRejetedLinefile=" + statRejetedLinefile +
-                ", referenceCounter=" + referenceCounter +
-                ", updateCounter=" + updateCounter +
-                ", ignoreCounter=" + ignoreCounter +
-                '}';
+            "statReadLineFile=" + statReadLineFile +
+            ", statRejetedLinefile=" + statRejetedLinefile +
+            ", referenceCounter=" + referenceCounter +
+            ", updateCounter=" + updateCounter +
+            ", ignoreCounter=" + ignoreCounter +
+            ", noMoreUpdated=" + noMoreUpdated +
+            '}';
     }
 }

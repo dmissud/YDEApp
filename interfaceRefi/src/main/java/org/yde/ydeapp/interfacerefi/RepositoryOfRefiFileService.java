@@ -1,32 +1,30 @@
 package org.yde.ydeapp.interfacerefi;
 
-import com.opencsv.CSVReader;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
-import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.yde.ydeapp.application.in.CollectionApplicationCmd;
-import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
-import org.yde.ydeapp.application.in.ReferenceApplicationUseCase.ReferenceApplicationCmd;
 
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
 
 @Component
-public class CsvFileOfRefiImpl implements StoreFileRefi {
-    private static final Logger log = LoggerFactory.getLogger(CsvFileOfRefiImpl.class);
+public class RepositoryOfRefiFileService implements StoreFileRefi {
+    private static final Logger log = LoggerFactory.getLogger(RepositoryOfRefiFileService.class);
 
 
     private String result = null;
     private MultipartFile refiFile = null;
 
     @Override
-    public void storeRefiFile(MultipartFile refiFile) {
+    public StatusFile storeRefiFile(MultipartFile refiFile) {
+
         this.refiFile = refiFile;
+
+        if(refiFile.isEmpty()){
+            return StatusFile.FILEKO;
+        }
+        return StatusFile.FILEOK;
     }
 
     public TransformerSourceToCmd giveTransformerSourceToCmd() {

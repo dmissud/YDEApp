@@ -5,9 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.yde.ydeapp.application.in.CollectionApplicationCmd;
 
 public interface StoreFileRefi {
-    void storeRefiFile(MultipartFile refiFile);
+    StatusFile storeRefiFile(MultipartFile refiFile);
     CollectionApplicationCmd giveTransformerSourceToCmd();
-    //String storeRefiLight(MultipartFile refiFile);
-
 
 }

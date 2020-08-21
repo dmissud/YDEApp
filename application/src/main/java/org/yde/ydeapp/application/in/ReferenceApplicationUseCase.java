@@ -9,7 +9,6 @@ import javax.validation.constraints.Pattern;
 public interface ReferenceApplicationUseCase {
     ResultOfCollection referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd);
     StateCmdEnum referenceOrUpdateApplication(ReferenceApplicationCmd referenceApplicationCmd);
-
     Application updateApplication(String codeApplication, ReferenceApplicationCmd referenceApplicationCmd);
 
     @Validated
@@ -22,26 +21,27 @@ public interface ReferenceApplicationUseCase {
 
         private final String longDescription;
 
-        private final String uid;
+        @Pattern(regexp = "^([0-9]{8})$")
+        private final String idRefOrganizationMoe;
 
-        private final String firstName;
+        private final ResponsableCmd responsableCmd;
 
-        private final String lastName;
-
-        public ReferenceApplicationCmd(@Pattern(regexp = "^(AP[0-9]{5})$") String codeApp,
+        public ReferenceApplicationCmd(String codeApp,
                                        String shortDescription,
                                        String longDescription,
-                                       String uid,
-                                       String firstName,
-                                       String lastName) {
+                                       ResponsableCmd responsableCmd,
+                                       String idRefOrganizationMoe) {
             this.codeApp = codeApp;
             this.shortDescription = shortDescription;
             this.longDescription = longDescription;
-            this.uid = uid;
-            this.firstName = firstName;
-            this.lastName = lastName;
+            this.responsableCmd = responsableCmd;
+            this.idRefOrganizationMoe= idRefOrganizationMoe;
 
-            this.validateSelf();
+        }
+        @Override
+        public void validate() {
+            super.validate();
+            responsableCmd.validate();
         }
 
         public String getCodeApp() { return codeApp; }
@@ -51,17 +51,47 @@ public interface ReferenceApplicationUseCase {
         public String getLongDescription() { return longDescription; }
 
         public String getUid() {
-            return uid;
+            return responsableCmd.getUid();
         }
 
         public String getFirstName() {
-            return firstName;
+            return responsableCmd.getFirstName();
         }
 
         public String getLastName() {
-            return lastName;
+            return responsableCmd.getLastName();
         }
 
+        public String getIdRefOrganizationMoe() {
+            return idRefOrganizationMoe;
+        }
 
+        /*
+         * Commande to create the Responsable
+         */
+        public static class ResponsableCmd extends SelfValidating<ResponsableCmd> {
+
+            private final String uid;
+            private final String firstName;
+            private final String lastName;
+
+            public ResponsableCmd(String uid, String firstName, String lastName)  {
+                this.uid = uid;
+                this.firstName = firstName;
+                this.lastName = lastName;
+            }
+
+            public String getUid() {
+                return uid;
+            }
+
+            public String getFirstName() {
+                return firstName;
+            }
+
+            public String getLastName() {
+                return lastName;
+            }
+        }
     }
 }
