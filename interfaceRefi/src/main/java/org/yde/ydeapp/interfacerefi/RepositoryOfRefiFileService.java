@@ -17,8 +17,14 @@ public class RepositoryOfRefiFileService implements StoreFileRefi {
     private MultipartFile refiFile = null;
 
     @Override
-    public void storeRefiFile(MultipartFile refiFile) {
+    public StatusFile storeRefiFile(MultipartFile refiFile) {
+
         this.refiFile = refiFile;
+
+        if(refiFile.isEmpty()){
+            return StatusFile.FILEKO;
+        }
+        return StatusFile.FILEOK;
     }
 
     public TransformerSourceToCmd giveTransformerSourceToCmd() {

@@ -6,7 +6,13 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import org.yde.ydeapp.application.in.CollectionApplicationCmd;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 
+import javax.swing.*;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -19,15 +25,23 @@ public class TransformerSourceToCmd implements CollectionApplicationCmd {
         strategy.setType(ApplicationSourcePosition.class);
 
         this.csvToBean = new CsvToBeanBuilder(inputStreamReader)
-            .withSeparator(';')
-            .withMappingStrategy(strategy)
-            .withType(ApplicationSourcePosition.class)
-            .withSkipLines(1)
-            .build();
+                .withSeparator(';')
+                .withMappingStrategy(strategy)
+                .withType(ApplicationSourcePosition.class)
+                .withSkipLines(1)
+                .build();
     }
 
     public final StatTraitementRefiFile giveResult() {
         return new StatTraitementRefiFile(this.statTraitementRefiFile);
+    }
+
+    public TransformerSourceToCmd(StatTraitementRefiFile statTraitementRefiFile) {
+        this.statTraitementRefiFile = statTraitementRefiFile;
+    }
+
+    public void setStatTraitementRefiFile(StatTraitementRefiFile statTraitementRefiFile) {
+        this.statTraitementRefiFile = statTraitementRefiFile;
     }
 
     @Override
@@ -41,6 +55,7 @@ public class TransformerSourceToCmd implements CollectionApplicationCmd {
 
         private ApplicationSourcePosition applicationSourcePosition;
         private final Iterator<ApplicationSourcePosition> csvIterator;
+        private String desactiveISO = null;
 
         public IteratorRefiFile() {
             this.csvIterator = csvToBean.iterator();
@@ -52,6 +67,7 @@ public class TransformerSourceToCmd implements CollectionApplicationCmd {
             if (csvIterator.hasNext()) {
                 applicationSourcePosition = csvIterator.next();
                 statTraitementRefiFile.addReadLine();
+
                 if (applicationSourcePosition.getState().equals("Désactivée") || applicationSourcePosition.getCodeOfTypeOfApplication().equals("SU")) {
                     statTraitementRefiFile.addRejetedLine();
                     findNextValidApplicationSourcePosition();
@@ -71,15 +87,15 @@ public class TransformerSourceToCmd implements CollectionApplicationCmd {
         public ReferenceApplicationUseCase.ReferenceApplicationCmd next() {
             if (applicationSourcePosition != null) {
                 ReferenceApplicationUseCase.ReferenceApplicationCmd referenceApplicationCmd =
-                    new ReferenceApplicationUseCase.ReferenceApplicationCmd(
-                        applicationSourcePosition.getCodeApp(),
-                        applicationSourcePosition.getShortLibelle(),
-                        applicationSourcePosition.getLongLibelle(),
-                        new ReferenceApplicationUseCase.ReferenceApplicationCmd.ResponsableCmd(
-                            applicationSourcePosition.getIdResponsableMOE(),
-                            applicationSourcePosition.getFirstNameResponsableMoe(),
-                            applicationSourcePosition.getLastNameResponsableMoe()),
-                        applicationSourcePosition.getIdRefogEntityMoe());
+                        new ReferenceApplicationUseCase.ReferenceApplicationCmd(
+                                applicationSourcePosition.getCodeApp(),
+                                applicationSourcePosition.getShortLibelle(),
+                                applicationSourcePosition.getLongLibelle(),
+                                new ReferenceApplicationUseCase.ReferenceApplicationCmd.ResponsableCmd(
+                                        applicationSourcePosition.getIdResponsableMOE(),
+                                        applicationSourcePosition.getFirstNameResponsableMoe(),
+                                        applicationSourcePosition.getLastNameResponsableMoe()),
+                                applicationSourcePosition.getIdRefogEntityMoe());
 
                 findNextValidApplicationSourcePosition();
                 return referenceApplicationCmd;

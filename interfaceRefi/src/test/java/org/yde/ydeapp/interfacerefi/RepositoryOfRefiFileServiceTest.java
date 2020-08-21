@@ -9,8 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
+import org.yde.ydeapp.application.in.CollectionApplicationCmd;
 
 import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -30,9 +33,9 @@ class RepositoryOfRefiFileServiceTest {
         MultipartFile multipartFile1 = new MockMultipartFile("file", fis);
 
         //When
-        repositoryOfRefiFileService.storeRefiFile(multipartFile1);
+        StatusFile statusFile=repositoryOfRefiFileService.storeRefiFile(multipartFile1);
         //Then
-        Assertions.assertThat(multipartFile1.getInputStream()).isNotNull();
+        Assertions.assertThat(statusFile).isEqualTo(StatusFile.FILEOK);
     }
     @Test
     @DisplayName("when the multipartfile is empty : store is ko")
@@ -42,22 +45,44 @@ class RepositoryOfRefiFileServiceTest {
         MockMultipartFile multipartFileEmpty = new MockMultipartFile("file", fisEmpty);
 
         ///When
-        repositoryOfRefiFileService.storeRefiFile(multipartFileEmpty);
+        StatusFile statusFile=repositoryOfRefiFileService.storeRefiFile(multipartFileEmpty);
         //Then
-        Assertions.assertThat(multipartFileEmpty.getInputStream()).isNull();
-        Assertions.assertThat(multipartFileEmpty.getInputStream()).isNull();
+        Assertions.assertThat(statusFile).isEqualTo(StatusFile.FILEKO);
+
     }
 
 
     @Test
-    @DisplayName("when file refi contain commande isi iterate")
-    void when_file_refi_contain_commande_is_iterate() {
+    @DisplayName("when file refi contain commande is iterate")
+    void when_file_refi_contain_commande_is_iterate() throws Exception{
         //Given
-
+        FileInputStream fis = new FileInputStream("src/test/resources/creation.csv");
+        MultipartFile multipartFile1 = new MockMultipartFile("file", fis);
+        repositoryOfRefiFileService.storeRefiFile(multipartFile1);
+        InputStreamReader inputStreamReader = new InputStreamReader(multipartFile1.getInputStream(), StandardCharsets.ISO_8859_1);
 
         //when
+        CollectionApplicationCmd collectionApplicationCmd =repositoryOfRefiFileService.giveTransformerSourceToCmd();
 
         //Then
+
+        Assertions.assertThat(collectionApplicationCmd.iterator().hasNext()).isEqualTo(true);
+
+    }
+    @Test
+    @DisplayName("when file refi contain commande not iterate")
+    void when_file_refi_contain_commande_not_iterate() throws Exception{
+        //Given
+        FileInputStream fis = new FileInputStream("src/test/resources/fileEmpty.csv");
+        MultipartFile multipartFileEmpty = new MockMultipartFile("file", fis);
+        repositoryOfRefiFileService.storeRefiFile(multipartFileEmpty);
+
+        //when
+        CollectionApplicationCmd collectionApplicationCmd=repositoryOfRefiFileService.giveTransformerSourceToCmd();
+
+        //Then
+       // Assertions.assertThat(transformerSourceToCmd.giveResult().getStatReadLineFile()).isEqualTo(0);
+        Assertions.assertThat(collectionApplicationCmd.iterator().hasNext()).isEqualTo(false);
 
     }
 }

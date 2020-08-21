@@ -54,14 +54,5 @@
             <artifactId>assertj-core</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.opencsv</groupId>
-            <artifactId>opencsv</artifactId>
-            <version>5.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.yde.ydeapp</groupId>
-            <artifactId>application</artifactId>
-        </dependency>
     </dependencies>
 </project>
