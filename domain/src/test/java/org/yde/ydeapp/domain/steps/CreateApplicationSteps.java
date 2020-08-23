@@ -6,9 +6,13 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.yde.ydeapp.domain.Application;
+import org.yde.ydeapp.domain.CycleLife;
 import org.yde.ydeapp.domain.Personne;
 import org.yde.ydeapp.domain.OrganizationIdent;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +35,11 @@ public class CreateApplicationSteps {
             entry.get("uid"),
             entry.get("firstName"),
             entry.get("lastName"),
-            entry.get("IdRefogOrganization"));
+            entry.get("IdRefogOrganization"),
+            entry.get("state"),
+            entry.get("dateOfCreation"),
+            entry.get("dateOfLastUpdate"),
+            entry.get("dateEndInReality"));
 
     }
 
@@ -133,6 +141,35 @@ public class CreateApplicationSteps {
         assertThat(application.getResponsable().getUid()).isEqualTo(appDescUpdate.getUid());
         assertThat(application.getResponsable().getFirstName()).isEqualTo(appDescUpdate.getFisrtName());
         assertThat(application.getResponsable().getLastName()).isEqualTo(appDescUpdate.getLastName());
+    }
+
+    @When("Administrator want to update an application with the cycle life")
+    public void administrator_want_to_update_an_application_with_the_cycle_life(List<ApplicationDataTable> apps) throws ParseException {
+        if (apps.size() == 1) {
+            appDescUpdate = apps.get(0);
+
+        } else {
+            throw new PendingException("Bad use of Cucumber scenario: update a new Application");
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat(("dd/MM/yyyy"));
+
+        CycleLife cycleLife = new CycleLife(appDescUpdate.getState(),
+                                            formatter.parse(appDescUpdate.getDateOfCreation()),
+                                            formatter.parse(appDescUpdate.getDateOfLastUpdate()),
+                                            formatter.parse(appDescUpdate.getDateEndInReality()));
+        application.updateCycleLife(cycleLife);
+
+    }
+    @Then("the update of cycleLife is success")
+    public void the_update_of_cycle_life_is_success() throws ParseException {
+
+        SimpleDateFormat formatter = new SimpleDateFormat(("dd/MM/yyyy"));
+        assertThat(application).isNotNull();
+        assertThat(application.getCodeApplication()).isEqualTo(appDescUpdate.getCodeApplication());
+        assertThat(application.getCycleLife().getState()).isEqualTo(appDescUpdate.getState());
+        assertThat(application.getCycleLife().getDateOfCreation()).isEqualTo(formatter.parse(appDescUpdate.getDateOfCreation()));
+        assertThat(application.getCycleLife().getDateOfLastUpdate()).isEqualTo(formatter.parse(appDescUpdate.getDateOfLastUpdate()));
+        assertThat(application.getCycleLife().getDateEndInReality()).isEqualTo(formatter.parse(appDescUpdate.getDateEndInReality()));
     }
 
 

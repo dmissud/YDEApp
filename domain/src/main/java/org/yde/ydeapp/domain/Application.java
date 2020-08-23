@@ -11,6 +11,7 @@ public class Application {
     private String longDescription;
     private Personne responsable;
     private OrganizationIdent organizationIdent;
+    private CycleLife cycleLife;
 
     private Application(String codeApplication) {
         this.codeApplication = codeApplication;
@@ -23,6 +24,10 @@ public class Application {
     public String getLongDescription() { return longDescription; }
 
     public Personne getResponsable() { return responsable; }
+
+    public CycleLife getCycleLife() {
+        return cycleLife;
+    }
 
     public void updateShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
@@ -48,12 +53,16 @@ public class Application {
         this.organizationIdent = organizationIdent;
     }
 
+    public void updateCycleLife(CycleLife cycleLife) { this.cycleLife = cycleLife;
+    }
+
     public static class Builder {
         private final String codeApplication;
         private String shortDescription = "to be completed";
         private String longDescription = "to be completed";
         private Personne responsable = null;
         private OrganizationIdent organizationIdent;
+        private CycleLife cycleLife;
 
         public Builder(String codeApplication) {
             this.codeApplication = codeApplication;
@@ -80,12 +89,18 @@ public class Application {
             return this;
         }
 
+        public Builder withCycleLife(CycleLife cycleLife) {
+            this.cycleLife = cycleLife;
+            return this;
+        }
+
         public Application build() {
             Application application = new Application(this.codeApplication);
             application.shortDescription = this.shortDescription;
             application.longDescription = this.longDescription;
             application.responsable = this.responsable;
             application.organizationIdent = this.organizationIdent;
+            application.cycleLife = this.cycleLife;
             log.trace("New Application Create");
             return application;
         }

@@ -1,5 +1,7 @@
 package org.yde.ydeapp.domain.steps;
 
+import java.util.Date;
+
 public class ApplicationDataTable {
     private final String codeApplication;
     private final String shortDescription;
@@ -8,26 +10,46 @@ public class ApplicationDataTable {
     private final String fisrtName;
     private final String lastName;
     private final String idRefogOrganization;
+    private final String state;
+    private final String dateOfCreation;
+    private final String dateOfLastUpdate;
+    private final String dateEndInReality;
+
+    public ApplicationDataTable(String codeApplication, String shortDescription,
+                                String longDescription, String uid,
+                                String fisrtName, String lastName,
+                                String idRefogOrganization, String state,
+                                String dateOfCreation, String dateOfLastUpdate,
+                                String dateEndInReality) {
+        this.codeApplication = codeApplication;
+        this.shortDescription = shortDescription;
+        this.longDescription = longDescription;
+        this.uid = uid;
+        this.fisrtName = fisrtName;
+        this.lastName = lastName;
+        this.idRefogOrganization = idRefogOrganization;
+        this.state = state;
+        this.dateOfCreation = dateOfCreation;
+        this.dateOfLastUpdate = dateOfLastUpdate;
+        this.dateEndInReality = dateEndInReality;
+    }
 
     public String getIdRefogOrganization() {
         return idRefogOrganization;
     }
 
-    public ApplicationDataTable(String codeApplication, String shortDescription, String longDescription, String uid, String fisrtName, String lastName, String idRefogOrganization) {
-        this.codeApplication = codeApplication;
-        this.shortDescription = shortDescription;
-        this.longDescription = longDescription;
-        this.uid = uid;
-        this.fisrtName= fisrtName;
-        this.lastName=lastName;
-        this.idRefogOrganization = idRefogOrganization;
+
+    public String getCodeApplication() {
+        return codeApplication;
     }
 
-    public String getCodeApplication() { return codeApplication; }
+    public String getShortDescription() {
+        return shortDescription;
+    }
 
-    public String getShortDescription() { return shortDescription; }
-
-    public String getLongDescription() { return longDescription; }
+    public String getLongDescription() {
+        return longDescription;
+    }
 
     public String getUid() {
         return uid;
@@ -40,4 +62,21 @@ public class ApplicationDataTable {
     public String getLastName() {
         return lastName;
     }
+
+    public String getState() {
+        return state;
+    }
+
+    public String getDateOfCreation() {
+        return dateOfCreation;
+    }
+
+    public String getDateOfLastUpdate() {
+        return dateOfLastUpdate;
+    }
+
+    public String getDateEndInReality() {
+        return dateEndInReality;
+    }
+
 }

@@ -23,3 +23,13 @@ Feature: Management of a Application
       | codeApplication | shortDescription | longDescription             | uid    | firstName | lastName | IdRefogOrganization |
       | AP00002         | Test Appupdate   | Long description app update | 654321 | Johnny    | Update   | 10000000            |
     Then the update is success
+
+
+  Scenario: Update a existing application with CycleLife
+    Given The application exist
+      | codeApplication | shortDescription | longDescription               | uid    | firstName | lastName | IdRefogOrganization |
+      | AP00002         | Test App         | Long description for Test app | 123456 | John      | Doe      | 10000000            |
+    When Administrator want to update an application with the cycle life
+      | codeApplication | state  | dateOfCreation  | dateOfLastUpdate | dateEndInReality |
+      | AP00002         | Active | 01/01/2020      | 01/08/2020       | 28/08/2020       |
+    Then the update of cycleLife is success
