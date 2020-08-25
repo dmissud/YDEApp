@@ -1,0 +1,10 @@
+version: '3.3'
+services:
+  yde.db_cartographie:
+    image: postgres
+    ports:
+      - "5436:5432"
+    environment:
+      - POSTGRES_DB=db_cartographie
+      - POSTGRES_USER=yde_users
+      - POSTGRES_PASSWORD=yde_users

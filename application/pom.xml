@@ -16,14 +16,20 @@
         <dependency>
             <groupId>org.yde.ydeapp</groupId>
             <artifactId>domain</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
+
 
         <!-- Spring dependances -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
         <!-- Spring Transaction -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -69,6 +75,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.6.2</version>
+        </dependency>
 
         <!-- Autre dependances -->
 
@@ -76,10 +91,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
             <!-- https://mvnrepository.com/artifact/net.masterthought/maven-cucumber-reporting -->
             <plugin>
                 <groupId>net.masterthought</groupId>

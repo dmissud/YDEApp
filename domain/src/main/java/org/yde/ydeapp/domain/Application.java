@@ -3,15 +3,14 @@ package org.yde.ydeapp.domain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.constraints.NotNull;
-
 public class Application {
     private static final Logger log = LoggerFactory.getLogger(Application.class);
 
     private final String codeApplication;
     private String shortDescription;
     private String longDescription;
-    private String nameOfResponsable;
+    private Personne responsable;
+    private OrganizationIdent organizationIdent;
 
     private Application(String codeApplication) {
         this.codeApplication = codeApplication;
@@ -23,15 +22,40 @@ public class Application {
 
     public String getLongDescription() { return longDescription; }
 
-    public String getNameOfResponsable() { return nameOfResponsable; }
+    public Personne getResponsable() { return responsable; }
+
+    public void updateShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
+    public void updateLongDescription(String longDescription) {
+        this.longDescription = longDescription;
+    }
+
+    public void updateResponsable(Personne responsable) {
+        this.responsable = responsable;
+    }
+
+    public ApplicationIdent giveApplicationIdent() {
+        return new ApplicationIdent(this.codeApplication, this.shortDescription);
+    }
+
+    public OrganizationIdent getOrganizationIdent() {
+        return organizationIdent;
+    }
+
+    public void updateOrganization(OrganizationIdent organizationIdent) {
+        this.organizationIdent = organizationIdent;
+    }
 
     public static class Builder {
         private final String codeApplication;
         private String shortDescription = "to be completed";
         private String longDescription = "to be completed";
-        private String nameOfResponsable = "who is responsible ?";
+        private Personne responsable = null;
+        private OrganizationIdent organizationIdent;
 
-        public Builder(@NotNull String codeApplication) {
+        public Builder(String codeApplication) {
             this.codeApplication = codeApplication;
             log.trace("New builder Application");
         }
@@ -46,8 +70,13 @@ public class Application {
             return this;
         }
 
-        public Builder withResponsable(String nameOfResponsable) {
-            this.nameOfResponsable = nameOfResponsable;
+        public Builder withResponsable(Personne responsable) {
+            this.responsable = responsable;
+            return this;
+        }
+
+        public Builder withOrganization(OrganizationIdent organizationIdent) {
+            this.organizationIdent = organizationIdent;
             return this;
         }
 
@@ -55,9 +84,11 @@ public class Application {
             Application application = new Application(this.codeApplication);
             application.shortDescription = this.shortDescription;
             application.longDescription = this.longDescription;
-            application.nameOfResponsable = nameOfResponsable;
+            application.responsable = this.responsable;
+            application.organizationIdent = this.organizationIdent;
             log.trace("New Application Create");
             return application;
         }
+
     }
 }

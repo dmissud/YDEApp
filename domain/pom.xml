@@ -12,6 +12,7 @@
     <artifactId>domain</artifactId>
 
     <dependencies>
+
         <!-- Autre dependances -->
         <dependency>
             <groupId>io.cucumber</groupId>

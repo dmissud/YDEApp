@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: YDEApp
+  jpa:
+    database: H2
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+        dialect: org.hibernate.dialect.H2Dialect
+  datasource:
+    platform: h2
+    url: jdbc:h2:file:~/.YDEApp/db_cartographie
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
+server:
+  port: 9090
+logging:
+  level:
+    org.yde.ydeapp: debug
+    org.springframework: error
