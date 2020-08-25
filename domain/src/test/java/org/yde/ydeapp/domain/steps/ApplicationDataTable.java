@@ -11,16 +11,16 @@ public class ApplicationDataTable {
     private final String lastName;
     private final String idRefogOrganization;
     private final String state;
-    private final String dateOfCreation;
-    private final String dateOfLastUpdate;
-    private final String dateEndInReality;
+    private final Date dateOfCreation;
+    private final Date dateOfLastUpdate;
+    private final Date dateEndInReality;
 
     public ApplicationDataTable(String codeApplication, String shortDescription,
                                 String longDescription, String uid,
                                 String fisrtName, String lastName,
                                 String idRefogOrganization, String state,
-                                String dateOfCreation, String dateOfLastUpdate,
-                                String dateEndInReality) {
+                                Date dateOfCreation, Date dateOfLastUpdate,
+                                Date dateEndInReality) {
         this.codeApplication = codeApplication;
         this.shortDescription = shortDescription;
         this.longDescription = longDescription;
@@ -67,16 +67,15 @@ public class ApplicationDataTable {
         return state;
     }
 
-    public String getDateOfCreation() {
+    public Date getDateOfCreation() {
         return dateOfCreation;
     }
 
-    public String getDateOfLastUpdate() {
+    public Date getDateOfLastUpdate() {
         return dateOfLastUpdate;
     }
 
-    public String getDateEndInReality() {
+    public Date getDateEndInReality() {
         return dateEndInReality;
     }
-
 }

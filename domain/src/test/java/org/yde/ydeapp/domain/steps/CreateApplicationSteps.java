@@ -28,7 +28,10 @@ public class CreateApplicationSteps {
 
 
     @DataTableType
-    public ApplicationDataTable applicationDataTableEntry(Map<String, String> entry) {
+    public ApplicationDataTable applicationDataTableEntry(Map<String, String> entry) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat(("dd/MM/yyyy"));
+
+
         return new ApplicationDataTable(entry.get("codeApplication"),
             entry.get("shortDescription"),
             entry.get("longDescription"),
@@ -37,9 +40,9 @@ public class CreateApplicationSteps {
             entry.get("lastName"),
             entry.get("IdRefogOrganization"),
             entry.get("state"),
-            entry.get("dateOfCreation"),
-            entry.get("dateOfLastUpdate"),
-            entry.get("dateEndInReality"));
+            formatter.parse(entry.get("dateOfCreation")),
+            formatter.parse(entry.get("dateOfLastUpdate")),
+            formatter.parse(entry.get("dateEndInReality")));
 
     }
 
@@ -154,9 +157,9 @@ public class CreateApplicationSteps {
         SimpleDateFormat formatter = new SimpleDateFormat(("dd/MM/yyyy"));
 
         CycleLife cycleLife = new CycleLife(appDescUpdate.getState(),
-                                            formatter.parse(appDescUpdate.getDateOfCreation()),
-                                            formatter.parse(appDescUpdate.getDateOfLastUpdate()),
-                                            formatter.parse(appDescUpdate.getDateEndInReality()));
+                                            appDescUpdate.getDateOfCreation(),
+                                            appDescUpdate.getDateOfLastUpdate(),
+                                            appDescUpdate.getDateEndInReality());
         application.updateCycleLife(cycleLife);
 
     }
@@ -167,9 +170,9 @@ public class CreateApplicationSteps {
         assertThat(application).isNotNull();
         assertThat(application.getCodeApplication()).isEqualTo(appDescUpdate.getCodeApplication());
         assertThat(application.getCycleLife().getState()).isEqualTo(appDescUpdate.getState());
-        assertThat(application.getCycleLife().getDateOfCreation()).isEqualTo(formatter.parse(appDescUpdate.getDateOfCreation()));
-        assertThat(application.getCycleLife().getDateOfLastUpdate()).isEqualTo(formatter.parse(appDescUpdate.getDateOfLastUpdate()));
-        assertThat(application.getCycleLife().getDateEndInReality()).isEqualTo(formatter.parse(appDescUpdate.getDateEndInReality()));
+        assertThat(application.getCycleLife().getDateOfCreation()).isEqualTo(appDescUpdate.getDateOfCreation());
+        assertThat(application.getCycleLife().getDateOfLastUpdate()).isEqualTo(appDescUpdate.getDateOfLastUpdate());
+        assertThat(application.getCycleLife().getDateEndInReality()).isEqualTo(appDescUpdate.getDateEndInReality());
     }
 
 

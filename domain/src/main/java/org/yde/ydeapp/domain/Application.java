@@ -62,7 +62,7 @@ public class Application {
         private String longDescription = "to be completed";
         private Personne responsable = null;
         private OrganizationIdent organizationIdent;
-        private CycleLife cycleLife;
+        private CycleLife cycleLife= null;
 
         public Builder(String codeApplication) {
             this.codeApplication = codeApplication;

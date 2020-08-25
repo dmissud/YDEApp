@@ -4,10 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.yde.ydeapp.domain.Application;
-import org.yde.ydeapp.domain.ApplicationIdent;
-import org.yde.ydeapp.domain.OrganizationIdent;
-import org.yde.ydeapp.domain.Personne;
+import org.yde.ydeapp.domain.*;
 import org.yde.ydeapp.domain.out.EntityAlreadyExist;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
@@ -29,6 +26,9 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
     @Autowired
     RepositoryOfOrganizationJpa repositoryOfOrganizationJpa;
 
+    @Autowired
+    RepositoryOfCycleLifeJpa repositoryOfCycleLifeJpa;
+
     @Override
     public Application retrieveByAppCode(String codeApp) {
         ApplicationEntity applicationEntity = repositoryOfApplicationJpa.findByCodeApp(codeApp);
@@ -39,14 +39,20 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
         }
 
         log.debug("Application {} load", codeApp);
-        Personne personne = new Personne(applicationEntity.getResponsable().getUid(), applicationEntity.getResponsable().getFirstName(), applicationEntity.getResponsable().getLastName());
+        Personne personne = new Personne(applicationEntity.getResponsable().getUid(),
+                                        applicationEntity.getResponsable().getFirstName(),
+                                        applicationEntity.getResponsable().getLastName());
         OrganizationIdent organizationIdent = new OrganizationIdent(applicationEntity.getOrganisation().getIdRefog(), applicationEntity.getOrganisation().getName());
-
+        CycleLife cycleLife= new CycleLife(applicationEntity.getCycleLife().getState(),
+                                            applicationEntity.getCycleLife().getDateOfCreation(),
+                                             applicationEntity.getCycleLife().getDateOfLastUpdate(),
+                                            applicationEntity.getCycleLife().getDateEndInReality());
         return new Application.Builder(applicationEntity.getCodeApp())
             .withShortDescription(applicationEntity.getShortDescription())
             .withLongDescription(applicationEntity.getLongDescription())
             .withResponsable(personne)
             .withOrganization(organizationIdent)
+            .withCycleLife(cycleLife)
             .build();
     }
 
@@ -66,7 +72,11 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
             responsableEntity.setLastName(application.getResponsable().getLastName());
             log.debug("Personne {} create", responsableEntity.getUid());
         }
-
+        CycleLifeEntity cycleLifeEntity = new CycleLifeEntity();
+        cycleLifeEntity.setState(application.getCycleLife().getState());
+        cycleLifeEntity.setDateOfCreation(application.getCycleLife().getDateOfCreation());
+        cycleLifeEntity.setDateOfLastUpdate(application.getCycleLife().getDateOfLastUpdate());
+        cycleLifeEntity.setDateEndInReality(application.getCycleLife().getDateEndInReality());
         OrganizationEntity organizationEntity = repositoryOfOrganizationJpa.findByIdRefog(application.getOrganizationIdent().getIdRefog());
         applicationEntity = new ApplicationEntity();
         applicationEntity.setCodeApp(application.getCodeApplication());
@@ -74,6 +84,7 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
         applicationEntity.setLongDescription(application.getLongDescription());
         applicationEntity.setOrganisation(organizationEntity);
         applicationEntity.setResponsable(responsableEntity);
+        applicationEntity.setCycleLife(cycleLifeEntity);
         organizationEntity.getApplications().add(applicationEntity);
         log.debug("Application {} create", application.getCodeApplication());
 
@@ -100,10 +111,14 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
 
         updateOrganizationRelationShip(application, applicationEntity);
 
+        updateCycleLife(application, applicationEntity);
+
         log.debug("Application {} update", application.getCodeApplication());
 
         repositoryOfApplicationJpa.save(applicationEntity);
     }
+
+
 
     private void updateOrganizationRelationShip(Application application, ApplicationEntity applicationEntity) {
         if (!applicationEntity.getOrganisation().getIdRefog().equals(application.getOrganizationIdent().getIdRefog())) {
@@ -132,5 +147,13 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
             }
             applicationEntity.setResponsable(responsableEntity);
         }
+    }
+
+    private void updateCycleLife(Application application, ApplicationEntity applicationEntity) {
+        CycleLifeEntity cycleLifeEntity = new CycleLifeEntity();
+        cycleLifeEntity.setState(application.getCycleLife().getState());
+        cycleLifeEntity.setDateOfCreation(application.getCycleLife().getDateOfCreation());
+        cycleLifeEntity.setDateOfLastUpdate(application.getCycleLife().getDateOfLastUpdate());
+        cycleLifeEntity.setDateEndInReality(application.getCycleLife().getDateEndInReality());
     }
 }
