@@ -5,6 +5,7 @@ import org.yde.ydeapp.application.common.SelfValidating;
 import org.yde.ydeapp.domain.Note;
 
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public interface ReferenceNoteUseCase {
 
@@ -15,12 +16,14 @@ public interface ReferenceNoteUseCase {
     @Validated
     class ReferenceNoteCmd extends SelfValidating<ReferenceNoteCmd> {
 
-        @Pattern(regexp = "^(/w{15})$")
+        @Size(min = 1, max = 20)
+        @Pattern(regexp = "^{20}$")
         private final String noteTitle;
+
         private final String noteContent;
         private final String noteCreationDate;
 
-        public ReferenceNoteCmd(@Pattern(regexp = "^(/w{15})$") String noteTitle, String noteContent, String noteCreationDate) {
+        public ReferenceNoteCmd(String noteTitle, String noteContent, String noteCreationDate) {
             this.noteTitle = noteTitle;
             this.noteContent = noteContent;
             this.noteCreationDate = noteCreationDate;
