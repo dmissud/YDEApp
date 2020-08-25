@@ -4,7 +4,6 @@ import org.springframework.validation.annotation.Validated;
 import org.yde.ydeapp.application.common.SelfValidating;
 import org.yde.ydeapp.domain.Note;
 
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public interface ReferenceNoteUseCase {
@@ -17,7 +16,7 @@ public interface ReferenceNoteUseCase {
     class ReferenceNoteCmd extends SelfValidating<ReferenceNoteCmd> {
 
         @Size(min = 1, max = 20)
-        @Pattern(regexp = "^{20}$")
+        //@Pattern(regexp = "^{20}$")
         private final String noteTitle;
 
         private final String noteContent;
