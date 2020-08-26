@@ -1,7 +1,5 @@
 package org.yde.ydeapp.infrastructure.application;
 
-import org.springframework.stereotype.Repository;
-
 import javax.persistence.*;
 import java.util.Date;
 

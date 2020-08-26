@@ -1,14 +1,14 @@
 package org.yde.ydeapp.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class CycleLife {
-    private String state;
-    private Date dateOfCreation;
-    private Date dateOfLastUpdate;
-    private Date dateEndInReality;
+    private final String state;
+    private final LocalDate dateOfCreation;
+    private final LocalDate dateOfLastUpdate;
+    private final LocalDate dateEndInReality;
 
-    public CycleLife(String state, Date dateOfCreation, Date dateOfLastUpdate, Date dateEndInReality) {
+    public CycleLife(String state, LocalDate dateOfCreation, LocalDate dateOfLastUpdate, LocalDate dateEndInReality) {
         this.state = state;
         this.dateOfCreation = dateOfCreation;
         this.dateOfLastUpdate = dateOfLastUpdate;
@@ -19,15 +19,15 @@ public class CycleLife {
         return state;
     }
 
-    public Date getDateOfCreation() {
+    public LocalDate getDateOfCreation() {
         return dateOfCreation;
     }
 
-    public Date getDateOfLastUpdate() {
+    public LocalDate getDateOfLastUpdate() {
         return dateOfLastUpdate;
     }
 
-    public Date getDateEndInReality() {
+    public LocalDate getDateEndInReality() {
         return dateEndInReality;
     }
 }
