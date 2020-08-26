@@ -12,6 +12,8 @@ import org.yde.ydeapp.domain.Note;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -51,6 +53,27 @@ public class NoteResource {
             @PathVariable("codeApplication") final String codeApplication) {
 
         Note note = referenceNoteUseCase.referenceNote(codeApplication, referenceNoteCmd);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{noteTitle}")
+                .buildAndExpand(note.getNoteTitle())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
+    }
+
+    @PutMapping("applications/{codeApplication}/notes/{noteTitle}")
+    public ResponseEntity<Void> updateNote(
+            @Valid @RequestBody String noteContent,
+            @PathVariable("codeApplication") final String codeApplication,
+            @PathVariable("noteTitle") final String noteTitle) {
+
+        LocalDate noteUpdateDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/LL/yyyy");
+        String noteCreationDate = noteUpdateDate.format(formatter);
+
+        ReferenceNoteUseCase.ReferenceNoteCmd referenceNoteCmd = new ReferenceNoteUseCase.ReferenceNoteCmd(noteTitle, noteContent, noteCreationDate);
+        Note note = referenceNoteUseCase.updateNote(codeApplication, noteTitle, referenceNoteCmd);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{noteTitle}")
