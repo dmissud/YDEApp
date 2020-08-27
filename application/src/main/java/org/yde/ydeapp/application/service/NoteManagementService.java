@@ -75,4 +75,12 @@ public class NoteManagementService implements ReferenceNoteUseCase,GetNoteQuery 
 
         return allNotes;
     }
+
+    @Override
+    public void deleteNoteByTitle(String codeApplication, String noteTitle) {
+
+        Application application = repositoryOfApplication.retrieveByAppCode(codeApplication);
+        application.deleteNote(noteTitle);
+
+    }
 }

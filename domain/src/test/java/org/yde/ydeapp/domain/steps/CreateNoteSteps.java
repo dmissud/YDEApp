@@ -36,4 +36,23 @@ public class CreateNoteSteps {
         assertThat(application.retrieveNotes().get(noteTitle).getNoteContent()).isEqualTo(noteContent);
         assertThat(application.retrieveNotes().get(noteTitle).getNoteCreationDate()).isEqualTo(noteCreationDate);
     }
+
+    @Given("existing codeApplication {string} and existing note {string}, {string}, {string} in the repository")
+    public void existing_code_application_and_existing_note_in_the_repository(String codeApplication, String noteTitle, String noteContent, String noteCreationDate) {
+        application = new Application.Builder(codeApplication).build();
+        newNote = new Note(noteTitle, noteContent, noteCreationDate);
+        application.addNote(newNote);
+
+    }
+
+    @When("application manager wants to delete a note entitled {string}")
+    public void application_manager_wants_to_delete_a_note_entitled(String noteTitle) {
+        application.deleteNote(noteTitle);
+    }
+
+    @Then("this note {string} is deleted")
+    public void this_note_is_deleted(String noteTitle) {
+        assertThat(application.retrieveNoteByTitle(noteTitle)).isNull();
+
+    }
 }

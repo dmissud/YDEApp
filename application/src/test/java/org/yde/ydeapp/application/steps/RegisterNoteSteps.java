@@ -21,6 +21,7 @@ import org.yde.ydeapp.domain.Note;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,7 @@ public class RegisterNoteSteps {
     private Application application;
     private EntityNotFound applicationNotFound;
     private Note note = null;
+    private Map<String, Note> notes = new HashMap<>();
 
 
     @Before
@@ -64,8 +66,8 @@ public class RegisterNoteSteps {
     }
 
 
-    @When("User wants to reference a new note with following datas")
-    public void user_wants_to_reference_a_new_note_with_following_datas(List<ReferenceNoteUseCase.ReferenceNoteCmd> notes) {
+    @When("User wants to reference a new note with following data")
+    public void user_wants_to_reference_a_new_note_with_following_data(List<ReferenceNoteUseCase.ReferenceNoteCmd> notes) {
         ReferenceNoteUseCase.ReferenceNoteCmd noteTable;
         if (notes.size() == 1) {
             noteTable = notes.get(0);
@@ -96,8 +98,8 @@ public class RegisterNoteSteps {
         applicationNotFound = null;
     }
 
-    @When("User wants to reference a new note to application {string} with following datas")
-    public void user_wants_to_reference_a_new_note_to_application_with_following_datas(String codeApplication, List<ReferenceNoteUseCase.ReferenceNoteCmd> notes) {
+    @When("User wants to reference a new note to application {string} with following data")
+    public void user_wants_to_reference_a_new_note_to_application_with_following_data(String codeApplication, List<ReferenceNoteUseCase.ReferenceNoteCmd> notes) {
         try {
             noteManagementService.referenceNote(codeApplication, notes.get(0));
         } catch (EntityNotFound entityNotFound) {
@@ -125,8 +127,8 @@ public class RegisterNoteSteps {
 
     }
 
-    @When("User wants to update note {string} with datas")
-    public void user_wants_to_update_note_with_datas(String noteTitle, List<ReferenceNoteUseCase.ReferenceNoteCmd> notes) {
+    @When("User wants to update note {string} with data")
+    public void user_wants_to_update_note_with_data(String noteTitle, List<ReferenceNoteUseCase.ReferenceNoteCmd> notes) {
 
         ReferenceNoteUseCase.ReferenceNoteCmd noteTable;
         if (notes.size() == 1) {
@@ -144,8 +146,6 @@ public class RegisterNoteSteps {
         Mockito
                 .verify(repositoryOfApplication, Mockito.times(1))
                 .updateApplication(application);
-
-        //assertThat(application.retrieveNoteByTitle(noteTitle).getNoteTitle()).isEqualTo(noteTitle);
 
     }
 
@@ -175,18 +175,57 @@ public class RegisterNoteSteps {
 
     }
 
-    @Given("An existing application {string} with existing notes {string} and {string}")
-    public void an_existing_application_with_existing_notes_and(String codeApplication, String noteTitle1, String noteTitle2) {
+    @Given("An existing application {string} with existing notes {string}, {string}, {string} and {string}, {string}, {string}")
+    public void an_existing_application_with_existing_notes_and(String codeApplication, String noteTitle1, String noteContent1, String noteCreationDate1,
+                                                                String noteTitle2, String noteContent2, String noteCreationDate2) {
 
+        application = new Application.Builder(codeApplication).build();
+        Note note1 = new Note(noteTitle1, noteContent1, noteCreationDate1);
+        Note note2 = new Note(noteTitle2, noteContent2, noteCreationDate2);
+        application.addNote(note1);
+        application.addNote(note2);
     }
 
-    @When("User wants to get a list content with {string} and {string}")
-    public void user_wants_to_get_a_list_content_with_and(String noteTitle1, String noteTitle2) {
-
+    @When("User wants to get a note-list")
+    public void user_wants_to_get_a_note_list() {
+        notes = application.retrieveNotes();
     }
 
     @Then("All notes {string} and {string} are provided")
     public void all_notes_and_are_provided(String noteTitle1, String noteTitle2) {
 
+        assertThat(notes).isNotNull();
+        assertThat(notes.get(noteTitle1).getNoteTitle()).isEqualTo(noteTitle1);
+        assertThat(notes.get(noteTitle2).getNoteTitle()).isEqualTo(noteTitle2);
+    }
+
+    @Given("An existing application {string} with the note {string}, {string}, {string}")
+    public void an_existing_application_with_the_note(String codeApplication, String noteTitle, String noteContent, String noteCreationDate) {
+
+        application = new Application.Builder(codeApplication).build();
+        note = new Note(noteTitle, noteContent, noteCreationDate);
+        application.addNote(note);
+
+
+        Mockito
+                .when(repositoryOfApplication.retrieveByAppCode(codeApplication))
+                .thenReturn(application);
+
+    }
+
+    @When("User wants to delete a note entitled {string}")
+    public void user_wants_to_delete_a_note_entitled(String noteTitle) {
+
+        noteManagementService.deleteNoteByTitle(application.getCodeApplication(), noteTitle);
+
+    }
+
+    @Then("{string} is deleted")
+    public void note_is_deleted(String noteTitle) {
+
+        assertThat(application.retrieveNoteByTitle(noteTitle).getNoteTitle()).isNull();
+        /*Mockito
+                .verify(repositoryOfApplication, Mockito.times(1))
+                .updateApplication(application);*/
     }
 }

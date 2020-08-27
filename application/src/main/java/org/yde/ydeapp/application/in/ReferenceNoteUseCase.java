@@ -12,6 +12,8 @@ public interface ReferenceNoteUseCase {
 
     Note updateNote(String codeApplication, String noteTitle, ReferenceNoteCmd referenceNoteCmd);
 
+    void deleteNoteByTitle(String codeApplication, String noteTitle);
+
     @Validated
     class ReferenceNoteCmd extends SelfValidating<ReferenceNoteCmd> {
 

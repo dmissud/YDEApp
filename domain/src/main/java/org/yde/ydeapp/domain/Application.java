@@ -73,6 +73,24 @@ public class Application {
         }
     }
 
+    public static <K, V> K getKey(Map<K, V> map, V value) {
+        for (K key : map.keySet()) {
+            if (value.equals(map.get(key))) {
+                return key;
+            }
+        }
+        return null;
+    }
+
+    public void deleteNote(String noteTitle) {
+
+        for (Note note : notes.values()) {
+            if (note.getNoteTitle().equals(noteTitle)) {
+                notes.remove(getKey(notes, note));
+            }
+        }
+    }
+
     public static class Builder {
         private final String codeApplication;
         private String shortDescription = "to be completed";
