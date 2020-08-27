@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(NoteResource.class)
-public class NoteResourceTest {
+class NoteResourceTest {
 
     public static final String CODE_APPLICATION = "AP00001";
     public static final String NOTE_TITLE_FIRST = "Note 1";
