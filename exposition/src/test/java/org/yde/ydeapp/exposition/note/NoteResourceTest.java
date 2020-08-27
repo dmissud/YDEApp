@@ -23,6 +23,7 @@ import org.yde.ydeapp.domain.Note;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -106,7 +107,7 @@ public class NoteResourceTest {
     void testReferenceNewNoteToExistingApplication() throws Exception {
         // Given
         Mockito
-                .when(referenceNoteUseCase.referenceNote(CODE_APPLICATION, referenceNoteCmd))
+                .when(referenceNoteUseCase.referenceNote(any(String.class), any(ReferenceNoteUseCase.ReferenceNoteCmd.class)))
                 .thenReturn(noteInit);
         String json = objectMapper.writeValueAsString(referenceNote);
 
