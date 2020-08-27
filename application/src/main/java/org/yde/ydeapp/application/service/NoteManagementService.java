@@ -12,6 +12,8 @@ import org.yde.ydeapp.domain.Note;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 
 import java.sql.Ref;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -64,7 +66,10 @@ public class NoteManagementService implements ReferenceNoteUseCase,GetNoteQuery 
     @Override
     public List<Note> getApplicationAllNotes(String codeApplication) {
 
-        List<Note> allNotes = (List<Note>) repositoryOfApplication.retrieveByAppCode(codeApplication).retrieveNotes();
+        List<Note> allNotes = new ArrayList<>();
+        //Iterator iter = repositoryOfApplication.retrieveByAppCode(codeApplication).retrieveNotes().entrySet().iterator();
+        allNotes.addAll(repositoryOfApplication.retrieveByAppCode(codeApplication).retrieveNotes().values());
+
 
         log.trace("Notes list for application {} has been sent.", codeApplication);
 

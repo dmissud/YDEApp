@@ -1,5 +1,6 @@
 package org.yde.ydeapp.exposition.note;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,9 @@ public class NoteResourceTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @MockBean
     private ReferenceNoteUseCase referenceNoteUseCase;
 
@@ -52,6 +56,7 @@ public class NoteResourceTest {
     private List<Note> notes;
     Note noteInit = new Note(NOTE_TITLE_FIRST, NOTE_CONTENT_FIRST, NOTE_CREATION_DATE_FIRST);
 
+    ReferenceNoteUseCase.ReferenceNoteCmd referenceNote = new ReferenceNoteUseCase.ReferenceNoteCmd(NOTE_TITLE_FIRST, NOTE_CONTENT_FIRST, NOTE_CREATION_DATE_FIRST);
 
     @BeforeEach
     void setup() {
@@ -69,7 +74,7 @@ public class NoteResourceTest {
     void testRetrieveAllNotesFromExistingApplication() throws Exception {
         // Given
         Mockito
-                .when(getNoteQuery.getApplicationAllNotes(CODE_APPLICATION))
+                .when(getNoteQuery. getApplicationAllNotes(CODE_APPLICATION))
                 .thenReturn(notes);
 
         mockMvc
@@ -103,12 +108,13 @@ public class NoteResourceTest {
         Mockito
                 .when(referenceNoteUseCase.referenceNote(CODE_APPLICATION, referenceNoteCmd))
                 .thenReturn(noteInit);
+        String json = objectMapper.writeValueAsString(referenceNote);
 
         mockMvc
                 // When
                 .perform(MockMvcRequestBuilders
                 .post("/api/applications/" + CODE_APPLICATION + "/notes")
-                .content(String.valueOf((noteInit)))
+                .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 // Then
