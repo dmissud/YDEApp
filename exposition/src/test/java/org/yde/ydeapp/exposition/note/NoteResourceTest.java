@@ -122,4 +122,22 @@ class NoteResourceTest {
                 .andExpect(status().isCreated());
     }
 
+    @Test
+    @DisplayName("Delete a note from an existing application")
+    void testDeleteNoteFromExistingApplication() throws Exception {
+        // Given
+      Mockito
+                .when(referenceNoteUseCase.deleteNoteByTitle(CODE_APPLICATION, NOTE_TITLE_FIRST))
+                .then();
+
+
+        mockMvc
+                // When
+                .perform(MockMvcRequestBuilders
+                        .delete("/api/applications/" + CODE_APPLICATION + "/notes/" + NOTE_TITLE_FIRST)
+                        .accept(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isOk());*/
+    }
+
 }

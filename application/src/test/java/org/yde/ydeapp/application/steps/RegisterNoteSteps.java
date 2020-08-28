@@ -37,7 +37,8 @@ public class RegisterNoteSteps {
     private RepositoryOfApplication repositoryOfApplication;
 
     private Application application;
-    private EntityNotFound applicationNotFound;
+    private EntityNotFound applicationNotFound = null;
+    private EntityNotFound noteNotFound = null;
     private Note note = null;
     private Map<String, Note> notes = new HashMap<>();
 
@@ -95,7 +96,6 @@ public class RegisterNoteSteps {
                 .when(repositoryOfApplication.retrieveByAppCode(codeApplication))
                 .thenThrow(new EntityNotFound(String.format("Unknown application referenced with codeApplication : %s", codeApplication)));
         application = null;
-        applicationNotFound = null;
     }
 
     @When("User wants to reference a new note to application {string} with following data")
@@ -206,7 +206,6 @@ public class RegisterNoteSteps {
         note = new Note(noteTitle, noteContent, noteCreationDate);
         application.addNote(note);
 
-
         Mockito
                 .when(repositoryOfApplication.retrieveByAppCode(codeApplication))
                 .thenReturn(application);
@@ -223,9 +222,38 @@ public class RegisterNoteSteps {
     @Then("{string} is deleted")
     public void note_is_deleted(String noteTitle) {
 
-        assertThat(application.retrieveNoteByTitle(noteTitle).getNoteTitle()).isNull();
-        /*Mockito
-                .verify(repositoryOfApplication, Mockito.times(1))
-                .updateApplication(application);*/
+
+        Mockito
+                .verify(repositoryOfApplication, Mockito.times(1)).retrieveByAppCode(application.getCodeApplication());
+
+        assertThat(application.retrieveNoteByTitle(noteTitle)).isNull();
     }
+
+    @Given("An existing application {string} with following note {string}, {string}, {string}")
+    public void an_existing_application_with_following_note(String codeApplication, String noteTitle, String noteContent, String noteCreationDate) {
+
+        application = new Application.Builder(codeApplication).build();
+        note = new Note(noteTitle, noteContent, noteCreationDate);
+        application.addNote(note);
+
+    }
+
+    @When("User wants to delete a note named as {string}")
+    public void user_wants_to_delete_note_named(String noteTitle2) {
+
+        try {
+            noteManagementService.deleteNoteByTitle(application.getCodeApplication(), noteTitle2);
+        } catch (EntityNotFound entityNotFound) {
+            noteNotFound = entityNotFound;
+        }
+    }
+
+    @Then("Exception EntityNotFound is thrown for {string}")
+    public void exception_entity_not_found_is_thrown(String noteTitle2) {
+
+        assertThat(noteNotFound).isNotNull();
+        assertThat(noteNotFound.getMessage()).isEqualTo(String.format("Unknown note deleted with noteTitle : %s", noteTitle2));
+
+    }
+
 }

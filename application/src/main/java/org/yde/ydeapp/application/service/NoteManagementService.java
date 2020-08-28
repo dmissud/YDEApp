@@ -9,11 +9,10 @@ import org.yde.ydeapp.application.in.GetNoteQuery;
 import org.yde.ydeapp.application.in.ReferenceNoteUseCase;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.Note;
+import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 
-import java.sql.Ref;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -67,7 +66,7 @@ public class NoteManagementService implements ReferenceNoteUseCase,GetNoteQuery 
     public List<Note> getApplicationAllNotes(String codeApplication) {
 
         List<Note> allNotes = new ArrayList<>();
-        //Iterator iter = repositoryOfApplication.retrieveByAppCode(codeApplication).retrieveNotes().entrySet().iterator();
+
         allNotes.addAll(repositoryOfApplication.retrieveByAppCode(codeApplication).retrieveNotes().values());
 
 
@@ -80,7 +79,13 @@ public class NoteManagementService implements ReferenceNoteUseCase,GetNoteQuery 
     public void deleteNoteByTitle(String codeApplication, String noteTitle) {
 
         Application application = repositoryOfApplication.retrieveByAppCode(codeApplication);
-        application.deleteNote(noteTitle);
+        if (application.retrieveNoteByTitle(noteTitle) != null) {
+            application.deleteNote(noteTitle);
+            repositoryOfApplication.updateApplication(application);
+        } else {
+            throw new EntityNotFound(String.format("Note %s does not exist", noteTitle));
+        }
+        log.trace("Note {} has been deleted.", noteTitle);
 
     }
 }

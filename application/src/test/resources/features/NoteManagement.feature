@@ -34,6 +34,11 @@ Feature: Note management test
       Then All notes "Note 1" and "Note 2" are provided
 
     Scenario: deleting a note by title
-      Given An existing application "AP00002" with the note "The note", "The content", "27/08/2020"
+      Given An existing application "AP00002" with the note "The Note", "The content", "27/08/2020"
       When User wants to delete a note entitled "The Note"
-      Then "The note" is deleted
+      Then "The Note" is deleted
+
+    Scenario: deleting an unknown note
+      Given An existing application "AP00002" with following note "The Note", "The content", "28/08/2020"
+      When User wants to delete a note named as "The Note 2"
+      Then Exception EntityNotFound is thrown for "The Note 2"

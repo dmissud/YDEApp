@@ -82,4 +82,14 @@ public class NoteResource {
 
         return ResponseEntity.created(location).build();
     }
+
+    @DeleteMapping("applications/{codeApplication}/notes/{noteTitle}")
+    public ResponseEntity<String> deleteNote(
+            @PathVariable("codeApplication") final String codeApplication,
+            @PathVariable("noteTitle") final String noteTitle) {
+
+        referenceNoteUseCase.deleteNoteByTitle(codeApplication, noteTitle);
+
+        return new ResponseEntity<>(noteTitle, HttpStatus.OK);
+    }
 }
