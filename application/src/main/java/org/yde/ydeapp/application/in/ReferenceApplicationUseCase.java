@@ -6,6 +6,7 @@ import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.CycleLife;
 
 import javax.validation.constraints.Pattern;
+import java.time.LocalDate;
 import java.util.Date;
 
 public interface ReferenceApplicationUseCase {
@@ -76,15 +77,15 @@ public interface ReferenceApplicationUseCase {
         public String getState() { return cycleLifeCmd.getState();
         }
 
-        public Date getDateOfCreation() {
+        public LocalDate getDateOfCreation() {
             return cycleLifeCmd.dateOfCreation;
         }
 
-        public Date getDateOfLastUpdate() {
+        public LocalDate getDateOfLastUpdate() {
             return cycleLifeCmd.dateOfLastUpdate;
         }
 
-        public Date getDateEndInReality() {
+        public LocalDate getDateEndInReality() {
             return cycleLifeCmd.dateEndInReality;
         }
 
@@ -121,11 +122,11 @@ public interface ReferenceApplicationUseCase {
 
         public static class CycleLifeCmd extends SelfValidating<CycleLifeCmd> {
             private final String state;
-            private final Date dateOfCreation;
-            private final Date dateOfLastUpdate;
-            private final Date dateEndInReality;
+            private final LocalDate dateOfCreation;
+            private final LocalDate dateOfLastUpdate;
+            private final LocalDate dateEndInReality;
 
-            public CycleLifeCmd(String state, Date dateOfCreation, Date dateOfLastUpdate, Date dateEndInReality) {
+            public CycleLifeCmd(String state, LocalDate dateOfCreation, LocalDate dateOfLastUpdate, LocalDate dateEndInReality) {
                 this.state = state;
                 this.dateOfCreation = dateOfCreation;
                 this.dateOfLastUpdate = dateOfLastUpdate;
@@ -136,15 +137,15 @@ public interface ReferenceApplicationUseCase {
                 return state;
             }
 
-            public Date getDateOfCreation() {
+            public LocalDate getDateOfCreation() {
                 return dateOfCreation;
             }
 
-            public Date getDateOfLastUpdate() {
+            public LocalDate getDateOfLastUpdate() {
                 return dateOfLastUpdate;
             }
 
-            public Date getDateEndInReality() {
+            public LocalDate getDateEndInReality() {
                 return dateEndInReality;
             }
         }

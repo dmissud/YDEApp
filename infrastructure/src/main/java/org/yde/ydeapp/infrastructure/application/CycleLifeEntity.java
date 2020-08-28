@@ -1,6 +1,7 @@
 package org.yde.ydeapp.infrastructure.application;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -11,9 +12,9 @@ public class CycleLifeEntity {
 
     @Column(unique = true)
     private String state;
-    private Date dateOfCreation;
-    private Date dateOfLastUpdate;
-    private Date dateEndInReality;
+    private LocalDate dateOfCreation;
+    private LocalDate dateOfLastUpdate;
+    private LocalDate dateEndInReality;
 
     public long getId() {
         return id;
@@ -23,15 +24,15 @@ public class CycleLifeEntity {
         return state;
     }
 
-    public Date getDateOfCreation() {
+    public LocalDate getDateOfCreation() {
         return dateOfCreation;
     }
 
-    public Date getDateOfLastUpdate() {
+    public LocalDate getDateOfLastUpdate() {
         return dateOfLastUpdate;
     }
 
-    public Date getDateEndInReality() {
+    public LocalDate getDateEndInReality() {
         return dateEndInReality;
     }
 
@@ -43,15 +44,15 @@ public class CycleLifeEntity {
         this.state = state;
     }
 
-    public void setDateOfCreation(Date dateOfCreation) {
+    public void setDateOfCreation(LocalDate dateOfCreation) {
         this.dateOfCreation = dateOfCreation;
     }
 
-    public void setDateOfLastUpdate(Date dateOfLastUpdate) {
+    public void setDateOfLastUpdate(LocalDate dateOfLastUpdate) {
         this.dateOfLastUpdate = dateOfLastUpdate;
     }
 
-    public void setDateEndInReality(Date dateEndInReality) {
+    public void setDateEndInReality(LocalDate dateEndInReality) {
         this.dateEndInReality = dateEndInReality;
     }
 }

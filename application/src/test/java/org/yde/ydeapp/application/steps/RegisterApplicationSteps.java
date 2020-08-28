@@ -3,28 +3,25 @@ package org.yde.ydeapp.application.steps;
 import io.cucumber.java.Before;
 import io.cucumber.java.DataTableType;
 import io.cucumber.java.PendingException;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.spring.CucumberContextConfiguration;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase.ReferenceApplicationCmd;
 import org.yde.ydeapp.application.in.StateCmdEnum;
 import org.yde.ydeapp.application.service.ApplicationManagementService;
-import org.yde.ydeapp.domain.Application;
-import org.yde.ydeapp.domain.CycleLife;
-import org.yde.ydeapp.domain.OrganizationIdent;
-import org.yde.ydeapp.domain.Personne;
+import org.yde.ydeapp.domain.*;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 import org.yde.ydeapp.domain.out.RepositoryOfOrganization;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -46,121 +43,193 @@ public class RegisterApplicationSteps {
 
 
     private StateCmdEnum stateCmdEnum;
-    private Application application;
-    SimpleDateFormat formatter = new SimpleDateFormat(("dd/MM/yyyy"));
-    private ReferenceApplicationCmd.CycleLifeCmd cycleLifeCmd;
+    private ReferenceApplicationCmd application;
+    private DateTimeFormatter formatter;
+    private ApplicationDataTableCmd appDescCrea = null;
+    private ApplicationDataTableCmd appDescUpdate = null;
+    private ResponsableDataTableCmd responsableDescCrea;
+    private ResponsableDataTableCmd responsableDescUpdate;
+    private CycleLifeDataTablecmd cdvDescCrea;
+    private CycleLifeDataTablecmd cdvDescUpdate;
+    private OrganizationIdent organizationIdent;
 
     @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
+    public void setupdate() {
+        formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
     }
 
 
+
+    @Before
+    public void setup() {MockitoAnnotations.initMocks(this);
+    }
 
     @DataTableType
-    public ReferenceApplicationCmd applicationDataTableEntry(Map<String, String> entry) throws ParseException {
-        cycleLifeCmd = new ReferenceApplicationCmd.CycleLifeCmd(entry.get("state"),
-                formatter.parse(entry.get("dateOfCreation")),
-                formatter.parse(entry.get("dateOfLastUpdate")),
-                formatter.parse(entry.get("dateEndInReality")));
-
-        return new ReferenceApplicationCmd(entry.get("codeApplication"),
-                    entry.get("idRefog"),
-                    entry.get("longDescription"),
-                    new ReferenceApplicationCmd.ResponsableCmd(entry.get("uid"), entry.get("firstName"), entry.get("lastName")),
-                entry.get("idRefogMoe"),
-                cycleLifeCmd);
+    public ApplicationDataTableCmd applicationDataTableEntry(Map<String, String> entry)  {
+        return new ApplicationDataTableCmd(entry.get("codeApplication"),
+                entry.get("shortDescription"),
+                entry.get("longDescription"),
+                entry.get("IdRefogOrganization")
+        );
     }
 
+    @DataTableType
+    public CycleLifeDataTablecmd cycleLifeDataTableEntry(Map<String, String> entry) {
+        return new CycleLifeDataTablecmd(entry.get("state"),
+                entry.get("dateOfCreation"),
+                entry.get("dateOfLastUpdate"),
+                entry.get("dateEndInReality")
+        );
+    }
 
+    @DataTableType
+    public ResponsableDataTableCmd responsableDataTableEntry(Map<String, String> entry)  {
+        return new ResponsableDataTableCmd(entry.get("uid"),
+                entry.get("firstName"),
+                entry.get("lastName")
+        );
+    }
     @Given("Application with code {string} is not on the repository")
-    public void application_with_code_is_not_on_the_repository(String codeApps) {
+    public void application_with_code_is_not_on_the_repository(String codApp) {
         Mockito
-            .when(repositoryOfApplication.retrieveByAppCode(any(String.class)))
-            .thenReturn(null);
+                .when(repositoryOfApplication.retrieveByAppCode(any(String.class)))
+                .thenReturn(null);
     }
 
+    @Given("The following application attributes")
+    public void the_following_application_attributes(List<ApplicationDataTableCmd> apps) {
+        if (apps.size() == 1) {
+            appDescCrea = apps.get(0);
+            application = null;
+        } else {
+            throw new PendingException("Bad use of Cucumber scenario: create a new Application");
+        }
+    }
+
+    @Given("Application is in the repository with this data")
+    public void application_is_in_the_repository_with_this_data(List<ApplicationDataTableCmd> apps) {
+        if (apps.size() == 1) {
+            appDescCrea = apps.get(0);
+            application = null;
+        } else {
+            throw new PendingException("Bad use of Cucumber scenario: create a new Application");
+        }
+
+    }
+
+    @Given("With Responsable")
+    public void with_responsable(List<ResponsableDataTableCmd> resp) {
+        if (resp.size() != 1) {
+            throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
+
+        }
+        responsableDescCrea = resp.get(0);
+     //   Personne personne= buildPersonne(responsableDescUpdate);
+
+    }
+    @Given("With the cycle life")
+    public void with_the_cycle_life(List<CycleLifeDataTablecmd> cycLif) {
+        if (cycLif.size() != 1) {
+            throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
+        }
+        cdvDescCrea = cycLif.get(0);
+        buildAnApplication();
+       // CycleLife cycleLife = buildCycleLife(cdvDescUpdate, formatter) ;
 
 
+    }
+    @Given("control organization {string} is in the directory")
+    public void control_organization_is_in_the_directory(String idRefog) {
+        this.organizationIdent = new OrganizationIdent(idRefog, NAME_ORGANIZATION);
+        Mockito
+                .when(repositoryOfOrganization.retriveIdentByIdRefog(idRefog))
+                .thenReturn(organizationIdent);
 
+
+    }
     @Given("organization {string} is in the directory")
     public void organization_is_in_the_directory(String idRefog) {
         OrganizationIdent organizationIdent = new OrganizationIdent(idRefog, NAME_ORGANIZATION);
         Mockito
-            .when(repositoryOfOrganization.retriveIdentByIdRefog(idRefog))
-            .thenReturn(organizationIdent);
+                .when(repositoryOfOrganization.retriveIdentByIdRefog(idRefog))
+                .thenReturn(organizationIdent);
+
     }
-
-
-    @When("The administrator enrich the repository with this application with this data")
-    public void the_administrator_enrich_the_repository_with_this_application_with_this_data(List<ReferenceApplicationCmd> apps) {
+    @When("The administrator update the repository with this application with this data")
+    public void the_administrator_update_the_repository_with_this_application_with_this_data(List<ApplicationDataTableCmd> apps) {
 
         if (apps.size() != 1) {
             throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
         }
-
-        stateCmdEnum = applicationManagementService.referenceOrUpdateApplication(apps.get(0));
+        appDescUpdate = apps.get(0);
+    }
+    @When("With Responsable update")
+    public void with_responsable_update(List<ResponsableDataTableCmd> resp) {
+        if (resp.size() != 1) {
+            throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
+        }
+        responsableDescUpdate=resp.get(0);
 
     }
+    @When("With the cycle life update")
+    public void with_the_cycle_life_update(List<CycleLifeDataTablecmd> cycLif) {
+        if (cycLif.size() != 1) {
+            throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
+        }
+        cdvDescUpdate =cycLif.get(0);
+         //CycleLife cycleLife = buildCycleLife(cdvDescUpdate, formatter) ;
+         //application.updateCycleLife(cycleLife);
+        buildAnApplicationUp();
 
+        stateCmdEnum = applicationManagementService.referenceOrUpdateApplication(application);
+    }
+    @Then("The application with code {string} is updated in the repository")
+    public void the_application_with_code_is_updated_in_the_repository(String codeApp) {
+        Mockito.verify(repositoryOfApplication, Mockito.times(1)).retrieveByAppCode(codeApp);
+        assertThat(stateCmdEnum).isEqualByComparingTo(StateCmdEnum.REFERENCE);
+    }
 
-    @Then("a new application is in the repository with code {string} rattached to the Organization with idRefog {string}")
-    public void a_new_application_is_in_the_repository_with_code(String codeApp, String idRefog) {
+    @Then("The application with code {string} rattached to the Organization with idRefog {string}")
+    public void the_application_with_code_rattached_to_the_organization_with_id_refog(String codeApp, String idRefog) {
         Mockito.verify(repositoryOfApplication, Mockito.times(1)).retrieveByAppCode(codeApp);
         Mockito.verify(repositoryOfOrganization, Mockito.times(1)).retriveIdentByIdRefog(idRefog);
 
         assertThat(stateCmdEnum).isEqualByComparingTo(StateCmdEnum.REFERENCE);
     }
 
-    @Given("Application with code {string} is in the repository with this data")
-    public void application_with_code_is_in_the_repository_with_this_data(String codeApp, List<ReferenceApplicationCmd> apps) {
-        OrganizationIdent organizationIdent = new OrganizationIdent(apps.get(0).getIdRefOrganizationMoe(), NAME_ORGANIZATION);
-        Personne personne = new Personne(apps.get(0).getUid(), apps.get(0).getFirstName(), apps.get(0).getLastName());
-        CycleLife cycleLife = new CycleLife(apps.get(0).getState(),apps.get(0).getDateOfCreation(),apps.get(0).getDateOfLastUpdate(),apps.get(0).getDateEndInReality());
-        application = new Application.Builder(apps.get(0).getCodeApp())
-            .withShortDescription(apps.get(0).getShortDescription())
-            .withLongDescription(apps.get(0).getLongDescription())
-            .withResponsable(personne)
-            .withOrganization(organizationIdent)
-            .withCycleLife(cycleLife)
-            .build();
+    private void buildAnApplicationUp() {
+        OrganizationIdent organizationIdent = new OrganizationIdent(appDescUpdate.getIdRefogOrganization(), "Organization Name");
+        ReferenceApplicationCmd.ResponsableCmd personne = buildPersonne(responsableDescUpdate);
+        ReferenceApplicationCmd.CycleLifeCmd cycleLife = buildCycleLife(cdvDescUpdate, formatter);
+        application = new ReferenceApplicationCmd(appDescUpdate.getCodeApplication(),
+                                    appDescUpdate.getShortDescription(),
+                                    appDescUpdate.getLongDescription(),
+                personne,
+                appDescUpdate.getIdRefogOrganization(),cycleLife);
 
-        Mockito
-            .when(repositoryOfApplication.retrieveByAppCode(codeApp))
-            .thenReturn(application);
     }
 
-    @When("The administrator update the repository with this application with this data")
-    public void the_administrator_update_the_repository_with_this_application_with_this_data(List<ReferenceApplicationCmd> apps) {
-        if (apps.size() != 1) {
-            throw new PendingException("Bad use of Cucumber scenario: update a Application");
-        }
+    private void buildAnApplication() {
+        OrganizationIdent organizationIdent = new OrganizationIdent(appDescCrea.getIdRefogOrganization(), "Organization Name");
+        ReferenceApplicationCmd.ResponsableCmd responsableCmd = buildPersonne(responsableDescCrea);
+        ReferenceApplicationCmd.CycleLifeCmd cycleLife = buildCycleLife(cdvDescCrea, formatter);
+        application = new ReferenceApplicationCmd(appDescCrea.getCodeApplication(),
+                appDescCrea.getShortDescription(),
+                appDescCrea.getLongDescription(),
+                responsableCmd,
+                appDescCrea.getIdRefogOrganization(),
+                cycleLife);
 
-        stateCmdEnum = applicationManagementService.referenceOrUpdateApplication(apps.get(0));
+    }
+    private static ReferenceApplicationCmd.ResponsableCmd buildPersonne(ResponsableDataTableCmd responsableDesc) {
+        return new ReferenceApplicationCmd.ResponsableCmd(responsableDesc.getUid(), responsableDesc.getFirstName(), responsableDesc.getLastName());
     }
 
-    @Then("The application with code {string} is updated in the repository")
-    public void the_application_with_code_is_updated_in_the_repository(String codeApp) {
-        Mockito.verify(repositoryOfApplication, Mockito.times(1)).retrieveByAppCode(codeApp);
-
-        assertThat(stateCmdEnum).isEqualByComparingTo(StateCmdEnum.UPDATE);
-    }
-
-    @Then("The application with code {string} rattached to the Organization with idRefog {string}")
-    public void the_application_with_code_rattached_to_the_organization_with_id_refog(String codeApp, String idRefog) {
-        Mockito.verify(repositoryOfOrganization, Mockito.times(1)).retriveIdentByIdRefog(idRefog);
-        assertThat(application.getOrganizationIdent()).isNotNull();
-        assertThat(application.getOrganizationIdent().getIdRefog()).isEqualTo(idRefog);
-    }
-
-
-    @When("cycle Life is equal to")
-    public void cycle_life_is_equal_to(List<ReferenceApplicationCmd> apps) {
-        if (apps.size() != 1) {
-            throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
-        }
-
-        stateCmdEnum = applicationManagementService.referenceOrUpdateApplication(apps.get(0));
+    private static ReferenceApplicationCmd.CycleLifeCmd buildCycleLife(CycleLifeDataTablecmd cdvDesc, DateTimeFormatter formatter) {
+        return new ReferenceApplicationCmd.CycleLifeCmd(cdvDesc.getState(),
+                LocalDate.parse(cdvDesc.getDateOfCreation(), formatter),
+                LocalDate.parse(cdvDesc.getDateOfLastUpdate(), formatter),
+                LocalDate.parse(cdvDesc.getDateEndInReality(), formatter));
     }
 
 }
