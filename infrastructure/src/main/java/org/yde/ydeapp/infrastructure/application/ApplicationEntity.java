@@ -3,6 +3,7 @@ package org.yde.ydeapp.infrastructure.application;
 import org.yde.ydeapp.infrastructure.organization.OrganizationEntity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class ApplicationEntity {
@@ -31,6 +32,9 @@ public class ApplicationEntity {
     public void setOrganisation(OrganizationEntity organisation) {
         this.organisation = organisation;
     }
+
+    @ElementCollection
+    private List<NoteEntity> notes;
 
     public Long getId() { return id; }
 
@@ -63,4 +67,9 @@ public class ApplicationEntity {
     public void setResponsable(PersonneEntity responsable) {
         this.responsable = responsable;
     }
+
+    public List<NoteEntity> getNotes() { return notes; }
+
+    public void setNotes(List<NoteEntity> notes) { this.notes = notes; }
+
 }

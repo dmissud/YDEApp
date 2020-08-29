@@ -4,16 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.yde.ydeapp.domain.Application;
-import org.yde.ydeapp.domain.ApplicationIdent;
-import org.yde.ydeapp.domain.OrganizationIdent;
-import org.yde.ydeapp.domain.Personne;
+import org.yde.ydeapp.domain.*;
 import org.yde.ydeapp.domain.out.EntityAlreadyExist;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 import org.yde.ydeapp.infrastructure.organization.OrganizationEntity;
 import org.yde.ydeapp.infrastructure.organization.RepositoryOfOrganizationJpa;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -37,17 +35,29 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
             log.debug("Application {} not exist", codeApp);
             return null;
         }
-
         log.debug("Application {} load", codeApp);
+
+        // Mapping du responsable
         Personne personne = new Personne(applicationEntity.getResponsable().getUid(), applicationEntity.getResponsable().getFirstName(), applicationEntity.getResponsable().getLastName());
+
         OrganizationIdent organizationIdent = new OrganizationIdent(applicationEntity.getOrganisation().getIdRefog(), applicationEntity.getOrganisation().getName());
 
-        return new Application.Builder(applicationEntity.getCodeApp())
+        Application application = new Application.Builder(applicationEntity.getCodeApp())
             .withShortDescription(applicationEntity.getShortDescription())
             .withLongDescription(applicationEntity.getLongDescription())
             .withResponsable(personne)
             .withOrganization(organizationIdent)
             .build();
+
+        // Mapping des Notes
+        for (NoteEntity noteEntity : applicationEntity.getNotes()) {
+            Note note = new Note(noteEntity.getNoteTitle(),
+                noteEntity.getNoteContent(),
+                noteEntity.getNoteCreationDate());
+            application.addNote(note);
+        }
+
+        return application;
     }
 
 
@@ -89,7 +99,7 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
     public void updateApplication(Application application) {
         ApplicationEntity applicationEntity = repositoryOfApplicationJpa.findByCodeApp(application.getCodeApplication());
         if (applicationEntity == null) {
-            log.error("Application {} not exist", application.getCodeApplication());
+            log.error("Application {} does not exist", application.getCodeApplication());
             throw new EntityNotFound(String.format("Application with %s is not in repository", application.getCodeApplication()));
         }
 
@@ -115,7 +125,7 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
                 log.debug("Organization {} link   to application {}", organizationEntity.getName(), applicationEntity.getCodeApp());
             } else {
                 throw new EntityNotFound(String.format("Organization %s in not in the repository, coundn't link %s to",
-                    application.getOrganizationIdent().getIdRefog(), applicationEntity.getCodeApp() ));
+                    application.getOrganizationIdent().getIdRefog(), applicationEntity.getCodeApp()));
             }
         }
     }
@@ -132,5 +142,22 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
             }
             applicationEntity.setResponsable(responsableEntity);
         }
+
+        // Mapping des Notes
+
+        List<NoteEntity> notesListEntity = new ArrayList<>();
+        for (Note note : application.retrieveNotes().values()) {
+            NoteEntity noteEntity = new NoteEntity();
+            noteEntity.setNoteTitle(note.getNoteTitle());
+            noteEntity.setNoteContent(note.getNoteContent());
+            noteEntity.setNoteCreationDate(note.getNoteCreationDate());
+            notesListEntity.add(noteEntity);
+
+        }
+        applicationEntity.setNotes(notesListEntity);
+
+        log.debug("Application {} update", application.getCodeApplication());
+
+        repositoryOfApplicationJpa.save(applicationEntity);
     }
 }
