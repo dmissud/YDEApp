@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.yde.ydeapp.application.in.GetNoteQuery;
 import org.yde.ydeapp.application.in.ReferenceNoteUseCase;
 import org.yde.ydeapp.domain.Note;
+import org.yde.ydeapp.domain.out.EntityNotFound;
 
 
 import java.util.ArrayList;
@@ -51,13 +52,10 @@ class NoteResourceTest {
     @MockBean
     private GetNoteQuery getNoteQuery;
 
-    @MockBean
     private ReferenceNoteUseCase.ReferenceNoteCmd referenceNoteCmd;
 
     private List<Note> notes;
     Note noteInit = new Note(NOTE_TITLE_FIRST, NOTE_CONTENT_FIRST, NOTE_CREATION_DATE_FIRST);
-
-    ReferenceNoteUseCase.ReferenceNoteCmd referenceNote = new ReferenceNoteUseCase.ReferenceNoteCmd(NOTE_TITLE_FIRST, NOTE_CONTENT_FIRST, NOTE_CREATION_DATE_FIRST);
 
     @BeforeEach
     void setup() {
@@ -75,15 +73,15 @@ class NoteResourceTest {
     void testRetrieveAllNotesFromExistingApplication() throws Exception {
         // Given
         Mockito
-                .when(getNoteQuery. getApplicationAllNotes(CODE_APPLICATION))
-                .thenReturn(notes);
+            .when(getNoteQuery.getApplicationAllNotes(CODE_APPLICATION))
+            .thenReturn(notes);
 
         mockMvc
-                // When
-                .perform(MockMvcRequestBuilders.get("/api/applications/" + CODE_APPLICATION + "/notes")
-                        .accept(MediaType.APPLICATION_JSON))
-                // Then
-                .andExpect(status().isOk());
+            // When
+            .perform(MockMvcRequestBuilders.get("/api/applications/" + CODE_APPLICATION + "/notes")
+                .accept(MediaType.APPLICATION_JSON))
+            // Then
+            .andExpect(status().isOk());
     }
 
     @Test
@@ -91,15 +89,15 @@ class NoteResourceTest {
     void testRetrieveNoteByTitleFromExistingApplication() throws Exception {
         // Given
         Mockito
-                .when(getNoteQuery.getApplicationNoteByTitle(CODE_APPLICATION, NOTE_TITLE_FIRST))
-                .thenReturn(noteInit);
+            .when(getNoteQuery.getApplicationNoteByTitle(CODE_APPLICATION, NOTE_TITLE_FIRST))
+            .thenReturn(noteInit);
 
         mockMvc
-                // When
-                .perform(MockMvcRequestBuilders.get("/api/applications/" + CODE_APPLICATION + "/notes/"+ NOTE_TITLE_FIRST)
-                        .accept(MediaType.APPLICATION_JSON))
-                // Then
-                .andExpect(status().isOk());
+            // When
+            .perform(MockMvcRequestBuilders.get("/api/applications/" + CODE_APPLICATION + "/notes/" + NOTE_TITLE_FIRST)
+                .accept(MediaType.APPLICATION_JSON))
+            // Then
+            .andExpect(status().isOk());
     }
 
     @Test
@@ -107,37 +105,51 @@ class NoteResourceTest {
     void testReferenceNewNoteToExistingApplication() throws Exception {
         // Given
         Mockito
-                .when(referenceNoteUseCase.referenceNote(any(String.class), any(ReferenceNoteUseCase.ReferenceNoteCmd.class)))
-                .thenReturn(noteInit);
-        String json = objectMapper.writeValueAsString(referenceNote);
+            .when(referenceNoteUseCase.referenceNote(any(String.class), any(ReferenceNoteUseCase.ReferenceNoteCmd.class)))
+            .thenReturn(noteInit);
+        String json = objectMapper.writeValueAsString(referenceNoteCmd);
 
         mockMvc
-                // When
-                .perform(MockMvcRequestBuilders
+            // When
+            .perform(MockMvcRequestBuilders
                 .post("/api/applications/" + CODE_APPLICATION + "/notes")
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                // Then
-                .andExpect(status().isCreated());
+            // Then
+            .andExpect(status().isCreated());
     }
 
     @Test
     @DisplayName("Delete a note from an existing application")
     void testDeleteNoteFromExistingApplication() throws Exception {
         // Given
-      Mockito
-                .when(referenceNoteUseCase.deleteNoteByTitle(CODE_APPLICATION, NOTE_TITLE_FIRST))
-                .then();
-
-
+        // rien a mocker la méthode est en void, il faut juste vérifier qu'elle est appellée
         mockMvc
-                // When
-                .perform(MockMvcRequestBuilders
-                        .delete("/api/applications/" + CODE_APPLICATION + "/notes/" + NOTE_TITLE_FIRST)
-                        .accept(MediaType.APPLICATION_JSON))
-                // Then
-                .andExpect(status().isOk());*/
+            // When
+            .perform(MockMvcRequestBuilders
+                .delete("/api/applications/" + CODE_APPLICATION + "/notes/" + NOTE_TITLE_FIRST)
+                .accept(MediaType.APPLICATION_JSON))
+            // Then
+            .andExpect(status().isOk());
+
+        Mockito.verify(referenceNoteUseCase, Mockito.times(1)).deleteNoteByTitle(CODE_APPLICATION, NOTE_TITLE_FIRST);
     }
 
+    @Test
+    @DisplayName("Try to Delete a unknow note from an existing application and got a 404 error")
+    void testDeleteUnknowNoteFromExistingApplication() throws Exception {
+        // Given
+        Mockito
+            .doThrow(new EntityNotFound(String.format("Note %s does not exist", NOTE_TITLE_FIRST)))
+            .when(referenceNoteUseCase).deleteNoteByTitle(CODE_APPLICATION, NOTE_TITLE_FIRST);
+
+        mockMvc
+            // When
+            .perform(MockMvcRequestBuilders
+                .delete("/api/applications/" + CODE_APPLICATION + "/notes/" + NOTE_TITLE_FIRST)
+                .accept(MediaType.APPLICATION_JSON))
+            // Then
+            .andExpect(status().isNotFound());
+    }
 }
