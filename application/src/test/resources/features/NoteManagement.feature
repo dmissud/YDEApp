@@ -40,5 +40,5 @@ Feature: Note management test
 
     Scenario: deleting an unknown note
       Given An existing application "AP00002" with following note "The Note", "The content", "28/08/2020"
-      When User wants to delete a note named as "The Note 2"
+      When User wants to delete a note named as "The Note 2" to the application "AP00002"
       Then Exception EntityNotFound is thrown for "The Note 2"

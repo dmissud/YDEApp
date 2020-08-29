@@ -65,10 +65,7 @@ public class NoteManagementService implements ReferenceNoteUseCase,GetNoteQuery 
     @Override
     public List<Note> getApplicationAllNotes(String codeApplication) {
 
-        List<Note> allNotes = new ArrayList<>();
-
-        allNotes.addAll(repositoryOfApplication.retrieveByAppCode(codeApplication).retrieveNotes().values());
-
+        List<Note> allNotes = new ArrayList<>(repositoryOfApplication.retrieveByAppCode(codeApplication).retrieveNotes().values());
 
         log.trace("Notes list for application {} has been sent.", codeApplication);
 
@@ -83,9 +80,10 @@ public class NoteManagementService implements ReferenceNoteUseCase,GetNoteQuery 
             application.deleteNote(noteTitle);
             repositoryOfApplication.updateApplication(application);
         } else {
+            log.error("Note {} not exist on {}", noteTitle, codeApplication);
             throw new EntityNotFound(String.format("Note %s does not exist", noteTitle));
         }
-        log.trace("Note {} has been deleted.", noteTitle);
+        log.trace("Note {} of {} has been deleted.", noteTitle, codeApplication);
 
     }
 }
