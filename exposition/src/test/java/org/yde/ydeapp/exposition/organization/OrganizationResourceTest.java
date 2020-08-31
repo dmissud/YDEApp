@@ -30,6 +30,8 @@ class OrganizationResourceTest {
 
     public static final String ORGANIZATION_ONE = "Organization One";
     public static final String ORGANIZATION_IDREFOG_ONE = "10000000";
+    public static final String ORGANIZATION_TWO = "Organization Two";
+    public static final String ORGANIZATION_IDREFOG_TWO = "10000001";
     @Autowired
     private MockMvc mockMvc;
 
@@ -55,11 +57,14 @@ class OrganizationResourceTest {
     void when_i_reference_a_new_organization_http_status_is_created() throws Exception {
         // Given
 
-        ReferenceOrganisationCmd referenceOrganisationCmd = new ReferenceOrganisationCmd(ORGANIZATION_ONE, ORGANIZATION_IDREFOG_ONE, new ArrayList<>());
+        ArrayList<ReferenceOrganisationCmd> lst = new ArrayList<>();
+        lst.add(new ReferenceOrganisationCmd(ORGANIZATION_TWO, ORGANIZATION_IDREFOG_TWO, new ArrayList<>()));
+        ReferenceOrganisationCmd referenceOrganisationCmd = new ReferenceOrganisationCmd(ORGANIZATION_ONE, ORGANIZATION_IDREFOG_ONE, lst);
         Mockito
             .when(referenceOrganizationUseCase.referenceOrganization(any(ReferenceOrganisationCmd.class)))
             .thenReturn(organization);
 
+        String query = objectMapper.writeValueAsString(referenceOrganisationCmd);
         mockMvc
             // When
             .perform(MockMvcRequestBuilders.post("/api/organizations")
