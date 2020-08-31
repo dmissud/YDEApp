@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.predicate;
 
 public class CreateApplicationSteps {
 
@@ -120,7 +121,13 @@ public class CreateApplicationSteps {
         assertThat(application.getCycleLife()).isNotNull();
         assertThat(application.getCycleLife().getDateOfCreation()).isEqualTo(LocalDate.parse(cdvDescCrea.getDateOfCreation(), formatter));
         assertThat(application.getCycleLife().getDateOfLastUpdate()).isEqualTo(LocalDate.parse(cdvDescCrea.getDateOfLastUpdate(), formatter));
-        assertThat(application.getCycleLife().getDateEndInReality()).isEqualTo(LocalDate.parse(cdvDescCrea.getDateEndInReality(), formatter));
+        if (application.getCycleLife().getDateEndInReality() != null) {
+
+            assertThat(application.getCycleLife().getDateEndInReality()).isEqualTo(LocalDate.parse(cdvDescCrea.getDateEndInReality(), formatter));
+        }
+        else {
+            assertThat(cdvDescCrea.getDateEndInReality()==null);
+        }
     }
 
     @When("Administrator want to create a new application with only code app AP00002")
@@ -218,10 +225,28 @@ public class CreateApplicationSteps {
     }
 
     private static CycleLife buildCycleLife(CycleDeVieDataTable cdvDesc, DateTimeFormatter formatter) {
-        return new CycleLife(cdvDesc.getState(),
-            LocalDate.parse(cdvDesc.getDateOfCreation(), formatter),
-            LocalDate.parse(cdvDesc.getDateOfLastUpdate(), formatter),
-            LocalDate.parse(cdvDesc.getDateEndInReality(), formatter));
-    }
 
+        LocalDate dateCreation=null;
+        LocalDate dateOfLastUpdate=null;
+        LocalDate dateEndInReality=null;
+
+        if (cdvDesc.getDateOfCreation() !=null) {
+
+            dateCreation = LocalDate.parse(cdvDesc.getDateOfCreation(), formatter);
+        }
+        if (cdvDesc.getDateOfLastUpdate() != null) {
+
+            dateOfLastUpdate = LocalDate.parse(cdvDesc.getDateOfLastUpdate(), formatter);
+        }
+        if (cdvDesc.getDateEndInReality() != null) {
+
+
+            dateEndInReality = LocalDate.parse(cdvDesc.getDateEndInReality(), formatter);
+        }
+
+        return new CycleLife(cdvDesc.getState(),
+            dateCreation,
+            dateOfLastUpdate,
+            dateEndInReality);
+    }
 }
