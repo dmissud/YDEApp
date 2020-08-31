@@ -3,6 +3,10 @@ package org.yde.ydeapp.domain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Application {
     private static final Logger log = LoggerFactory.getLogger(Application.class);
 
@@ -12,8 +16,11 @@ public class Application {
     private Personne responsable;
     private OrganizationIdent organizationIdent;
     private CycleLife cycleLife;
+    private final Map<String, Note> notes;
+
 
     private Application(String codeApplication) {
+        this.notes = new HashMap<>();
         this.codeApplication = codeApplication;
     }
 
@@ -54,6 +61,41 @@ public class Application {
     }
 
     public void updateCycleLife(CycleLife cycleLife) { this.cycleLife = cycleLife;
+    }
+
+    public Map<String, Note> retrieveNotes() {
+        return Collections.unmodifiableMap(notes);
+    }
+
+    public Note retrieveNoteByTitle(String noteTitle) {
+        return notes.get(noteTitle);
+    }
+
+
+    public void addNote(Note newNote) {
+        if (notes.get(newNote.getNoteTitle()) == null) {
+            notes.put(newNote.getNoteTitle(), newNote);
+        } else {
+            notes.replace(newNote.getNoteTitle(), newNote);
+        }
+    }
+
+    public static <K, V> K getKey(Map<K, V> map, V value) {
+        for (K key : map.keySet()) {
+            if (value.equals(map.get(key))) {
+                return key;
+            }
+        }
+        return null;
+    }
+
+    public void deleteNote(String noteTitle) {
+
+        for (Note note : notes.values()) {
+            if (note.getNoteTitle().equals(noteTitle)) {
+                notes.remove(getKey(notes, note));
+            }
+        }
     }
 
     public static class Builder {
@@ -104,6 +146,5 @@ public class Application {
             log.trace("New Application Create");
             return application;
         }
-
     }
 }

@@ -8,8 +8,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.yde.ydeapp.domain.Application;
 import org.yde.ydeapp.domain.CycleLife;
-import org.yde.ydeapp.domain.OrganizationIdent;
+import org.yde.ydeapp.domain.Note;
 import org.yde.ydeapp.domain.Personne;
+import org.yde.ydeapp.domain.OrganizationIdent;
 
 import java.text.ParseException;
 import java.time.LocalDate;

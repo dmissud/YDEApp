@@ -30,5 +30,4 @@ public class ApplicationDataTable {
     public String getLongDescription() {
         return longDescription;
     }
-
 }
