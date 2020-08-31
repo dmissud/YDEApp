@@ -96,6 +96,42 @@ public class RegisterApplicationSteps {
                 .thenReturn(null);
     }
 
+    @When("The administrator enrich the repository with this application with this data")
+    public void the_administrator_enrich_the_repository_with_this_application_with_this_data(List<ApplicationDataTableCmd> apps) {
+
+        if (apps.size() != 1) {
+            throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
+        }
+        appDescCrea = apps.get(0);
+    }
+    @When("With Responsable create")
+    public void with_responsable_create(List<ResponsableDataTableCmd> resp) {
+        if (resp.size() != 1) {
+            throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
+        }
+        responsableDescCrea=resp.get(0);
+
+    }
+    @When("With the cycle life create")
+    public void with_the_cycle_life_create(List<CycleLifeDataTablecmd> cycLif) {
+        if (cycLif.size() != 1) {
+            throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
+        }
+        cdvDescCrea =cycLif.get(0);
+        buildAnApplication();
+
+        stateCmdEnum = applicationManagementService.referenceOrUpdateApplication(application);
+    }
+
+    @Then("The application with code {string} is created in the repository")
+    public void the_application_with_code_is_created_in_the_repository(String codeApp) {
+
+        Mockito.verify(repositoryOfApplication, Mockito.times(1)).retrieveByAppCode(codeApp);
+    }
+
+
+
+
     @Given("The following application attributes")
     public void the_following_application_attributes(List<ApplicationDataTableCmd> apps) {
         if (apps.size() == 1) {

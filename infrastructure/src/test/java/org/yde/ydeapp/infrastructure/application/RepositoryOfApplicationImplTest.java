@@ -15,8 +15,12 @@ import org.yde.ydeapp.domain.OrganizationIdent;
 import org.yde.ydeapp.domain.Personne;
 import org.yde.ydeapp.infrastructure.organization.OrganizationEntity;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +33,8 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 @DisplayName("Validation du Repository des Applications")
 class RepositoryOfApplicationImplTest {
 
-    SimpleDateFormat formatter = new SimpleDateFormat(("dd/MM/yyyy"));
+    //SimpleDateFormat formatter = new SimpleDateFormat(("dd/MM/yyyy"));
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
 
     private static final String CODE_APP = "AP00001";
     private static final String SHORT_DESCRIPTION = "A short description";
@@ -38,17 +43,17 @@ class RepositoryOfApplicationImplTest {
     private static final String FIRSTNAME_OF_RESPONSABLE = "Jhon";
     private static final String LASTNAME_OF_RESPONSABLE = "Doe";
     private static final String STATE = "Active";
-    private final Date DATE_OF_CREATION = formatter.parse("01/01/2020");
-    private final Date DATE_OF_LAST_UPDATE = formatter.parse("01/01/2020");
-    private final Date DATE_END_IN_REALITY = formatter.parse("01/01/2020");
+    private final LocalDate DATE_OF_CREATION = LocalDate.parse("01/01/2020",formatter);
+    private final LocalDate DATE_OF_LAST_UPDATE = LocalDate.parse("01/01/2020",formatter);
+    private final LocalDate DATE_END_IN_REALITY = LocalDate.parse("01/01/2020",formatter);
     private static final String CODE_APP_NOT_EXIST = "AP99999";
     public static final String ID_REFOG_MOE = "10000000";
     public static final String NAME_OF_MOE = "NAME_OF_MOE";
     public static final String ID_REFOG_MOE_OTHER = "10000001";
     public static final String NAME_OF_MOE_OTHER = "NAME_OF_OTHER_MOE";
-    private final Date DATE_OF_CREATION_OTHER = formatter.parse("01/01/2020");
-    private final Date DATE_OF_LAST_UPDATE_OTHER = formatter.parse("01/01/2020");
-    private final Date DATE_END_IN_REALITY_OTHER = formatter.parse("01/01/2020");
+    private final LocalDate DATE_OF_CREATION_OTHER = LocalDate.parse("01/01/2020",formatter);
+    private final LocalDate DATE_OF_LAST_UPDATE_OTHER = LocalDate.parse("01/01/2020",formatter);
+    private final LocalDate DATE_END_IN_REALITY_OTHER = LocalDate.parse("01/01/2020",formatter);
 
 
     @Autowired
@@ -57,7 +62,7 @@ class RepositoryOfApplicationImplTest {
     @Autowired
     private RepositoryOfApplicationImpl repositoryOfApplicationImpl;
 
-    RepositoryOfApplicationImplTest() throws ParseException {
+    RepositoryOfApplicationImplTest()  {
     }
 
     @Test

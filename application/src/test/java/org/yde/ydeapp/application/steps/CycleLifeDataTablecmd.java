@@ -21,6 +21,7 @@ public class CycleLifeDataTablecmd {
 
 
     public String getDateOfCreation() {
+
         return dateOfCreation;
     }
 
@@ -34,4 +35,7 @@ public class CycleLifeDataTablecmd {
     public String getState() {
         return state;
     }
+
+
+
 }

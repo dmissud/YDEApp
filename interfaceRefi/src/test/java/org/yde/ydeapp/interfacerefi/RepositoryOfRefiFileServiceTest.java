@@ -29,7 +29,8 @@ class RepositoryOfRefiFileServiceTest {
     @DisplayName("when the multipartfile is correct : storeFile is ok")
     void when_the_multipartfile_is_correct_storeFile_is_ok() throws Exception {
         //Given
-        FileInputStream fis = new FileInputStream("src/test/resources/creation.csv");
+         FileInputStream fis = new FileInputStream("src/test/resources/creation.csv");
+
         MultipartFile multipartFile1 = new MockMultipartFile("file", fis);
 
         //When

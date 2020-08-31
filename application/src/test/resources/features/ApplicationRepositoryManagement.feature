@@ -8,14 +8,14 @@ Feature: Management of the repository of Application
     When The administrator enrich the repository with this application with this data
       | codeApplication | shortDescription | longDescription               | IdRefogOrganization |
       | AP00001         | Test App         | Long description for Test app | 10000000            |
-    And With Responsable
+    And With Responsable create
       | uid    | firstName | lastName | IdRefogOrganization |
       | 123456 | John      | Doe      | 10000000            |
-    And With the cycle life
+    And With the cycle life create
       | state  | dateOfCreation | dateOfLastUpdate | dateEndInReality |
       | Active | 01/01/2020     | 01/08/2020       | 28/08/2020       |
-
-    Then a new application is in the repository with code "AP00010" rattached to the Organization with idRefog "10000000"
+    Then The application with code "AP00001" is created in the repository
+    And The application with code "AP00001" rattached to the Organization with idRefog "10000000"
 
   Scenario: Updating a application with other Organization
     Given Application is in the repository with this data
