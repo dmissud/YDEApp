@@ -1,5 +1,13 @@
 package org.yde.ydeapp.domain.steps;
 
+import org.yde.ydeapp.domain.Application;
+import org.yde.ydeapp.domain.CycleLife;
+import org.yde.ydeapp.domain.OrganizationIdent;
+import org.yde.ydeapp.domain.Personne;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class NoteDataTable {
 
     private final String noteTitle;
@@ -23,4 +31,5 @@ public class NoteDataTable {
     public String getNoteCreationDate() {
         return noteCreationDate;
     }
+
 }

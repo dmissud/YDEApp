@@ -48,7 +48,7 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
                                             applicationEntity.getCycleLife().getDateOfCreation(),
                                              applicationEntity.getCycleLife().getDateOfLastUpdate(),
                                             applicationEntity.getCycleLife().getDateEndInReality());
-        return new Application.Builder(applicationEntity.getCodeApp())
+        Application application = new Application.Builder(applicationEntity.getCodeApp())
             .withShortDescription(applicationEntity.getShortDescription())
             .withLongDescription(applicationEntity.getLongDescription())
             .withResponsable(personne)

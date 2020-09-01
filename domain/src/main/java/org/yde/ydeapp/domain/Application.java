@@ -2,6 +2,7 @@ package org.yde.ydeapp.domain;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yde.ydeapp.domain.out.EntityIncorrect;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -140,6 +141,25 @@ public class Application {
             Application application = new Application(this.codeApplication);
             application.shortDescription = this.shortDescription;
             application.longDescription = this.longDescription;
+            Boolean isValide= true;
+            String message="";
+            if (this.responsable == null) {
+                isValide = false;
+                message = String.format("%s\n Responsable est obligatoire  ", message );
+            }
+            if (this.organizationIdent == null) {
+                isValide = false;
+                message = String.format("%s\n Organisation est obligatoire  ", message );
+            }
+            if (this.cycleLife == null) {
+                isValide = false;
+                message = String.format("%s\n Cycle de vie est obligatoire  ", message );
+            }
+
+            if (!isValide){
+                throw new EntityIncorrect(String.format("%s\nPour l'application %s", message , this.codeApplication));
+            }
+
             application.responsable = this.responsable;
             application.organizationIdent = this.organizationIdent;
             application.cycleLife = this.cycleLife;
