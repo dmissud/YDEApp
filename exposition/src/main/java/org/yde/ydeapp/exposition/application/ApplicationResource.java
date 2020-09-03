@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/V1")
 public class ApplicationResource {
 
     @Autowired
