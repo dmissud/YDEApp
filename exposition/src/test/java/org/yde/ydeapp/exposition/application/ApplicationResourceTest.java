@@ -84,7 +84,7 @@ class ApplicationResourceTest {
 
         mockMvc
                 // When
-                .perform(MockMvcRequestBuilders.get("/api/applications/" + CODE_APPLICATION)
+                .perform(MockMvcRequestBuilders.get("/api/V1/applications/" + CODE_APPLICATION)
                         .accept(MediaType.APPLICATION_JSON))
                 // Then
                 .andExpect(status().isOk());
@@ -100,7 +100,7 @@ class ApplicationResourceTest {
 
         mockMvc
                 // When
-                .perform(MockMvcRequestBuilders.get("/api/applications/")
+                .perform(MockMvcRequestBuilders.get("/api/V1/applications/")
                         .accept(MediaType.APPLICATION_JSON))
                 // Then
                 .andExpect(status().isOk());

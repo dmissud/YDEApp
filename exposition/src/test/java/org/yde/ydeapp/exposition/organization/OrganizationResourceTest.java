@@ -67,7 +67,7 @@ class OrganizationResourceTest {
         String query = objectMapper.writeValueAsString(referenceOrganisationCmd);
         mockMvc
             // When
-            .perform(MockMvcRequestBuilders.post("/api/organizations")
+            .perform(MockMvcRequestBuilders.post("/api/V1/organizations")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(referenceOrganisationCmd)))
@@ -85,7 +85,7 @@ class OrganizationResourceTest {
 
         mockMvc
             // When
-            .perform(MockMvcRequestBuilders.get("/api/organizations/" + ORGANIZATION_IDREFOG_ONE)
+            .perform(MockMvcRequestBuilders.get("/api/V1/organizations/" + ORGANIZATION_IDREFOG_ONE)
                 .accept(MediaType.APPLICATION_JSON))
             // Then
             .andExpect(status().isOk());
