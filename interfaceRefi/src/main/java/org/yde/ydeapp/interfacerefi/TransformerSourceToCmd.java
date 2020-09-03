@@ -21,7 +21,8 @@ public class TransformerSourceToCmd implements CollectionApplicationCmd {
         this.csvToBean = new CsvToBeanBuilder(inputStreamReader)
                 .withSeparator(';')
                 .withMappingStrategy(strategy)
-                .withType(ApplicationSourcePosition.class)
+                .withIgnoreQuotations(true)
+                .withStrictQuotes(false)
                 .withSkipLines(1)
                 .build();
     }
