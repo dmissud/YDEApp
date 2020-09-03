@@ -75,7 +75,7 @@ public class RefiResourceTest {
                 .thenReturn(resultOfCollection);
 
         //When
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/uploadRefi")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/V1/uploadRefi")
                 .file(multipartFile1)
                 .param("some-random", "4"))
 
