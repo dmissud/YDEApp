@@ -25,13 +25,10 @@ public class ApplicationEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     private OrganizationEntity organisation;
 
-    public OrganizationEntity getOrganisation() {
-        return organisation;
-    }
+    @OneToOne(cascade = CascadeType.ALL)
+    private CycleLifeEntity cycleLife;
 
-    public void setOrganisation(OrganizationEntity organisation) {
-        this.organisation = organisation;
-    }
+
 
     @ElementCollection
     private List<NoteEntity> notes;
@@ -66,6 +63,22 @@ public class ApplicationEntity {
 
     public void setResponsable(PersonneEntity responsable) {
         this.responsable = responsable;
+    }
+
+    public OrganizationEntity getOrganisation() {
+        return organisation;
+    }
+
+    public void setOrganisation(OrganizationEntity organisation) {
+        this.organisation = organisation;
+    }
+
+    public CycleLifeEntity getCycleLife() {
+        return cycleLife;
+    }
+
+    public void setCycleLife(CycleLifeEntity cycleLife) {
+        this.cycleLife = cycleLife;
     }
 
     public List<NoteEntity> getNotes() { return notes; }

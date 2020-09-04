@@ -1,14 +1,14 @@
-package org.yde.ydeapp.domain.steps;
+package org.yde.ydeapp.application.steps;
 
-public class ApplicationDataTable {
+public class ApplicationDataTableCmd {
     private final String codeApplication;
     private final String shortDescription;
     private final String longDescription;
     private final String idRefogOrganization;
 
-    public ApplicationDataTable(String codeApplication, String shortDescription,
-                                String longDescription,
-                                String idRefogOrganization) {
+    public ApplicationDataTableCmd(String codeApplication, String shortDescription,
+                                   String longDescription,
+                                   String idRefogOrganization) {
         this.codeApplication = codeApplication;
         this.shortDescription = shortDescription;
         this.longDescription = longDescription;
@@ -30,4 +30,6 @@ public class ApplicationDataTable {
     public String getLongDescription() {
         return longDescription;
     }
+
 }
+

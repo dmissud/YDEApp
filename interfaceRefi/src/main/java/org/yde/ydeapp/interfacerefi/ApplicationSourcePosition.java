@@ -3,6 +3,7 @@ package org.yde.ydeapp.interfacerefi;
 import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvDate;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class ApplicationSourcePosition {
@@ -32,30 +33,30 @@ public class ApplicationSourcePosition {
 
     @CsvBindByPosition(position = 8)
     @CsvDate("dd/MM/yyyy")
-    private Date dateOfCreation;
+    private LocalDate dateOfCreation;
 
     @CsvBindByPosition(position = 9)
     @CsvDate("dd/MM/yyyy")
-    private Date dateOfLastUpdate;
+    private LocalDate dateOfLastUpdate;
 
     @CsvBindByPosition(position = 10)
     @CsvDate("dd/MM/yyyy")
-    private Date dateEndProjected;
+    private LocalDate dateEndProjected;
 
     @CsvBindByPosition(position = 11)
     private String applicationTarget;
 
     @CsvBindByPosition(position = 12)
     @CsvDate("dd/MM/yyyy")
-    private Date dateEndInReality;
+    private LocalDate dateEndInReality;
 
     @CsvBindByPosition(position = 13)
     @CsvDate("dd/MM/yyyy")
-    private Date dateBeginningExploitation;
+    private LocalDate dateBeginningExploitation;
 
     @CsvBindByPosition(position = 14)
     @CsvDate("dd/MM/yyyy")
-    private Date dateEndExploitation;
+    private LocalDate dateEndExploitation;
 
     @CsvBindByPosition(position = 15)
     private String idRefogEntityOwner;
@@ -176,7 +177,7 @@ public class ApplicationSourcePosition {
 
     @CsvBindByPosition(position = 54)
     @CsvDate("dd/MM/yyyy")
-    private Date dateOfValidationOfServiceDefinition;
+    private LocalDate dateOfValidationOfServiceDefinition;
 
     @CsvBindByPosition(position = 55)
     private String typeOfSolution;
@@ -251,27 +252,27 @@ public class ApplicationSourcePosition {
         this.state = state;
     }
 
-    public Date getDateOfCreation() {
+    public LocalDate getDateOfCreation() {
         return dateOfCreation;
     }
 
-    public void setDateOfCreation(Date dateOfCreation) {
+    public void setDateOfCreation(LocalDate dateOfCreation) {
         this.dateOfCreation = dateOfCreation;
     }
 
-    public Date getDateOfLastUpdate() {
+    public LocalDate getDateOfLastUpdate() {
         return dateOfLastUpdate;
     }
 
-    public void setDateOfLastUpdate(Date dateOfLastUpdate) {
+    public void setDateOfLastUpdate(LocalDate dateOfLastUpdate) {
         this.dateOfLastUpdate = dateOfLastUpdate;
     }
 
-    public Date getDateEndProjected() {
+    public LocalDate getDateEndProjected() {
         return dateEndProjected;
     }
 
-    public void setDateEndProjected(Date dateEndProjected) {
+    public void setDateEndProjected(LocalDate dateEndProjected) {
         this.dateEndProjected = dateEndProjected;
     }
 
@@ -283,27 +284,27 @@ public class ApplicationSourcePosition {
         this.applicationTarget = applicationTarget;
     }
 
-    public Date getDateEndInReality() {
+    public LocalDate getDateEndInReality() {
         return dateEndInReality;
     }
 
-    public void setDateEndInReality(Date dateEndInReality) {
+    public void setDateEndInReality(LocalDate dateEndInReality) {
         this.dateEndInReality = dateEndInReality;
     }
 
-    public Date getDateBeginningExploitation() {
+    public LocalDate getDateBeginningExploitation() {
         return dateBeginningExploitation;
     }
 
-    public void setDateBeginningExploitation(Date dateBeginningExploitation) {
+    public void setDateBeginningExploitation(LocalDate dateBeginningExploitation) {
         this.dateBeginningExploitation = dateBeginningExploitation;
     }
 
-    public Date getDateEndExploitation() {
+    public LocalDate getDateEndExploitation() {
         return dateEndExploitation;
     }
 
-    public void setDateEndExploitation(Date dateEndExploitation) {
+    public void setDateEndExploitation(LocalDate dateEndExploitation) {
         this.dateEndExploitation = dateEndExploitation;
     }
 
@@ -619,11 +620,11 @@ public class ApplicationSourcePosition {
         this.derogation = derogation;
     }
 
-    public Date getDateOfValidationOfServiceDefinition() {
+    public LocalDate getDateOfValidationOfServiceDefinition() {
         return dateOfValidationOfServiceDefinition;
     }
 
-    public void setDateOfValidationOfServiceDefinition(Date dateOfValidationOfServiceDefinition) {
+    public void setDateOfValidationOfServiceDefinition(LocalDate dateOfValidationOfServiceDefinition) {
         this.dateOfValidationOfServiceDefinition = dateOfValidationOfServiceDefinition;
     }
 

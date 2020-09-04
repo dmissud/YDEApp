@@ -1,6 +1,8 @@
 package org.yde.ydeapp.infrastructure.application;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import java.time.LocalDate;
 
 @Embeddable
 public class NoteEntity {
@@ -9,7 +11,7 @@ public class NoteEntity {
     @Column(unique = true)
     private String noteTitle;
     private String noteContent;
-    private String noteCreationDate;
+    private LocalDate noteCreationDate;
 
 
     public void setNoteTitle(String noteTitle) {
@@ -20,7 +22,7 @@ public class NoteEntity {
         this.noteContent = noteContent;
     }
 
-    public void setNoteCreationDate(String noteCreationDate) {
+    public void setNoteCreationDate(LocalDate noteCreationDate) {
         this.noteCreationDate = noteCreationDate;
     }
 
@@ -32,7 +34,7 @@ public class NoteEntity {
         return noteContent;
     }
 
-    public String getNoteCreationDate() {
+    public LocalDate getNoteCreationDate() {
         return noteCreationDate;
     }
 }

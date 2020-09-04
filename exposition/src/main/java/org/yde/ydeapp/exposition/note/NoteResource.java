@@ -13,7 +13,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -67,19 +66,13 @@ public class NoteResource {
             @Valid @RequestBody String noteContent,
             @PathVariable("codeApplication") final String codeApplication,
             @PathVariable("noteTitle") final String noteTitle) {
-
-        LocalDate noteUpdateDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/LL/yyyy");
-        String noteCreationDate = noteUpdateDate.format(formatter);
-
-        ReferenceNoteUseCase.ReferenceNoteCmd referenceNoteCmd = new ReferenceNoteUseCase.ReferenceNoteCmd(noteTitle, noteContent, noteCreationDate);
+        ReferenceNoteUseCase.ReferenceNoteCmd referenceNoteCmd = new ReferenceNoteUseCase.ReferenceNoteCmd(noteTitle, noteContent, LocalDate.now());
         Note note = referenceNoteUseCase.updateNote(codeApplication, noteTitle, referenceNoteCmd);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{noteTitle}")
                 .buildAndExpand(note.getNoteTitle())
                 .toUri();
-
         return ResponseEntity.created(location).build();
     }
 

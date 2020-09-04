@@ -1,15 +1,18 @@
 package org.yde.ydeapp.domain.steps;
 
+import io.cucumber.java.Before;
 import io.cucumber.java.DataTableType;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.yde.ydeapp.domain.Application;
-import org.yde.ydeapp.domain.Note;
-import org.yde.ydeapp.domain.Personne;
+import org.yde.ydeapp.domain.CycleLife;
 import org.yde.ydeapp.domain.OrganizationIdent;
+import org.yde.ydeapp.domain.Personne;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -18,129 +21,190 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CreateApplicationSteps {
 
     public static final String CODE_APPLICATION = "AP00002";
+    private final ScenarioContext scenarioContext;
 
-    private ApplicationDataTable appDescCrea = null;
-    private ApplicationDataTable appDescUpdate = null;
-    private Application application;
+    public CreateApplicationSteps(ScenarioContext scenarioContext) {
+        this.scenarioContext = scenarioContext;
+    }
 
+    @Before
+    public void setup() {
+
+    }
 
     @DataTableType
-    public ApplicationDataTable applicationDataTableEntry(Map<String, String> entry) {
+    public ApplicationDataTable applicationDataTableEntry(Map<String, String> entry)  {
         return new ApplicationDataTable(entry.get("codeApplication"),
             entry.get("shortDescription"),
             entry.get("longDescription"),
-            entry.get("uid"),
-            entry.get("firstName"),
-            entry.get("lastName"),
-            entry.get("IdRefogOrganization"));
+            entry.get("IdRefogOrganization")
+        );
+    }
 
+    @DataTableType
+    public CycleDeVieDataTable cycleDeVieDataTableEntry(Map<String, String> entry)  {
+        return new CycleDeVieDataTable(entry.get("state"),
+            entry.get("dateOfCreation"),
+            entry.get("dateOfLastUpdate"),
+            entry.get("dateEndInReality")
+        );
+    }
+
+    @DataTableType
+    public ResponsableDataTable responsableDataTableEntry(Map<String, String> entry)  {
+        return new ResponsableDataTable(entry.get("uid"),
+            entry.get("firstName"),
+            entry.get("lastName")
+        );
     }
 
     @Given("The application doesn't exist")
     public void the_application_doesn_t_exist() {
-        application = null;
+        this.scenarioContext.initScenario();
     }
 
-    @When("Administrator want to create a new application with the following attributes")
-    public void administrator_want_to_create_a_new_application_with_the_following_attributes(List<ApplicationDataTable> apps) {
+    @When("Administrator with the following Application attributes")
+    public void administrator_with_the_following_application_attributes(List<ApplicationDataTable> apps) {
         if (apps.size() == 1) {
-            appDescCrea = apps.get(0);
-            application = null;
+            this.scenarioContext.setAppDescCrea(apps.get(0));
         } else {
             throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
         }
-        Personne personne = new Personne(appDescCrea.getUid(), appDescCrea.getFirstName(), appDescCrea.getLastName());
-        OrganizationIdent organizationIdent = new OrganizationIdent(appDescCrea.getIdRefogOrganization(), "Organization Name");
-        application = new Application.Builder(appDescCrea.getCodeApplication())
-            .withShortDescription(appDescCrea.getShortDescription())
-            .withLongDescription(appDescCrea.getLongDescription())
-            .withResponsable(personne)
-            .withOrganization(organizationIdent)
-            .build();
     }
 
-    @Then("the create is success")
+    @When("With Responsable")
+    public void responsable(List<ResponsableDataTable> resps) {
+        if (resps.size() == 1) {
+            this.scenarioContext.setResponsableDescCrea(resps.get(0));
+        } else {
+            throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
+        }
+    }
+
+    @When("With the cycle life")
+    public void with_the_cycle_life(List<CycleDeVieDataTable> cdvs) {
+        if (cdvs.size() == 1) {
+            this.scenarioContext.setCdvDescCrea(cdvs.get(0));
+        } else {
+            throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
+        }
+    }
+
+    @When("Administrator want to create a new application")
+    public void administrator_want_to_create_a_new_application() {
+        this.scenarioContext.buildAApplication();
+    }
+
+
+    @Then("The create of a new application is a success")
     public void the_create_is_success() {
-        assertThat(application).isNotNull();
-        assertThat(application.getCodeApplication()).isEqualTo(appDescCrea.getCodeApplication());
-        assertThat(application.getShortDescription()).isEqualTo(appDescCrea.getShortDescription());
-        assertThat(application.getLongDescription()).isEqualTo(appDescCrea.getLongDescription());
-        assertThat(application.getResponsable()).isNotNull();
-        assertThat(application.getResponsable().getUid()).isEqualTo(appDescCrea.getUid());
-        assertThat(application.getResponsable().getFirstName()).isEqualTo(appDescCrea.getFirstName());
-        assertThat(application.getResponsable().getLastName()).isEqualTo(appDescCrea.getLastName());
-        assertThat(application.getOrganizationIdent()).isNotNull();
-        assertThat(application.getOrganizationIdent().getIdRefog()).isEqualTo(appDescCrea.getIdRefogOrganization());
+        assertThat(this.scenarioContext.getApplication())
+            .isNotNull();
+        assertThat(this.scenarioContext.getApplication().getCodeApplication())
+            .isEqualTo(this.scenarioContext.getAppDescCrea().getCodeApplication());
+        assertThat(this.scenarioContext.getApplication().getShortDescription())
+            .isEqualTo(this.scenarioContext.getAppDescCrea().getShortDescription());
+        assertThat(this.scenarioContext.getApplication().getLongDescription())
+            .isEqualTo(this.scenarioContext.getAppDescCrea().getLongDescription());
+        assertThat(this.scenarioContext.getApplication().getResponsable()).isNotNull();
+        assertThat(this.scenarioContext.getApplication().getResponsable().getUid())
+            .isEqualTo(this.scenarioContext.getResponsableDescCrea().getUid());
+        assertThat(this.scenarioContext.getApplication().getResponsable().getFirstName())
+            .isEqualTo(this.scenarioContext.getResponsableDescCrea().getFirstName());
+        assertThat(this.scenarioContext.getApplication().getResponsable().getLastName())
+            .isEqualTo(this.scenarioContext.getResponsableDescCrea().getLastName());
+        assertThat(this.scenarioContext.getApplication().getOrganizationIdent())
+            .isNotNull();
+        assertThat(this.scenarioContext.getApplication().getOrganizationIdent().getIdRefog())
+            .isEqualTo(this.scenarioContext.getAppDescCrea().getIdRefogOrganization());
+        assertThat(this.scenarioContext.getApplication().getCycleLife())
+            .isNotNull();
+        assertThat(this.scenarioContext.getApplication().getCycleLife().getDateOfCreation())
+            .isEqualTo(LocalDate.parse(this.scenarioContext.getCdvDescCrea().getDateOfCreation(), this.scenarioContext.getFormatter()));
+        assertThat(this.scenarioContext.getApplication().getCycleLife().getDateOfLastUpdate())
+            .isEqualTo(LocalDate.parse(this.scenarioContext.getCdvDescCrea().getDateOfLastUpdate(), this.scenarioContext.getFormatter()));
+        if (this.scenarioContext.getApplication().getCycleLife().getDateEndInReality() != null) {
+
+            assertThat(this.scenarioContext.getApplication().getCycleLife().getDateEndInReality()).isEqualTo(LocalDate.parse(this.scenarioContext.getCdvDescCrea().getDateEndInReality(), this.scenarioContext.getFormatter()));
+        }
+        else {
+            assertThat(this.scenarioContext.getCdvDescCrea().getDateEndInReality()).isNull();
+        }
     }
 
-    @When("Administrator want to create a new application with only code app AP00002")
-    public void administrator_want_to_create_a_new_application_with_only_code_app_ap00002() {
-        application = new Application.Builder(CODE_APPLICATION)
-            .build();
-    }
-
-    @Then("the create is success with default field")
-    public void the_create_is_success_with_default_field() {
-        assertThat(application).isNotNull();
-        assertThat(application.getCodeApplication()).isEqualTo(CODE_APPLICATION);
-    }
-
-    @Given("The application exist")
-    public void the_application_exist(List<ApplicationDataTable> apps) {
-        ApplicationDataTable appDescCreaUpdate;
+    @Given("The following application attributes")
+    public void the_following_application_attributes(List<ApplicationDataTable> apps) {
         if (apps.size() == 1) {
-            appDescCreaUpdate = apps.get(0);
-            application = null;
+            this.scenarioContext.setAppDescCrea(apps.get(0));
         } else {
             throw new PendingException("Bad use of Cucumber scenario: create a new Application");
         }
-        Personne personne = new Personne(appDescCreaUpdate.getUid(), appDescCreaUpdate.getFirstName(), appDescCreaUpdate.getLastName());
-        OrganizationIdent organizationIdent = new OrganizationIdent(appDescCreaUpdate.getIdRefogOrganization(), "Orga Name");
+    }
 
-        application = new Application.Builder(appDescCreaUpdate.getCodeApplication())
-            .withShortDescription(appDescCreaUpdate.getShortDescription())
-            .withLongDescription(appDescCreaUpdate.getLongDescription())
-            .withResponsable(personne)
-            .withOrganization(organizationIdent)
-            .build();
-
-
+    @Given("The application exist")
+    public void the_application_exist() {
+        this.scenarioContext.buildAApplication();
     }
 
     @When("Administrator want to update an application with the following attributes")
     public void administrator_want_to_update_an_application_with_the_following_attributes(List<ApplicationDataTable> apps) {
         if (apps.size() == 1) {
-            appDescUpdate = apps.get(0);
-
+            this.scenarioContext.setAppDescUpdate(apps.get(0));
         } else {
             throw new PendingException("Bad use of Cucumber scenario: update a new Application");
         }
-
-        OrganizationIdent organizationIdent = new OrganizationIdent(appDescUpdate.getIdRefogOrganization(), "Orga Name");
-        Personne personne = new Personne(appDescUpdate.getUid(), appDescUpdate.getFirstName(), appDescUpdate.getLastName());
-
-        application.updateShortDescription(appDescUpdate.getShortDescription());
-        application.updateLongDescription(appDescUpdate.getLongDescription());
-        application.updateResponsable(personne);
-        application.updateOrganization(organizationIdent);
-        application.updateShortDescription(appDescUpdate.getShortDescription());
-        application.updateLongDescription(appDescUpdate.getLongDescription());
-        application.updateResponsable(personne);
-
-
+        OrganizationIdent organizationIdent = new OrganizationIdent(this.scenarioContext.getAppDescUpdate().getIdRefogOrganization(), "Orga Name");
+        this.scenarioContext.getApplication().updateShortDescription(this.scenarioContext.getAppDescUpdate().getShortDescription());
+        this.scenarioContext.getApplication().updateLongDescription(this.scenarioContext.getAppDescUpdate().getLongDescription());
+        this.scenarioContext.getApplication().updateOrganization(organizationIdent);
     }
 
     @Then("the update is success")
     public void the_update_is_success() {
         // Write code here that turns the phrase above into concrete actions
-        assertThat(application).isNotNull();
-        assertThat(application.getCodeApplication()).isEqualTo(appDescUpdate.getCodeApplication());
-        assertThat(application.getShortDescription()).isEqualTo(appDescUpdate.getShortDescription());
-        assertThat(application.getLongDescription()).isEqualTo(appDescUpdate.getLongDescription());
-        assertThat(application.getResponsable().getUid()).isEqualTo(appDescUpdate.getUid());
-        assertThat(application.getResponsable().getFirstName()).isEqualTo(appDescUpdate.getFirstName());
-        assertThat(application.getResponsable().getLastName()).isEqualTo(appDescUpdate.getLastName());
+        assertThat(this.scenarioContext.getApplication()).isNotNull();
+        assertThat(this.scenarioContext.getApplication().getCodeApplication())
+            .isEqualTo(this.scenarioContext.getAppDescUpdate().getCodeApplication());
+        assertThat(this.scenarioContext.getApplication().getShortDescription())
+            .isEqualTo(this.scenarioContext.getAppDescUpdate().getShortDescription());
+        assertThat(this.scenarioContext.getApplication().getLongDescription())
+            .isEqualTo(this.scenarioContext.getAppDescUpdate().getLongDescription());
+        assertThat(this.scenarioContext.getApplication().getOrganizationIdent())
+            .isNotNull();
+        assertThat(this.scenarioContext.getApplication().getOrganizationIdent().getIdRefog())
+            .isEqualTo(this.scenarioContext.getAppDescUpdate().getIdRefogOrganization());
     }
+
+    @When("Administrator want to update an application with the cycle life")
+    public void administrator_want_to_update_an_application_with_the_cycle_life(List<CycleDeVieDataTable> cdvs)  {
+        if (cdvs.size() == 1) {
+            this.scenarioContext.setCdvDescUpdate(cdvs.get(0));
+        } else {
+            throw new PendingException("Bad use of Cucumber scenario: update a new Application");
+        }
+
+        CycleLife cycleLife = this.scenarioContext.buildCycleLifeForUpdate();
+        this.scenarioContext.getApplication().updateCycleLife(cycleLife);
+    }
+
+    @Then("the update of cycleLife is success")
+    public void the_update_of_cycle_life_is_success()  {
+        assertThat(this.scenarioContext.getApplication()).isNotNull();
+        assertThat(this.scenarioContext.getApplication().getCodeApplication())
+            .isEqualTo(this.scenarioContext.getAppDescCrea().getCodeApplication());
+        assertThat(this.scenarioContext.getApplication().getCycleLife())
+            .isNotNull();
+        assertThat(this.scenarioContext.getApplication().getCycleLife().getState())
+            .isEqualTo(this.scenarioContext.getCdvDescUpdate().getState());
+        assertThat(this.scenarioContext.getApplication().getCycleLife().getDateOfCreation())
+            .isEqualTo(LocalDate.parse(this.scenarioContext.getCdvDescUpdate().getDateOfCreation(), this.scenarioContext.getFormatter()));
+        assertThat(this.scenarioContext.getApplication().getCycleLife().getDateOfLastUpdate())
+            .isEqualTo(LocalDate.parse(this.scenarioContext.getCdvDescUpdate().getDateOfLastUpdate(), this.scenarioContext.getFormatter()));
+        assertThat(this.scenarioContext.getApplication().getCycleLife().getDateEndInReality())
+            .isEqualTo(LocalDate.parse(this.scenarioContext.getCdvDescUpdate().getDateEndInReality(), this.scenarioContext.getFormatter()));
+    }
+
+
 
 
 }

@@ -21,6 +21,7 @@ import org.yde.ydeapp.domain.Note;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,10 +35,10 @@ class NoteResourceTest {
     public static final String CODE_APPLICATION = "AP00001";
     public static final String NOTE_TITLE_FIRST = "Note 1";
     public static final String NOTE_CONTENT_FIRST = "Let's start";
-    public static final String NOTE_CREATION_DATE_FIRST = "01/01/2020";
+    public static final LocalDate NOTE_CREATION_DATE_FIRST = LocalDate.of(2020,1,1);
     public static final String NOTE_TITLE_SECOND = "Note 2";
     public static final String NOTE_CONTENT_SECOND = "Let's continue";
-    public static final String NOTE_CREATION_DATE_SECOND = "01/01/2020";
+    public static final LocalDate NOTE_CREATION_DATE_SECOND = LocalDate.of(2020,2,2);
 
 
     @Autowired
