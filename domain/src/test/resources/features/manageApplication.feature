@@ -16,11 +16,6 @@ Feature: Management of a Application
     And Administrator want to create a new application
     Then The create of a new application is a success
 
-  Scenario: Create a new Application with deffault value
-    Given The application doesn't exist
-    When Administrator want to create a new application with only code app AP00002
-    Then the create is success with default field
-
   Scenario: Update a existing application
     Given The following application attributes
       | codeApplication | shortDescription | longDescription               | IdRefogOrganization |
