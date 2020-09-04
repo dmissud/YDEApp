@@ -44,27 +44,24 @@ class RepositoryOfApplicationImplTest {
     private static final String FIRSTNAME_OF_RESPONSABLE = "Jhon";
     private static final String LASTNAME_OF_RESPONSABLE = "Doe";
     private static final String STATE = "Active";
-    private final LocalDate DATE_OF_CREATION = LocalDate.parse("01/01/2020",formatter);
-    private final LocalDate DATE_OF_LAST_UPDATE = LocalDate.parse("01/01/2020",formatter);
-    private final LocalDate DATE_END_IN_REALITY = LocalDate.parse("01/01/2020",formatter);
+    private static final LocalDate DATE_OF_CREATION = LocalDate.of(2020, 1, 1);
+    private static final LocalDate DATE_OF_LAST_UPDATE = LocalDate.of(2020, 1, 1);
+    private static final LocalDate DATE_END_IN_REALITY = LocalDate.of(2020, 1, 1);
     private static final String CODE_APP_NOT_EXIST = "AP99999";
     private static final String NOTE_TITLE = "First Note";
     private static final String NOTE_CONTENT = "Once upon a time...";
-    private static final String NOTE_CREATION_DATE = "01/02/2020";
+    private static final LocalDate NOTE_CREATION_DATE = LocalDate.of(2020, 1, 2);
     private static final String NOTE_CONTENT_UPDATE = "The story continue...";
-    private static final String NOTE_CREATION_DATE_UPDATE = "26/03/2020";
+    private static final LocalDate NOTE_CREATION_DATE_UPDATE = LocalDate.of(2020, 3, 26);
     private static final String NOTE_2ND_TITLE = "Second Note";
     private static final String NOTE_2ND_CONTENT = "Another story...";
-    private static final String NOTE_2ND_CREATION_DATE = "15/06/2000";
+    private static final LocalDate NOTE_2ND_CREATION_DATE = LocalDate.of(2000, 6, 15);
 
 
     public static final String ID_REFOG_MOE = "10000000";
     public static final String NAME_OF_MOE = "NAME_OF_MOE";
     public static final String ID_REFOG_MOE_OTHER = "10000001";
     public static final String NAME_OF_MOE_OTHER = "NAME_OF_OTHER_MOE";
-    private final LocalDate DATE_OF_CREATION_OTHER = LocalDate.parse("01/01/2020",formatter);
-    private final LocalDate DATE_OF_LAST_UPDATE_OTHER = LocalDate.parse("01/01/2020",formatter);
-    private final LocalDate DATE_END_IN_REALITY_OTHER = LocalDate.parse("01/01/2020",formatter);
 
 
     @Autowired
@@ -119,10 +116,12 @@ class RepositoryOfApplicationImplTest {
         // Application not in base
         Personne personne = new Personne(UID_OF_RESPONSABLE, FIRSTNAME_OF_RESPONSABLE, LASTNAME_OF_RESPONSABLE);
         CycleLife cycleLife = new CycleLife(STATE,DATE_OF_CREATION,DATE_OF_LAST_UPDATE,DATE_END_IN_REALITY);
+        OrganizationIdent organizationIdent = new OrganizationIdent(ID_REFOG_MOE, NAME_OF_MOE);
         Application application = new Application.Builder(CODE_APP)
             .withShortDescription(SHORT_DESCRIPTION)
             .withLongDescription(LONG_DESCRIPTION)
             .withResponsable(personne)
+            .withOrganization(organizationIdent)
             .withCycleLife(cycleLife)
             .build();
 
@@ -279,13 +278,14 @@ class RepositoryOfApplicationImplTest {
 
         // When
         OrganizationIdent organizationIdent = new OrganizationIdent(ID_REFOG_MOE, NAME_OF_MOE);
-
+        CycleLife cycleLife = new CycleLife(STATE,DATE_OF_CREATION,DATE_OF_LAST_UPDATE,DATE_END_IN_REALITY);
         Personne responsable = new Personne(UID_OF_RESPONSABLE, FIRSTNAME_OF_RESPONSABLE, LASTNAME_OF_RESPONSABLE);
         Application application = new Application.Builder(CODE_APP)
             .withShortDescription(SHORT_DESCRIPTION)
             .withLongDescription(LONG_DESCRIPTION)
             .withResponsable(responsable)
             .withOrganization(organizationIdent)
+            .withCycleLife(cycleLife)
             .build();
 
         Note noteUpdate = new Note(NOTE_TITLE, NOTE_CONTENT, NOTE_CREATION_DATE);
@@ -313,12 +313,14 @@ class RepositoryOfApplicationImplTest {
 
         // When
         Personne responsable = new Personne(UID_OF_RESPONSABLE, FIRSTNAME_OF_RESPONSABLE, LASTNAME_OF_RESPONSABLE);
+        CycleLife cycleLife = new CycleLife(STATE,DATE_OF_CREATION,DATE_OF_LAST_UPDATE,DATE_END_IN_REALITY);
         OrganizationIdent organizationIdent = new OrganizationIdent(ID_REFOG_MOE, NAME_OF_MOE);
         Application application = new Application.Builder(CODE_APP)
             .withShortDescription(SHORT_DESCRIPTION)
             .withLongDescription(LONG_DESCRIPTION)
             .withResponsable(responsable)
             .withOrganization(organizationIdent)
+            .withCycleLife(cycleLife)
             .build();
 
         Note noteInit = new Note(NOTE_TITLE, NOTE_CONTENT, NOTE_CREATION_DATE);
@@ -353,12 +355,14 @@ class RepositoryOfApplicationImplTest {
 
         // When
         Personne responsable = new Personne(UID_OF_RESPONSABLE, FIRSTNAME_OF_RESPONSABLE, LASTNAME_OF_RESPONSABLE);
+        CycleLife cycleLife = new CycleLife(STATE,DATE_OF_CREATION,DATE_OF_LAST_UPDATE,DATE_END_IN_REALITY);
         OrganizationIdent organizationIdent = new OrganizationIdent(ID_REFOG_MOE, NAME_OF_MOE);
         Application application = new Application.Builder(CODE_APP)
             .withShortDescription(SHORT_DESCRIPTION)
             .withLongDescription(LONG_DESCRIPTION)
             .withResponsable(responsable)
             .withOrganization(organizationIdent)
+            .withCycleLife(cycleLife)
             .build();
 
         Note noteInit = new Note(NOTE_TITLE, NOTE_CONTENT, NOTE_CREATION_DATE);

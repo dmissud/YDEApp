@@ -5,6 +5,7 @@ import org.yde.ydeapp.application.common.SelfValidating;
 import org.yde.ydeapp.domain.Note;
 
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
 public interface ReferenceNoteUseCase {
 
@@ -22,9 +23,9 @@ public interface ReferenceNoteUseCase {
         private final String noteTitle;
 
         private final String noteContent;
-        private final String noteCreationDate;
+        private final LocalDate noteCreationDate;
 
-        public ReferenceNoteCmd(String noteTitle, String noteContent, String noteCreationDate) {
+        public ReferenceNoteCmd(String noteTitle, String noteContent, LocalDate noteCreationDate) {
             this.noteTitle = noteTitle;
             this.noteContent = noteContent;
             this.noteCreationDate = noteCreationDate;
@@ -38,7 +39,7 @@ public interface ReferenceNoteUseCase {
             return noteContent;
         }
 
-        public String getNoteCreationDate() {
+        public LocalDate getNoteCreationDate() {
             return noteCreationDate;
         }
     }
