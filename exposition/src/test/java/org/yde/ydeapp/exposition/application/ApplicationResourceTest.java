@@ -92,11 +92,11 @@ class ApplicationResourceTest {
             .thenReturn(application);
 
         mockMvc
-            // When
-            .perform(MockMvcRequestBuilders.get("/api/applications/" + CODE_APPLICATION)
-                .accept(MediaType.APPLICATION_JSON))
-            // Then
-            .andExpect(status().isOk());
+                // When
+                .perform(MockMvcRequestBuilders.get("/api/V1/applications/" + CODE_APPLICATION)
+                        .accept(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -108,11 +108,11 @@ class ApplicationResourceTest {
             .thenReturn(application);
 
         mockMvc
-            // When
-            .perform(MockMvcRequestBuilders.get("/api/applications/")
-                .accept(MediaType.APPLICATION_JSON))
-            // Then
-            .andExpect(status().isOk());
+                // When
+                .perform(MockMvcRequestBuilders.get("/api/V1/applications/")
+                        .accept(MediaType.APPLICATION_JSON))
+                // Then
+                .andExpect(status().isOk());
     }
 
 }

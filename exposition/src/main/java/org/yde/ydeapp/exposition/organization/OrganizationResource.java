@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/V1")
 public class OrganizationResource {
     @Autowired
     ReferenceOrganizationUseCase referenceOrganizationUseCase;

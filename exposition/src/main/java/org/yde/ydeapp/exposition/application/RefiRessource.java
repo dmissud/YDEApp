@@ -16,7 +16,7 @@ import org.yde.ydeapp.interfacerefi.StoreFileRefi;
 import org.yde.ydeapp.interfacerefi.TransformerSourceToCmd;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/V1")
 public class RefiRessource {
 
     @Autowired
