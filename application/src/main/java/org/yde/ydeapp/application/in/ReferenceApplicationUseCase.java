@@ -3,14 +3,11 @@ package org.yde.ydeapp.application.in;
 import org.springframework.validation.annotation.Validated;
 import org.yde.ydeapp.application.common.SelfValidating;
 import org.yde.ydeapp.domain.Application;
-import org.yde.ydeapp.domain.CycleLife;
 
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
-import java.util.Date;
 
 public interface ReferenceApplicationUseCase {
-    ResultOfCollection referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd);
     StateCmdEnum referenceOrUpdateApplication(ReferenceApplicationCmd referenceApplicationCmd);
     Application updateApplication(String codeApplication, ReferenceApplicationCmd referenceApplicationCmd);
 

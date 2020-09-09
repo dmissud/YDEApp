@@ -26,32 +26,6 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
     private RepositoryOfOrganization repositoryOforganization;
 
     @Override
-    public ResultOfCollection referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd) {
-        ResultOfCollection resultOfCollection = new ResultOfCollection();
-        for (ReferenceApplicationCmd referenceApplicationCmd : collectionApplicationCmd) {
-            StateCmdEnum stateCmdEnum = referenceOrUpdateApplication(referenceApplicationCmd);
-            switch (stateCmdEnum) {
-                case IGNORE:
-                    resultOfCollection.addIgnore();
-                    break;
-                case UPDATE:
-                    resultOfCollection.addUpdate();
-                    break;
-                case REFERENCE:
-                    resultOfCollection.addReference();
-                    break;
-                case NO_MORE_UPDATED:
-                    resultOfCollection.addNoMoreUpdated();
-                    break;
-                default:
-                    break;
-
-            }
-        }
-        return resultOfCollection;
-    }
-
-    @Override
     public StateCmdEnum referenceOrUpdateApplication(ReferenceApplicationCmd referenceApplicationCmd) {
         StateCmdEnum stateCmd;
 

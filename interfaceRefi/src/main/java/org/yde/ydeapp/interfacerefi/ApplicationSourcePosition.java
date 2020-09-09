@@ -4,7 +4,6 @@ import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvDate;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class ApplicationSourcePosition {
     @CsvBindByPosition(position = 0)
@@ -32,30 +31,30 @@ public class ApplicationSourcePosition {
     private String state;
 
     @CsvBindByPosition(position = 8)
-    @CsvDate("dd/MM/yyyy")
+    @CsvDate("yyyy-MM-dd")
     private LocalDate dateOfCreation;
 
     @CsvBindByPosition(position = 9)
-    @CsvDate("dd/MM/yyyy")
+    @CsvDate("yyyy-MM-dd")
     private LocalDate dateOfLastUpdate;
 
     @CsvBindByPosition(position = 10)
-    @CsvDate("dd/MM/yyyy")
+    @CsvDate("yyyy-MM-dd")
     private LocalDate dateEndProjected;
 
     @CsvBindByPosition(position = 11)
     private String applicationTarget;
 
     @CsvBindByPosition(position = 12)
-    @CsvDate("dd/MM/yyyy")
+    @CsvDate("yyyy-MM-dd")
     private LocalDate dateEndInReality;
 
     @CsvBindByPosition(position = 13)
-    @CsvDate("dd/MM/yyyy")
+    @CsvDate("yyyy-MM-dd")
     private LocalDate dateBeginningExploitation;
 
     @CsvBindByPosition(position = 14)
-    @CsvDate("dd/MM/yyyy")
+    @CsvDate("yyyy-MM-dd")
     private LocalDate dateEndExploitation;
 
     @CsvBindByPosition(position = 15)
@@ -176,7 +175,7 @@ public class ApplicationSourcePosition {
     private String derogation;
 
     @CsvBindByPosition(position = 54)
-    @CsvDate("dd/MM/yyyy")
+    @CsvDate("yyyy-MM-dd")
     private LocalDate dateOfValidationOfServiceDefinition;
 
     @CsvBindByPosition(position = 55)

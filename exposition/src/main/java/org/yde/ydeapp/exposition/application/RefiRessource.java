@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
+import org.yde.ydeapp.application.in.ReferenceCollectionOfApplicationUseCase;
 import org.yde.ydeapp.application.in.ResultOfCollection;
 import org.yde.ydeapp.interfacerefi.StatTraitementRefiFile;
 import org.yde.ydeapp.interfacerefi.StoreFileRefi;
@@ -23,7 +23,7 @@ public class RefiRessource {
     StoreFileRefi storeFileRefi;
 
     @Autowired
-    ReferenceApplicationUseCase referenceApplicationUseCase;
+    ReferenceCollectionOfApplicationUseCase referenceCollectionOfApplicationUseCase;
 
 
     @PostMapping("/uploadRefi")
@@ -31,7 +31,7 @@ public class RefiRessource {
 
         storeFileRefi.storeRefiFile(fileRefi);
         TransformerSourceToCmd transformerSourceToCmd = (TransformerSourceToCmd) storeFileRefi.giveTransformerSourceToCmd();
-        ResultOfCollection resultOfCollection = referenceApplicationUseCase.referenceOrUpdateCollectionOfApplication(transformerSourceToCmd);
+        ResultOfCollection resultOfCollection = referenceCollectionOfApplicationUseCase.referenceOrUpdateCollectionOfApplication(transformerSourceToCmd);
 
 
         final StatTraitementRefiFile statTraitementRefiFile = transformerSourceToCmd.giveResult();
