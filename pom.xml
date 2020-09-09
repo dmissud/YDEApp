@@ -10,7 +10,7 @@
     <!-- ===== Informations Maven ===== -->
     <groupId>org.yde.ydeapp</groupId>
     <artifactId>YDEApp</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <!-- =============================================================== -->
