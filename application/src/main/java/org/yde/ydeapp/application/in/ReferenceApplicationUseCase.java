@@ -5,9 +5,9 @@ import org.yde.ydeapp.application.common.SelfValidating;
 import org.yde.ydeapp.domain.Application;
 
 import javax.validation.constraints.Pattern;
+import java.time.LocalDate;
 
 public interface ReferenceApplicationUseCase {
-    ResultOfCollection referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd);
     StateCmdEnum referenceOrUpdateApplication(ReferenceApplicationCmd referenceApplicationCmd);
     Application updateApplication(String codeApplication, ReferenceApplicationCmd referenceApplicationCmd);
 
@@ -26,22 +26,27 @@ public interface ReferenceApplicationUseCase {
 
         private final ResponsableCmd responsableCmd;
 
+        private final CycleLifeCmd cycleLifeCmd;
+
         public ReferenceApplicationCmd(String codeApp,
                                        String shortDescription,
                                        String longDescription,
                                        ResponsableCmd responsableCmd,
-                                       String idRefOrganizationMoe) {
+                                       String idRefOrganizationMoe,
+                                       CycleLifeCmd cycleLifeCmd) {
             this.codeApp = codeApp;
             this.shortDescription = shortDescription;
             this.longDescription = longDescription;
             this.responsableCmd = responsableCmd;
             this.idRefOrganizationMoe= idRefOrganizationMoe;
+            this.cycleLifeCmd= cycleLifeCmd;
 
         }
         @Override
         public void validate() {
             super.validate();
             responsableCmd.validate();
+            cycleLifeCmd.validate();
         }
 
         public String getCodeApp() { return codeApp; }
@@ -65,6 +70,24 @@ public interface ReferenceApplicationUseCase {
         public String getIdRefOrganizationMoe() {
             return idRefOrganizationMoe;
         }
+
+        public String getState() { return cycleLifeCmd.getState();
+        }
+
+        public LocalDate getDateOfCreation() {
+            return cycleLifeCmd.dateOfCreation;
+        }
+
+        public LocalDate getDateOfLastUpdate() {
+            return cycleLifeCmd.dateOfLastUpdate;
+        }
+
+        public LocalDate getDateEndInReality() {
+            return cycleLifeCmd.dateEndInReality;
+        }
+
+
+
 
         /*
          * Commande to create the Responsable
@@ -91,6 +114,36 @@ public interface ReferenceApplicationUseCase {
 
             public String getLastName() {
                 return lastName;
+            }
+        }
+
+        public static class CycleLifeCmd extends SelfValidating<CycleLifeCmd> {
+            private final String state;
+            private final LocalDate dateOfCreation;
+            private final LocalDate dateOfLastUpdate;
+            private final LocalDate dateEndInReality;
+
+            public CycleLifeCmd(String state, LocalDate dateOfCreation, LocalDate dateOfLastUpdate, LocalDate dateEndInReality) {
+                this.state = state;
+                this.dateOfCreation = dateOfCreation;
+                this.dateOfLastUpdate = dateOfLastUpdate;
+                this.dateEndInReality = dateEndInReality;
+            }
+
+            public String getState() {
+                return state;
+            }
+
+            public LocalDate getDateOfCreation() {
+                return dateOfCreation;
+            }
+
+            public LocalDate getDateOfLastUpdate() {
+                return dateOfLastUpdate;
+            }
+
+            public LocalDate getDateEndInReality() {
+                return dateEndInReality;
             }
         }
     }

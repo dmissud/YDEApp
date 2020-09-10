@@ -17,8 +17,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.yde.ydeapp.application.in.ApplicationQuery;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.domain.Application;
+import org.yde.ydeapp.domain.CycleLife;
 import org.yde.ydeapp.domain.OrganizationIdent;
 import org.yde.ydeapp.domain.Personne;
+
+import java.time.LocalDate;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,6 +44,10 @@ class ApplicationResourceTest {
     public static final String LAST_NAME_SECOND = "TheGreat";
     public static final String ID_REFOG_MOE_SECOND = "10000000";
     public static final String NAME_OF_ORGA_MOE = "NameOfOrgaMOE";
+    private static final String STATE = "Active";
+    private static final LocalDate DATE_OF_CREATION = LocalDate.of(2020, 1, 1);
+    private static final LocalDate DATE_OF_LAST_UPDATE = LocalDate.of(2020, 1, 1);
+    private static final LocalDate DATE_END_IN_REALITY = LocalDate.of(2020, 1, 1);
 
     @Autowired
     private MockMvc mockMvc;
@@ -61,17 +68,19 @@ class ApplicationResourceTest {
     @BeforeEach
     void setup() {
         application = new Application.Builder(CODE_APPLICATION)
-                .withShortDescription(A_SHORT_DESCRIPTION_INIT)
-                .withLongDescription(A_LONG_DESCRIPTION_INIT)
-                .withResponsable(new Personne(UID_FIRST, FIRST_NAME_FIRST, LAST_NAME_FIRST))
-                .withOrganization(new OrganizationIdent(ID_REFOG_MOE_FIRST, NAME_OF_ORGA_MOE))
-                .build();
+            .withShortDescription(A_SHORT_DESCRIPTION_INIT)
+            .withLongDescription(A_LONG_DESCRIPTION_INIT)
+            .withResponsable(new Personne(UID_FIRST, FIRST_NAME_FIRST, LAST_NAME_FIRST))
+            .withOrganization(new OrganizationIdent(ID_REFOG_MOE_FIRST, NAME_OF_ORGA_MOE))
+            .withCycleLife(new CycleLife(STATE,DATE_OF_CREATION,DATE_OF_LAST_UPDATE,DATE_END_IN_REALITY))
+            .build();
         application_updated = new Application.Builder(CODE_APPLICATION)
-                .withShortDescription(A_SHORT_DESCRIPTION_INIT)
-                .withLongDescription(A_LONG_DESCRIPTION_INIT)
-                .withResponsable(new Personne(UID_FIRST, FIRST_NAME_FIRST, LAST_NAME_FIRST))
-                .withOrganization(new OrganizationIdent(ID_REFOG_MOE_FIRST, NAME_OF_ORGA_MOE))
-                .build();
+            .withShortDescription(A_SHORT_DESCRIPTION_UPDATE)
+            .withLongDescription(A_LONG_DESCRIPTION_UPDATE)
+            .withResponsable(new Personne(UID_SECOND, FIRST_NAME_SECOND, LAST_NAME_SECOND))
+            .withOrganization(new OrganizationIdent(ID_REFOG_MOE_SECOND, NAME_OF_ORGA_MOE))
+            .withCycleLife(new CycleLife(STATE,DATE_OF_CREATION,DATE_OF_LAST_UPDATE,DATE_END_IN_REALITY))
+            .build();
     }
 
     @Test
@@ -79,8 +88,8 @@ class ApplicationResourceTest {
     void testRetrieveApplicationByCodeApplication() throws Exception {
         // Given
         Mockito
-                .when(applicationQuery.getApplication(CODE_APPLICATION))
-                .thenReturn(application);
+            .when(applicationQuery.getApplication(CODE_APPLICATION))
+            .thenReturn(application);
 
         mockMvc
                 // When
@@ -95,8 +104,8 @@ class ApplicationResourceTest {
     void testRetrieveAllApplication() throws Exception {
         // Given
         Mockito
-                .when(applicationQuery.getApplication(CODE_APPLICATION))
-                .thenReturn(application);
+            .when(applicationQuery.getApplication(CODE_APPLICATION))
+            .thenReturn(application);
 
         mockMvc
                 // When

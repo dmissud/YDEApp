@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
+import org.yde.ydeapp.application.in.ReferenceCollectionOfApplicationUseCase;
 import org.yde.ydeapp.application.in.ResultOfCollection;
 import org.yde.ydeapp.interfacerefi.StatTraitementRefiFile;
 import org.yde.ydeapp.interfacerefi.StoreFileRefi;
 import org.yde.ydeapp.interfacerefi.TransformerSourceToCmd;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/V1")
@@ -23,16 +26,19 @@ public class RefiRessource {
     StoreFileRefi storeFileRefi;
 
     @Autowired
-    ReferenceApplicationUseCase referenceApplicationUseCase;
+    ReferenceCollectionOfApplicationUseCase referenceCollectionOfApplicationUseCase;
 
 
     @PostMapping("/uploadRefi")
     public ResponseEntity<StatRefiFileDto> uploadFile(@RequestParam("file") MultipartFile fileRefi) {
 
+        LocalDateTime start = LocalDateTime.now();
+
         storeFileRefi.storeRefiFile(fileRefi);
         TransformerSourceToCmd transformerSourceToCmd = (TransformerSourceToCmd) storeFileRefi.giveTransformerSourceToCmd();
-        ResultOfCollection resultOfCollection = referenceApplicationUseCase.referenceOrUpdateCollectionOfApplication(transformerSourceToCmd);
+        ResultOfCollection resultOfCollection = referenceCollectionOfApplicationUseCase.referenceOrUpdateCollectionOfApplication(transformerSourceToCmd);
 
+        LocalDateTime stop = LocalDateTime.now();
 
         final StatTraitementRefiFile statTraitementRefiFile = transformerSourceToCmd.giveResult();
         StatRefiFileDto statRefiFileDto = new StatRefiFileDto(statTraitementRefiFile.getStatReadLineFile(),
@@ -40,7 +46,8 @@ public class RefiRessource {
             resultOfCollection.getReferenceCounter(),
             resultOfCollection.getUpdateCounter(),
             resultOfCollection.getIgnoreCounter(),
-            resultOfCollection.getNoMoreUpdated());
+            resultOfCollection.getNoMoreUpdated(),
+            Duration.between(start, stop).getSeconds());
 
 
         return new ResponseEntity<>(statRefiFileDto, HttpStatus.OK);

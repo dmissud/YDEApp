@@ -7,19 +7,17 @@ public class StatRefiFileDto {
     private int updateCounter;
     private int ignoreCounter;
     private int noMoreUpdated;
+    private long duree;
 
-    public StatRefiFileDto(int statReadLineFile, int statRejetedLinefile, int referenceCounter, int updateCounter, int ignoreCounter, int noMoreUpdated) {
+    public StatRefiFileDto(int statReadLineFile, int statRejetedLinefile, int referenceCounter, int updateCounter, int ignoreCounter, int noMoreUpdated, long duree) {
         this.statReadLineFile = statReadLineFile;
         this.statRejetedLinefile = statRejetedLinefile;
         this.referenceCounter = referenceCounter;
         this.updateCounter = updateCounter;
         this.ignoreCounter = ignoreCounter;
         this.noMoreUpdated = noMoreUpdated;
+        this.duree = duree;
     }
-
-    public int getNoMoreUpdated() { return noMoreUpdated; }
-
-    public void setNoMoreUpdated(int noMoreUpdated) { this.noMoreUpdated = noMoreUpdated; }
 
     public int getStatReadLineFile() {
         return statReadLineFile;
@@ -61,6 +59,22 @@ public class StatRefiFileDto {
         this.ignoreCounter = ignoreCounter;
     }
 
+    public int getNoMoreUpdated() {
+        return noMoreUpdated;
+    }
+
+    public void setNoMoreUpdated(int noMoreUpdated) {
+        this.noMoreUpdated = noMoreUpdated;
+    }
+
+    public long getDuree() {
+        return duree;
+    }
+
+    public void setDuree(long duree) {
+        this.duree = duree;
+    }
+
     @Override
     public String toString() {
         return "StatRefiFileDto{" +
@@ -70,6 +84,7 @@ public class StatRefiFileDto {
             ", updateCounter=" + updateCounter +
             ", ignoreCounter=" + ignoreCounter +
             ", noMoreUpdated=" + noMoreUpdated +
+            ", duree=" + duree +
             '}';
     }
 }

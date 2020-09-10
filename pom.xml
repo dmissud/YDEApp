@@ -10,7 +10,7 @@
     <!-- ===== Informations Maven ===== -->
     <groupId>org.yde.ydeapp</groupId>
     <artifactId>YDEApp</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <!-- =============================================================== -->
@@ -33,7 +33,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <cucumber.version>6.6.0</cucumber.version>
         <junit.jupiter.version>5.6.2</junit.jupiter.version>
-        <cucumber.publish.enabled>true</cucumber.publish.enabled>
     </properties>
 
     <!-- ===== Informations générales ===== -->
@@ -151,6 +150,14 @@
                 <version>${cucumber.version}</version>
                 <scope>test</scope>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-picocontainer -->
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-picocontainer</artifactId>
+                <version>${cucumber.version}</version>
+                <scope>test</scope>
+            </dependency>
+
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -196,7 +203,14 @@
                     <artifactId>maven-cucumber-reporting</artifactId>
                     <version>5.3.0</version>
                 </plugin>
+                <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-maven-plugin -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>2.3.3.RELEASE</version>
+                </plugin>
             </plugins>
+
         </pluginManagement>
     </build>
 </project>

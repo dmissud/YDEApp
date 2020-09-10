@@ -3,6 +3,7 @@ package org.yde.ydeapp.infrastructure.application;
 import org.yde.ydeapp.infrastructure.organization.OrganizationEntity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class ApplicationEntity {
@@ -24,13 +25,13 @@ public class ApplicationEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     private OrganizationEntity organisation;
 
-    public OrganizationEntity getOrganisation() {
-        return organisation;
-    }
+    @Embedded
+    private CycleLifeEntity cycleLife;
 
-    public void setOrganisation(OrganizationEntity organisation) {
-        this.organisation = organisation;
-    }
+
+
+    @ElementCollection
+    private List<NoteEntity> notes;
 
     public Long getId() { return id; }
 
@@ -63,4 +64,25 @@ public class ApplicationEntity {
     public void setResponsable(PersonneEntity responsable) {
         this.responsable = responsable;
     }
+
+    public OrganizationEntity getOrganisation() {
+        return organisation;
+    }
+
+    public void setOrganisation(OrganizationEntity organisation) {
+        this.organisation = organisation;
+    }
+
+    public CycleLifeEntity getCycleLife() {
+        return cycleLife;
+    }
+
+    public void setCycleLife(CycleLifeEntity cycleLife) {
+        this.cycleLife = cycleLife;
+    }
+
+    public List<NoteEntity> getNotes() { return notes; }
+
+    public void setNotes(List<NoteEntity> notes) { this.notes = notes; }
+
 }
