@@ -25,7 +25,7 @@ public class ApplicationEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     private OrganizationEntity organisation;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @Embedded
     private CycleLifeEntity cycleLife;
 
 

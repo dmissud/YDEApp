@@ -1,14 +1,10 @@
 package org.yde.ydeapp.infrastructure.application;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.time.LocalDate;
 
 @Embeddable
 public class NoteEntity {
-
-
-    @Column(unique = true)
     private String noteTitle;
     private String noteContent;
     private LocalDate noteCreationDate;
