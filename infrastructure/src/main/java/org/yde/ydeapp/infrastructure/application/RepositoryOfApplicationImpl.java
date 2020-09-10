@@ -27,9 +27,6 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
     @Autowired
     RepositoryOfOrganizationJpa repositoryOfOrganizationJpa;
 
-    @Autowired
-    RepositoryOfCycleLifeJpa repositoryOfCycleLifeJpa;
-
     @Override
     public Application retrieveByAppCode(String codeApp) {
         ApplicationEntity applicationEntity = repositoryOfApplicationJpa.findByCodeApp(codeApp);
@@ -181,5 +178,7 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
         cycleLifeEntity.setDateOfCreation(application.getCycleLife().getDateOfCreation());
         cycleLifeEntity.setDateOfLastUpdate(application.getCycleLife().getDateOfLastUpdate());
         cycleLifeEntity.setDateEndInReality(application.getCycleLife().getDateEndInReality());
+
+        applicationEntity.setCycleLife(cycleLifeEntity);
     }
 }

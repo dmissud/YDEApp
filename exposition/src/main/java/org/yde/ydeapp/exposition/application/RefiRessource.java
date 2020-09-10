@@ -15,6 +15,9 @@ import org.yde.ydeapp.interfacerefi.StatTraitementRefiFile;
 import org.yde.ydeapp.interfacerefi.StoreFileRefi;
 import org.yde.ydeapp.interfacerefi.TransformerSourceToCmd;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping("/api/V1")
 public class RefiRessource {
@@ -29,10 +32,13 @@ public class RefiRessource {
     @PostMapping("/uploadRefi")
     public ResponseEntity<StatRefiFileDto> uploadFile(@RequestParam("file") MultipartFile fileRefi) {
 
+        LocalDateTime start = LocalDateTime.now();
+
         storeFileRefi.storeRefiFile(fileRefi);
         TransformerSourceToCmd transformerSourceToCmd = (TransformerSourceToCmd) storeFileRefi.giveTransformerSourceToCmd();
         ResultOfCollection resultOfCollection = referenceCollectionOfApplicationUseCase.referenceOrUpdateCollectionOfApplication(transformerSourceToCmd);
 
+        LocalDateTime stop = LocalDateTime.now();
 
         final StatTraitementRefiFile statTraitementRefiFile = transformerSourceToCmd.giveResult();
         StatRefiFileDto statRefiFileDto = new StatRefiFileDto(statTraitementRefiFile.getStatReadLineFile(),
@@ -40,7 +46,8 @@ public class RefiRessource {
             resultOfCollection.getReferenceCounter(),
             resultOfCollection.getUpdateCounter(),
             resultOfCollection.getIgnoreCounter(),
-            resultOfCollection.getNoMoreUpdated());
+            resultOfCollection.getNoMoreUpdated(),
+            Duration.between(start, stop).getSeconds());
 
 
         return new ResponseEntity<>(statRefiFileDto, HttpStatus.OK);
