@@ -31,25 +31,19 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
 
         referenceApplicationCmd.validate();
 
-        Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
-
-        CycleLife cycleLife = new CycleLife(referenceApplicationCmd.getState(),
-                                            referenceApplicationCmd.getDateOfCreation(),
-                                            referenceApplicationCmd.getDateOfCreation(),
-                                            referenceApplicationCmd.getDateEndInReality());
 
         OrganizationIdent organizationIdent = repositoryOforganization.retriveIdentByIdRefog(referenceApplicationCmd.getIdRefOrganizationMoe());
-        Application application = repositoryOfApplication.retrieveByAppCode(referenceApplicationCmd.getCodeApp());
+        Application application;
+        stateCmd = StateCmdEnum.IGNORE;
 
-        if (organizationIdent == null) {
-            if (application == null) {
-                stateCmd = StateCmdEnum.IGNORE;
-                log.trace("Application {} ignored. {} not in", referenceApplicationCmd.getCodeApp(), referenceApplicationCmd.getIdRefOrganizationMoe());
-            } else {
-                stateCmd = StateCmdEnum.NO_MORE_UPDATED;
-                log.trace("Application {} not updated. {} no more in", referenceApplicationCmd.getCodeApp(), referenceApplicationCmd.getIdRefOrganizationMoe());
-            }
-        } else {
+        if (organizationIdent != null) {
+            Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
+
+            CycleLife cycleLife = new CycleLife(referenceApplicationCmd.getState(),
+                referenceApplicationCmd.getDateOfCreation(),
+                referenceApplicationCmd.getDateOfCreation(),
+                referenceApplicationCmd.getDateEndInReality());
+            application = repositoryOfApplication.retrieveByAppCode(referenceApplicationCmd.getCodeApp());
             if (application != null) {
                 log.trace("Application {} updated", application.getCodeApplication());
                 application.updateLongDescription(referenceApplicationCmd.getLongDescription());
@@ -95,9 +89,9 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
         application.updateResponsable(personne);
 
         CycleLife cycleLife = new CycleLife(referenceApplicationCmd.getState(),
-                referenceApplicationCmd.getDateOfCreation(),
-                referenceApplicationCmd.getDateOfCreation(),
-                referenceApplicationCmd.getDateEndInReality());
+            referenceApplicationCmd.getDateOfCreation(),
+            referenceApplicationCmd.getDateOfCreation(),
+            referenceApplicationCmd.getDateEndInReality());
         application.updateCycleLife(cycleLife);
         repositoryOfApplication.updateApplication(application);
 
