@@ -27,6 +27,11 @@ public class RepositoryOfRefiFileService implements StoreFileRefi {
         return StatusFile.FILEOK;
     }
 
+    @Override
+    public MultipartFile retrieveRefiFile() {
+        return refiFile;
+    }
+
     public TransformerSourceToCmd giveTransformerSourceToCmd() {
 
         try {
@@ -37,65 +42,7 @@ public class RepositoryOfRefiFileService implements StoreFileRefi {
             ee.printStackTrace();
         }
         return null;
-
     }
-
-
-
-
-//    @Override
-//    public String storeRefiLight(MultipartFile refiFile) {
-//
-//        int compteur = 0;
-//        CSVReader csvReader = null;
-//
-//        try {
-//
-//            HeaderColumnNameMappingStrategy<ApplicationSourceLight> strategy
-//                    = new HeaderColumnNameMappingStrategy<>();
-//            strategy.setType(ApplicationSourceLight.class);
-//
-//
-//            CsvToBean<ApplicationSourceLight> csvToBean = new CsvToBeanBuilder<ApplicationSourceLight>(new InputStreamReader(refiFile.getInputStream(), "ISO_8859_1"))
-//                    .withSeparator(';')
-//                    .withMappingStrategy(strategy)
-//                    .withType(ApplicationSourceLight.class)
-//                    .withSkipLines(1)
-//                    .withIgnoreLeadingWhiteSpace(true)
-//                    .build();
-//
-//
-//            List<ApplicationSourceLight> csvIterator = csvToBean.parse();
-//            List<ApplicationSourceLight> applicationSources = new ArrayList<>();
-//
-//            //while(csvIterator.hasNext()) {
-//            for (ApplicationSourceLight applicationSourceLight : csvIterator) {
-//                System.out.println("test parse csv");
-//                // ApplicationSourceLight applicationSourceLight = csvIterator.next();
-//                applicationSources.add(applicationSourceLight);
-//                ReferenceApplicationUseCase.ReferenceApplicationCmd referenceApplicationCmd =
-//                        new ReferenceApplicationUseCase.ReferenceApplicationCmd(applicationSourceLight.getCodeApp(), applicationSourceLight.getShortDescription(),
-//                                applicationSourceLight.getLongDescription(), applicationSourceLight.getIdResponsableMOE(), applicationSourceLight.getFirstNameResponsableMoe(),
-//                                applicationSourceLight.getLastNameResponsableMoe());
-//
-//                //Application application = referenceApplicationUseCase.referenceOrUpdateApplication(referenceApplicationCmd);
-//
-//                if (application != null) {
-//                    compteur++;
-//                }
-//            }
-//
-//
-//        } catch (Exception ee) {
-//            ee.printStackTrace();
-//        }
-//        result = "le nombre d'applications créés est de " + compteur;
-//
-//        return result;
-//    }
-
-
-
 }
 
 

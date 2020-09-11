@@ -6,52 +6,48 @@ public class ResultOfCollection {
     private int ignoreCounter;
     private int noMoreUpdated;
 
+    public ResultOfCollection(int ignored, int referenced, int updated, int nomoreupdated) {
+        ignoreCounter = ignored;
+        referenceCounter = referenced;
+        updateCounter = updated;
+        noMoreUpdated = nomoreupdated;
+    }
+
+    public ResultOfCollection() {
+    }
 
     public int getReferenceCounter() {
         return referenceCounter;
-    }
-
-    public void setReferenceCounter(int referenceCounter) {
-        this.referenceCounter = referenceCounter;
     }
 
     public int getUpdateCounter() {
         return updateCounter;
     }
 
-    public void setUpdateCounter(int updateCounter) {
-        this.updateCounter = updateCounter;
-    }
-
     public int getIgnoreCounter() {
         return ignoreCounter;
-    }
-
-    public void setIgnoreCounter(int ignoreCounter) {
-        this.ignoreCounter = ignoreCounter;
     }
 
     public int getNoMoreUpdated() {
         return noMoreUpdated;
     }
 
-    public void setNoMoreUpdated(int noMoreUpdated) {
-        this.noMoreUpdated = noMoreUpdated;
-    }
-    public void addReference(){
-        referenceCounter ++;
-
-    }
-    public void addUpdate(){
-        updateCounter ++;
-
-    }
-    public void addIgnore(){
-        ignoreCounter ++;
-
-    }
-
-    public void addNoMoreUpdated() {
-        noMoreUpdated++;
+    public void referenceResult(StateCmdEnum stateCmdEnum) {
+        switch (stateCmdEnum) {
+            case IGNORE:
+                ignoreCounter++;
+                break;
+            case UPDATE:
+                updateCounter++;
+                break;
+            case REFERENCE:
+                referenceCounter++;
+                break;
+            case NO_MORE_UPDATED:
+                noMoreUpdated++;
+                break;
+            default:
+                break;
+        }
     }
 }

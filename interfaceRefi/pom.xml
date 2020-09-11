@@ -23,15 +23,6 @@
             <artifactId>infrastructure</artifactId>
         </dependency>
 
-        <!-- module traitement fichier csv -->
-        <dependency>
-            <groupId>com.opencsv</groupId>
-            <artifactId>opencsv</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
 
         <!-- Spring dependances -->
         <dependency>
@@ -42,6 +33,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-batch</artifactId>
         </dependency>
 
         <!-- test dependencies -->

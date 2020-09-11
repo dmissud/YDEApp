@@ -4,7 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.yde.ydeapp.application.in.*;
+import org.yde.ydeapp.application.in.CollectionApplicationCmd;
+import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
+import org.yde.ydeapp.application.in.ReferenceCollectionOfApplicationUseCase;
+import org.yde.ydeapp.application.in.ResultOfCollection;
 
 @Service
 public class CollectionOfApplicationManagementService implements ReferenceCollectionOfApplicationUseCase {
@@ -18,23 +21,7 @@ public class CollectionOfApplicationManagementService implements ReferenceCollec
     public ResultOfCollection referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd) {
         ResultOfCollection resultOfCollection = new ResultOfCollection();
         for (ReferenceApplicationUseCase.ReferenceApplicationCmd referenceApplicationCmd : collectionApplicationCmd) {
-            StateCmdEnum stateCmdEnum = referenceApplicationUseCase.referenceOrUpdateApplication(referenceApplicationCmd);
-            switch (stateCmdEnum) {
-                case IGNORE:
-                    resultOfCollection.addIgnore();
-                    break;
-                case UPDATE:
-                    resultOfCollection.addUpdate();
-                    break;
-                case REFERENCE:
-                    resultOfCollection.addReference();
-                    break;
-                case NO_MORE_UPDATED:
-                    resultOfCollection.addNoMoreUpdated();
-                    break;
-                default:
-                    break;
-            }
+            resultOfCollection.referenceResult(referenceApplicationUseCase.referenceOrUpdateApplication(referenceApplicationCmd));
         }
         return resultOfCollection;
     }

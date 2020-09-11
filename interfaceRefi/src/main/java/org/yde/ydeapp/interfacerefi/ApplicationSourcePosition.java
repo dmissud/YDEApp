@@ -1,190 +1,74 @@
 package org.yde.ydeapp.interfacerefi;
 
-import com.opencsv.bean.CsvBindByPosition;
-import com.opencsv.bean.CsvDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 public class ApplicationSourcePosition {
-    @CsvBindByPosition(position = 0)
     private String identifiant;
-
-    @CsvBindByPosition(position = 1)
     private String codeApp;
-
-    @CsvBindByPosition(position = 2)
     private String shortLibelle;
-
-    @CsvBindByPosition(position = 3)
     private String longLibelle;
-
-    @CsvBindByPosition(position = 4)
     private String description;
-
-    @CsvBindByPosition(position = 5)
     private String codeOfTypeOfApplication;
-
-    @CsvBindByPosition(position = 6)
     private String libelleTypeApplication;
-
-    @CsvBindByPosition(position = 7)
     private String state;
-
-    @CsvBindByPosition(position = 8)
-    @CsvDate("yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd")
     private LocalDate dateOfCreation;
-
-    @CsvBindByPosition(position = 9)
-    @CsvDate("yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd")
     private LocalDate dateOfLastUpdate;
-
-    @CsvBindByPosition(position = 10)
-    @CsvDate("yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd")
     private LocalDate dateEndProjected;
-
-    @CsvBindByPosition(position = 11)
     private String applicationTarget;
-
-    @CsvBindByPosition(position = 12)
-    @CsvDate("yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd")
     private LocalDate dateEndInReality;
-
-    @CsvBindByPosition(position = 13)
-    @CsvDate("yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd")
     private LocalDate dateBeginningExploitation;
-
-    @CsvBindByPosition(position = 14)
-    @CsvDate("yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd")
     private LocalDate dateEndExploitation;
-
-    @CsvBindByPosition(position = 15)
     private String idRefogEntityOwner;
-
-    @CsvBindByPosition(position = 16)
     private String codeEntityOwner;
-
-    @CsvBindByPosition(position = 17)
     private String labelEntityOwner;
-
-    @CsvBindByPosition(position = 18)
     private String idRefogEntityMOA;
-
-    @CsvBindByPosition(position = 19)
     private String codeEntityMOA;
-
-    @CsvBindByPosition(position = 20)
     private String labelEntityMOA;
-
-    @CsvBindByPosition(position = 21)
     private String idResponsableMOE;
-
-    @CsvBindByPosition(position = 22)
     private String lastNameResponsableMoe;
-
-    @CsvBindByPosition(position = 23)
     private String firstNameResponsableMoe;
-
-    @CsvBindByPosition(position = 24)
     private String codeEntityResponsableMoe;
-
-    @CsvBindByPosition(position = 25)
     private String labelEntityResponsableMoe;
-
-    @CsvBindByPosition(position = 26)
     private String idRefogEntityMoe;
-
-    @CsvBindByPosition(position = 27)
     private String codeEntityMoe;
-
-    @CsvBindByPosition(position = 28)
     private String labelEntityMoe;
-
-    @CsvBindByPosition(position = 29)
     private String idRefogEntityProduction;
-
-    @CsvBindByPosition(position = 30)
     private String codeEntityProduction;
-
-    @CsvBindByPosition(position = 31)
     private String labelEntityProduction;
-
-    @CsvBindByPosition(position = 32)
     private String codeAttachmentUnderSector;
-
-    @CsvBindByPosition(position = 33)
     private String labelAttachmentUnderSector;
-
-    @CsvBindByPosition(position = 34)
     private String codeAttachmentSector;
-
-    @CsvBindByPosition(position = 35)
     private String labelAttachmentSector;
-
-    @CsvBindByPosition(position = 36)
     private String codeAttachmentPatrimony;
-
-    @CsvBindByPosition(position = 37)
     private String labelAttachmentPatrimony;
-
-    @CsvBindByPosition(position = 38)
     private String codeAttachmentDPP;
-
-    @CsvBindByPosition(position = 39)
     private String labelAttachmentDPP;
-
-    @CsvBindByPosition(position = 40)
     private String labelFunctionalCluster;
-
-    @CsvBindByPosition(position = 41)
     private String labelOfSourcingMode;
-
-    @CsvBindByPosition(position = 42)
     private String privilegeInformation;
-
-    @CsvBindByPosition(position = 43)
     private String personalData;
-
-    @CsvBindByPosition(position = 44)
     private String serviceClass;
-
-    @CsvBindByPosition(position = 45)
     private String availability;
-
-    @CsvBindByPosition(position = 46)
     private String RPO;
-
-    @CsvBindByPosition(position = 47)
     private String RTO;
-
-    @CsvBindByPosition(position = 48)
     private String integrity;
-
-    @CsvBindByPosition(position = 49)
     private String privacy;
-
-    @CsvBindByPosition(position = 50)
     private String traceability;
-
-    @CsvBindByPosition(position = 51)
     private String businessCriticality;
-
-    @CsvBindByPosition(position = 52)
     private String continuityLevel;
-
-    @CsvBindByPosition(position = 53)
     private String derogation;
-
-    @CsvBindByPosition(position = 54)
-    @CsvDate("yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd")
     private LocalDate dateOfValidationOfServiceDefinition;
-
-    @CsvBindByPosition(position = 55)
     private String typeOfSolution;
-
-    @CsvBindByPosition(position = 56)
     private String nameOfFirmware;
-
-    @CsvBindByPosition(position = 57)
     private String technicalApplication;
 
     public String getIdentifiant() {

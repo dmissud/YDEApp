@@ -14,6 +14,8 @@ spring:
     username: sa
     password:
     driverClassName: org.h2.Driver
+  batch:
+    initialize-schema: always
   h2:
     console:
       enabled: true
@@ -27,5 +29,5 @@ server:
   port: 9090
 logging:
   level:
-    org.yde.ydeapp: debug
+    org.yde.ydeapp: error
     org.springframework: error

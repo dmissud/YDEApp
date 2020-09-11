@@ -1,8 +1,8 @@
 package org.yde.ydeapp.interfacerefi;
 
-import com.opencsv.bean.ColumnPositionMappingStrategy;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
+//import com.opencsv.bean.ColumnPositionMappingStrategy;
+//import com.opencsv.bean.CsvToBean;
+//import com.opencsv.bean.CsvToBeanBuilder;
 import org.yde.ydeapp.application.in.CollectionApplicationCmd;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 
@@ -11,20 +11,20 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class TransformerSourceToCmd implements CollectionApplicationCmd {
-    private final CsvToBean csvToBean;
+//    private final CsvToBean csvToBean;
     private StatTraitementRefiFile statTraitementRefiFile = new StatTraitementRefiFile();
 
     public TransformerSourceToCmd(InputStreamReader inputStreamReader) {
-        ColumnPositionMappingStrategy strategy = new ColumnPositionMappingStrategy();
-        strategy.setType(ApplicationSourcePosition.class);
-
-        this.csvToBean = new CsvToBeanBuilder(inputStreamReader)
-                .withSeparator(';')
-                .withMappingStrategy(strategy)
-                .withIgnoreQuotations(true)
-                .withStrictQuotes(false)
-                .withSkipLines(1)
-                .build();
+//        ColumnPositionMappingStrategy strategy = new ColumnPositionMappingStrategy();
+//        strategy.setType(ApplicationSourcePosition.class);
+//
+//        this.csvToBean = new CsvToBeanBuilder(inputStreamReader)
+//                .withSeparator(';')
+//                .withMappingStrategy(strategy)
+//                .withIgnoreQuotations(true)
+//                .withStrictQuotes(false)
+//                .withSkipLines(1)
+//                .build();
     }
 
     public final StatTraitementRefiFile giveResult() {
@@ -41,26 +41,26 @@ public class TransformerSourceToCmd implements CollectionApplicationCmd {
     class IteratorRefiFile implements Iterator<ReferenceApplicationUseCase.ReferenceApplicationCmd> {
 
         private ApplicationSourcePosition applicationSourcePosition;
-        private final Iterator<ApplicationSourcePosition> csvIterator;
+//        private final Iterator<ApplicationSourcePosition> csvIterator;
 
         public IteratorRefiFile() {
-            this.csvIterator = csvToBean.iterator();
+//            this.csvIterator = csvToBean.iterator();
             findNextValidApplicationSourcePosition();
         }
 
         private StatTraitementRefiFile findNextValidApplicationSourcePosition() {
 
-            if (csvIterator.hasNext()) {
-                applicationSourcePosition = csvIterator.next();
-                statTraitementRefiFile.addReadLine();
-
-                if (applicationSourcePosition.getState().equals("Désactivée") || applicationSourcePosition.getCodeOfTypeOfApplication().equals("SU")) {
-                    statTraitementRefiFile.addRejetedLine();
-                    findNextValidApplicationSourcePosition();
-                }
-            } else {
-                applicationSourcePosition = null;
-            }
+//            if (csvIterator.hasNext()) {
+//                applicationSourcePosition = csvIterator.next();
+//                statTraitementRefiFile.addReadLine();
+//
+//                if (applicationSourcePosition.getState().equals("Désactivée") || applicationSourcePosition.getCodeOfTypeOfApplication().equals("SU")) {
+//                    statTraitementRefiFile.addRejetedLine();
+//                    findNextValidApplicationSourcePosition();
+//                }
+//            } else {
+//                applicationSourcePosition = null;
+//            }
             return statTraitementRefiFile;
         }
 

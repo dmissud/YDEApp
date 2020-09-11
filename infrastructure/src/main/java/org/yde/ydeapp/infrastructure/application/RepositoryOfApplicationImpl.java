@@ -22,9 +22,6 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
     RepositoryOfApplicationJpa repositoryOfApplicationJpa;
 
     @Autowired
-    RepositoryOfPersonneJpa repositoryOfPersonneJpa;
-
-    @Autowired
     RepositoryOfOrganizationJpa repositoryOfOrganizationJpa;
 
     @Override
@@ -38,13 +35,13 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
 
         log.debug("Application {} load", codeApp);
         Personne personne = new Personne(applicationEntity.getResponsable().getUid(),
-                                        applicationEntity.getResponsable().getFirstName(),
-                                        applicationEntity.getResponsable().getLastName());
+            applicationEntity.getResponsable().getFirstName(),
+            applicationEntity.getResponsable().getLastName());
         OrganizationIdent organizationIdent = new OrganizationIdent(applicationEntity.getOrganisation().getIdRefog(), applicationEntity.getOrganisation().getName());
-        CycleLife cycleLife= new CycleLife(applicationEntity.getCycleLife().getState(),
-                                            applicationEntity.getCycleLife().getDateOfCreation(),
-                                             applicationEntity.getCycleLife().getDateOfLastUpdate(),
-                                            applicationEntity.getCycleLife().getDateEndInReality());
+        CycleLife cycleLife = new CycleLife(applicationEntity.getCycleLife().getState(),
+            applicationEntity.getCycleLife().getDateOfCreation(),
+            applicationEntity.getCycleLife().getDateOfLastUpdate(),
+            applicationEntity.getCycleLife().getDateEndInReality());
         Application application = new Application.Builder(applicationEntity.getCodeApp())
             .withShortDescription(applicationEntity.getShortDescription())
             .withLongDescription(applicationEntity.getLongDescription())
@@ -72,19 +69,17 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
             log.debug("Application {} with id {} already exist", applicationEntity.getCodeApp(), applicationEntity.getId());
             throw new EntityAlreadyExist(String.format("Application with %s is in repository", applicationEntity.getCodeApp()));
         }
-        PersonneEntity responsableEntity = repositoryOfPersonneJpa.findByUid(application.getResponsable().getUid());
-        if (responsableEntity == null) {
-            responsableEntity = new PersonneEntity();
-            responsableEntity.setUid(application.getResponsable().getUid());
-            responsableEntity.setFirstName(application.getResponsable().getFirstName());
-            responsableEntity.setLastName(application.getResponsable().getLastName());
-            log.debug("Personne {} create", responsableEntity.getUid());
-        }
+        PersonneEntity responsableEntity = new PersonneEntity();
+        responsableEntity.setUid(application.getResponsable().getUid());
+        responsableEntity.setFirstName(application.getResponsable().getFirstName());
+        responsableEntity.setLastName(application.getResponsable().getLastName());
+        log.debug("Personne {} create", responsableEntity.getUid());
         CycleLifeEntity cycleLifeEntity = new CycleLifeEntity();
         cycleLifeEntity.setState(application.getCycleLife().getState());
         cycleLifeEntity.setDateOfCreation(application.getCycleLife().getDateOfCreation());
         cycleLifeEntity.setDateOfLastUpdate(application.getCycleLife().getDateOfLastUpdate());
         cycleLifeEntity.setDateEndInReality(application.getCycleLife().getDateEndInReality());
+
         OrganizationEntity organizationEntity = repositoryOfOrganizationJpa.findByIdRefog(application.getOrganizationIdent().getIdRefog());
         applicationEntity = new ApplicationEntity();
         applicationEntity.setCodeApp(application.getCodeApplication());
@@ -143,14 +138,11 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
 
     private void updateResponsableRelationShip(Application application, ApplicationEntity applicationEntity) {
         if (!applicationEntity.getResponsable().getUid().equals(application.getResponsable().getUid())) {
-            PersonneEntity responsableEntity = repositoryOfPersonneJpa.findByUid(application.getResponsable().getUid());
-            if (responsableEntity == null) {
-                responsableEntity = new PersonneEntity();
-                responsableEntity.setUid(application.getResponsable().getUid());
-                responsableEntity.setFirstName(application.getResponsable().getFirstName());
-                responsableEntity.setLastName(application.getResponsable().getLastName());
-                log.debug("Personne {} create", responsableEntity.getUid());
-            }
+            PersonneEntity responsableEntity = new PersonneEntity();
+            responsableEntity.setUid(application.getResponsable().getUid());
+            responsableEntity.setFirstName(application.getResponsable().getFirstName());
+            responsableEntity.setLastName(application.getResponsable().getLastName());
+            log.debug("Personne {} create", responsableEntity.getUid());
             applicationEntity.setResponsable(responsableEntity);
         }
 

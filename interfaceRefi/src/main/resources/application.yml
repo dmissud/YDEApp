@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: YDEAppBatch
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5436/db_cartographie
+    username: yde_users
+    password: yde_users
+    driverClassName: org.postgresql.Driver
+
+  batch:
+    initialize-schema: always
+
+logging:
+  level:
+    org.yde.ydeapp: error
+    org.springframework.batch: error

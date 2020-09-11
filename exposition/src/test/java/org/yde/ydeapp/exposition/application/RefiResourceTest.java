@@ -31,7 +31,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest({RefiRessource.class})
 @DisplayName("Repository of refi file validation")
-public class RefiResourceTest {
+class RefiResourceTest {
+    public static final int IGNORED = 37;
+    public static final int REFERENCED = 27;
+    public static final int UPDATED = 17;
+    public static final int NOMOREUPDATED = 7;
     @MockBean
     private ReferenceCollectionOfApplicationUseCase referenceCollectionOfApplicationUseCase;
 
@@ -49,11 +53,7 @@ public class RefiResourceTest {
 
     @BeforeEach
     void setup() {
-       resultOfCollection =new ResultOfCollection();
-       resultOfCollection.setIgnoreCounter(37);
-       resultOfCollection.setReferenceCounter(27);
-       resultOfCollection.setUpdateCounter(17);
-       resultOfCollection.setNoMoreUpdated(7);
+       resultOfCollection =new ResultOfCollection(IGNORED, REFERENCED, UPDATED, NOMOREUPDATED);
     }
 
     @Test

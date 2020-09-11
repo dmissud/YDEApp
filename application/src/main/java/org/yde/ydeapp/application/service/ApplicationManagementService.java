@@ -14,7 +14,7 @@ import org.yde.ydeapp.domain.out.RepositoryOfOrganization;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional()
 public class ApplicationManagementService implements ReferenceApplicationUseCase, ApplicationQuery {
 
     private final Logger log = LoggerFactory.getLogger(ApplicationManagementService.class);
