@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.support.DefaultConversionService;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -104,7 +105,7 @@ public class RefiReader implements ItemReader<ApplicationSourcePosition>, JobExe
     public ConversionService createConversionService() {
         DefaultConversionService conversionService = new DefaultConversionService();
         DefaultConversionService.addDefaultConverters(conversionService);
-        // Don't change to Lamba, Spring doen't find type
+        // Don't change to Lamba, Spring doesn't find type
         // Cf : https://stackoverflow.com/questions/25711858/spring-cant-determine-generic-types-when-lambda-expression-is-used-instead-of-a
         conversionService.addConverter(new Converter<String, LocalDate>() {
             @Override
@@ -121,28 +122,24 @@ public class RefiReader implements ItemReader<ApplicationSourcePosition>, JobExe
 
     @Override
     public void beforeJob(JobExecution jobExecution) {
-        if (storeFileRefi.retrieveRefiFile() != null) {
-            reader = new FlatFileItemReader<>();
-            final DefaultLineMapper<ApplicationSourcePosition> lineMapper = new DefaultLineMapper<>();
-            final DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
-            tokenizer.setDelimiter(";");
-            initialiseNamesOfTokenizer(tokenizer);
-            lineMapper.setLineTokenizer(tokenizer);
+        reader = new FlatFileItemReader<>();
+        final DefaultLineMapper<ApplicationSourcePosition> lineMapper = new DefaultLineMapper<>();
+        final DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
+        tokenizer.setDelimiter(";");
+        initialiseNamesOfTokenizer(tokenizer);
+        lineMapper.setLineTokenizer(tokenizer);
 
-            final BeanWrapperFieldSetMapper<ApplicationSourcePosition> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
-            fieldSetMapper.setTargetType(ApplicationSourcePosition.class);
-            fieldSetMapper.setConversionService(createConversionService());
-            lineMapper.setFieldSetMapper(fieldSetMapper);
+        final BeanWrapperFieldSetMapper<ApplicationSourcePosition> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
+        fieldSetMapper.setTargetType(ApplicationSourcePosition.class);
+        fieldSetMapper.setConversionService(createConversionService());
+        lineMapper.setFieldSetMapper(fieldSetMapper);
 
-            reader.setResource(storeFileRefi.retrieveRefiFile().getResource());
-            reader.setLineMapper(lineMapper);
-            reader.setLinesToSkip(1);
-            reader.setEncoding("ISO-8859-1");
-            reader.open(new ExecutionContext());
-            isInit = true;
-        } else {
-            isInit = false;
-        }
+        reader.setResource(new FileSystemResource(jobExecution.getJobParameters().getString(RepositoryOfRefiFileService.PROPERTY_FILE_NAME)));
+        reader.setLineMapper(lineMapper);
+        reader.setLinesToSkip(1);
+        reader.setEncoding("ISO-8859-1");
+        reader.open(new ExecutionContext());
+        isInit = true;
     }
 
     @Override

@@ -35,48 +35,10 @@ public class RefiRessource {
     @Autowired
     StoreFileRefi storeFileRefi;
 
-    @Autowired
-    RefiFileImportJob refiFileImportJob;
-
-    @Autowired
-    JobLauncher jobLauncher;
-
-    @Autowired
-    JobOperator jobOperator;
-
-    @Autowired
-    ReferenceCollectionOfApplicationUseCase referenceCollectionOfApplicationUseCase;
-
-
-//    @PostMapping("/uploadRefi")
-//    public ResponseEntity<StatRefiFileDto> uploadFile(@RequestParam("file") MultipartFile fileRefi) {
-//
-//        LocalDateTime start = LocalDateTime.now();
-//
-//        storeFileRefi.storeRefiFile(fileRefi);
-//        TransformerSourceToCmd transformerSourceToCmd = (TransformerSourceToCmd) storeFileRefi.giveTransformerSourceToCmd();
-//        ResultOfCollection resultOfCollection = referenceCollectionOfApplicationUseCase.referenceOrUpdateCollectionOfApplication(transformerSourceToCmd);
-//
-//        LocalDateTime stop = LocalDateTime.now();
-//
-//        final StatTraitementRefiFile statTraitementRefiFile = transformerSourceToCmd.giveResult();
-//        StatRefiFileDto statRefiFileDto = new StatRefiFileDto(statTraitementRefiFile.getStatReadLineFile(),
-//            statTraitementRefiFile.getStatRejetedLinefile(),
-//            resultOfCollection.getReferenceCounter(),
-//            resultOfCollection.getUpdateCounter(),
-//            resultOfCollection.getIgnoreCounter(),
-//            resultOfCollection.getNoMoreUpdated(),
-//            Duration.between(start, stop).getSeconds());
-//
-//
-//        return new ResponseEntity<>(statRefiFileDto, HttpStatus.OK);
-//
-//    }
 
     @PostMapping("/uploadBatchRefi")
     public ResponseEntity<Void> uploadFileWithBatch(@RequestParam("file") MultipartFile fileRefi) throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
         storeFileRefi.storeRefiFile(fileRefi);
-        jobLauncher.run(refiFileImportJob.importJob(), new JobParameters());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
