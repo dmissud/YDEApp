@@ -8,7 +8,7 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
   datasource:
     platform: postgres
     url: jdbc:postgresql://localhost:5436/db_cartographie

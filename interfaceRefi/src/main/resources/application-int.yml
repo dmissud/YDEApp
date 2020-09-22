@@ -1,6 +1,6 @@
 spring:
   application:
-    name: YDEApp
+    name: BatchYDEApp
   jpa:
     database: H2
     show-sql: true
@@ -15,17 +15,8 @@ spring:
     username: sa
     password:
     driverClassName: org.h2.Driver
-  h2:
-    console:
-      enabled: true
-  servlet:
-    multipart:
-      enabled: true
-      file-size-threshold: 2KB
-      max-file-size: 200MB
-      max-request-size: 215MB
-server:
-  port: 9090
+  batch:
+    initialize-schema: always
 logging:
   level:
     org.yde.ydeapp: error
