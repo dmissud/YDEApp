@@ -14,7 +14,7 @@ import org.yde.ydeapp.application.in.ReferenceOrganizationUseCase;
 import org.yde.ydeapp.application.in.ReferenceOrganizationUseCase.ReferenceOrganisationCmd;
 import org.yde.ydeapp.application.service.OrganizationManagementService;
 import org.yde.ydeapp.application.service.OrganizationQueryService;
-import org.yde.ydeapp.domain.Organization;
+import org.yde.ydeapp.domain.organization.Organization;
 import org.yde.ydeapp.domain.out.RepositoryOfOrganization;
 
 import java.util.ArrayList;

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yde.ydeapp.application.in.GetNoteQuery;
 import org.yde.ydeapp.application.in.ReferenceNoteUseCase;
-import org.yde.ydeapp.domain.Application;
-import org.yde.ydeapp.domain.Note;
+import org.yde.ydeapp.domain.application.Application;
+import org.yde.ydeapp.domain.application.Note;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 

@@ -1,4 +1,4 @@
-package org.yde.ydeapp.interfacerefi;
+package org.yde.ydeapp.infrastructure.fluxrefi;
 
 public class RefiFileDesc {
     private String originalFileName;

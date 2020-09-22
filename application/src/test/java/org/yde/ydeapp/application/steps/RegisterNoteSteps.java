@@ -12,7 +12,11 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.yde.ydeapp.application.in.ReferenceNoteUseCase;
 import org.yde.ydeapp.application.service.NoteManagementService;
-import org.yde.ydeapp.domain.*;
+import org.yde.ydeapp.domain.application.Application;
+import org.yde.ydeapp.domain.application.CycleLife;
+import org.yde.ydeapp.domain.application.Note;
+import org.yde.ydeapp.domain.application.Personne;
+import org.yde.ydeapp.domain.organization.OrganizationIdent;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 

@@ -1,4 +1,4 @@
-package org.yde.ydeapp.interfacerefi;
+package org.yde.ydeapp.infrastructure.fluxrefi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,18 +8,25 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @PropertySource(name = "ydeappProperties", value = "classpath:ydeapp.properties")
-public class YdeAppReposiroryConfiguration {
-    private static final Logger log = LoggerFactory.getLogger(YdeAppReposiroryConfiguration.class);
+public class ReposiroryFluxRefiConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ReposiroryFluxRefiConfiguration.class);
 
     @Value("${ydeapp.upload.dir}")
     private String uploadDir;
 
-    public YdeAppReposiroryConfiguration() {
+    @Value("${ydeapp.old.dir}")
+    private String oldDir;
+
+    public ReposiroryFluxRefiConfiguration() {
         log.info("UploadDir = {}", uploadDir);
     }
 
     public String getUploadDir() {
         return uploadDir;
     }
+    public String getOldDir() {
+        return oldDir;
+    }
+
 
 }

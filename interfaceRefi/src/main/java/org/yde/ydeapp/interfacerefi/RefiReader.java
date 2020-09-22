@@ -15,7 +15,12 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
+import org.yde.ydeapp.application.in.StoreFileRefiUseCase;
+import org.yde.ydeapp.application.service.RepositoryOfRefiFileService;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -23,12 +28,13 @@ import java.time.format.DateTimeFormatter;
 public class RefiReader implements ItemReader<ApplicationSourcePosition>, JobExecutionListener {
 
     @Autowired
-    StoreFileRefi storeFileRefi;
+    StoreFileRefiUseCase storeFileRefiUseCase;
 
     private FlatFileItemReader<ApplicationSourcePosition> reader = null;
     private static final Logger log = LoggerFactory.getLogger(RefiReader.class);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private boolean isInit = false;
+    private String nameOfFile;
 
 
     @Override
@@ -133,8 +139,9 @@ public class RefiReader implements ItemReader<ApplicationSourcePosition>, JobExe
         fieldSetMapper.setTargetType(ApplicationSourcePosition.class);
         fieldSetMapper.setConversionService(createConversionService());
         lineMapper.setFieldSetMapper(fieldSetMapper);
-
-        reader.setResource(new FileSystemResource(jobExecution.getJobParameters().getString(RepositoryOfRefiFileService.PROPERTY_FILE_NAME)));
+        this.nameOfFile = jobExecution.getJobParameters().getString(RepositoryOfRefiFileService.PROPERTY_FILE_NAME);
+        log.debug("File : {}", this.nameOfFile);
+        reader.setResource(new FileSystemResource(this.nameOfFile));
         reader.setLineMapper(lineMapper);
         reader.setLinesToSkip(1);
         reader.setEncoding("ISO-8859-1");
@@ -146,6 +153,11 @@ public class RefiReader implements ItemReader<ApplicationSourcePosition>, JobExe
     public void afterJob(JobExecution jobExecution) {
         if (isInit) {
             reader.close();
+            try {
+                Files.delete(Paths.get(this.nameOfFile));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             isInit = false;
         }
     }

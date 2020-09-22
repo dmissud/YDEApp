@@ -1,9 +1,9 @@
 package org.yde.ydeapp.domain.steps;
 
-import org.yde.ydeapp.domain.Application;
-import org.yde.ydeapp.domain.CycleLife;
-import org.yde.ydeapp.domain.OrganizationIdent;
-import org.yde.ydeapp.domain.Personne;
+import org.yde.ydeapp.domain.application.Application;
+import org.yde.ydeapp.domain.application.CycleLife;
+import org.yde.ydeapp.domain.organization.OrganizationIdent;
+import org.yde.ydeapp.domain.application.Personne;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

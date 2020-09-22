@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.yde.ydeapp.application.in.OrganizationQuery;
 import org.yde.ydeapp.application.in.ReferenceOrganizationUseCase;
 import org.yde.ydeapp.application.in.ReferenceOrganizationUseCase.ReferenceOrganisationCmd;
-import org.yde.ydeapp.domain.Organization;
+import org.yde.ydeapp.domain.organization.Organization;
 
 import java.util.ArrayList;
 

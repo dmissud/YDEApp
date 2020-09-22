@@ -1,4 +1,4 @@
-package org.yde.ydeapp.interfacerefi;
+package org.yde.ydeapp.infrastructure.fluxrefi;
 
 import org.yde.ydeapp.domain.out.BusinessException;
 

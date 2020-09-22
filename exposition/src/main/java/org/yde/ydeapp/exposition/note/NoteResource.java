@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.yde.ydeapp.application.in.GetNoteQuery;
 import org.yde.ydeapp.application.in.ReferenceNoteUseCase;
-import org.yde.ydeapp.domain.Note;
+import org.yde.ydeapp.domain.application.Note;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

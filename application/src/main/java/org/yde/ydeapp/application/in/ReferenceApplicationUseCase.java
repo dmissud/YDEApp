@@ -2,7 +2,7 @@ package org.yde.ydeapp.application.in;
 
 import org.springframework.validation.annotation.Validated;
 import org.yde.ydeapp.application.common.SelfValidating;
-import org.yde.ydeapp.domain.Application;
+import org.yde.ydeapp.domain.application.Application;
 
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;

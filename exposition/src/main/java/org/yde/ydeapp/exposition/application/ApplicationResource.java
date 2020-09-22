@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.yde.ydeapp.application.in.ApplicationQuery;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
-import org.yde.ydeapp.domain.Application;
-import org.yde.ydeapp.domain.ApplicationIdent;
+import org.yde.ydeapp.domain.application.Application;
+import org.yde.ydeapp.domain.application.ApplicationIdent;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
