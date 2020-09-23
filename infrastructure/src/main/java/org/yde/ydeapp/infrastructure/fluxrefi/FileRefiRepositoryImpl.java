@@ -84,7 +84,7 @@ public class FileRefiRepositoryImpl implements RepositoryOfFluxRefi {
     @Override
     public ImportFlux retieveByFluxId(Long ifOfImportFlux) {
         return mapFluxEntityToImportFlux(repositoryOfFluxEntityJpa.findById(ifOfImportFlux)
-            .orElseThrow(() -> new EntityNotFound(String.format("flux %s not found", ifOfImportFlux))));
+            .orElseThrow(() -> new EntityNotFound(String.format(FLUX_S_NOT_FOUND, ifOfImportFlux))));
     }
 
     private ImportFlux mapFluxEntityToImportFlux(FluxEntity fluxEntity) {
