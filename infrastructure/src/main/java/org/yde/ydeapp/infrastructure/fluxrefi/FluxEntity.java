@@ -9,8 +9,13 @@ public class FluxEntity {
     private Long id;
     private String location;
 
+    private String orignalFileName;
+
     @Embedded
     private JobInfoEntity jobInfoEntity;
+
+    @Embedded
+    private StatUpdateEntity statUpdateEntity;
 
     public JobInfoEntity getJobInfoEntity() {
         return jobInfoEntity;
@@ -34,6 +39,22 @@ public class FluxEntity {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public StatUpdateEntity getStatUpdateEntity() {
+        return statUpdateEntity;
+    }
+
+    public void setStatUpdateEntity(StatUpdateEntity statUpdateEntity) {
+        this.statUpdateEntity = statUpdateEntity;
+    }
+
+    public void setOrignalFileName(String orignalFileName) {
+        this.orignalFileName = orignalFileName;
+    }
+
+    public String getOrignalFileName() {
+        return orignalFileName;
     }
 
 }

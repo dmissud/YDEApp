@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
-import org.springframework.batch.item.*;
+import org.springframework.batch.item.ExecutionContext;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
@@ -15,26 +17,33 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
-import org.yde.ydeapp.application.in.StoreFileRefiUseCase;
-import org.yde.ydeapp.application.service.RepositoryOfRefiFileService;
+import org.yde.ydeapp.domain.out.BusinessException;
+import org.yde.ydeapp.infrastructure.fluxrefi.ReposiroryFluxRefiConfiguration;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 @Component
 public class RefiReader implements ItemReader<ApplicationSourcePosition>, JobExecutionListener {
 
+    private final ReposiroryFluxRefiConfiguration reposiroryFluxRefiConfiguration;
+
     @Autowired
-    StoreFileRefiUseCase storeFileRefiUseCase;
+    public RefiReader(ReposiroryFluxRefiConfiguration reposiroryFluxRefiConfiguration) {
+        this.reposiroryFluxRefiConfiguration = reposiroryFluxRefiConfiguration;
+    }
 
     private FlatFileItemReader<ApplicationSourcePosition> reader = null;
     private static final Logger log = LoggerFactory.getLogger(RefiReader.class);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private boolean isInit = false;
     private String nameOfFile;
+    private Path targetLocation;
 
 
     @Override
@@ -45,7 +54,7 @@ public class RefiReader implements ItemReader<ApplicationSourcePosition>, JobExe
         return reader.read();
     }
 
-    private void initialiseNamesOfTokenizer(DelimitedLineTokenizer tokenizer) {
+    private void initialiseNamesForMappingLineToBean(DelimitedLineTokenizer tokenizer) {
         tokenizer.setNames(
             "identifiant",
             "codeApp",
@@ -128,24 +137,10 @@ public class RefiReader implements ItemReader<ApplicationSourcePosition>, JobExe
 
     @Override
     public void beforeJob(JobExecution jobExecution) {
-        reader = new FlatFileItemReader<>();
-        final DefaultLineMapper<ApplicationSourcePosition> lineMapper = new DefaultLineMapper<>();
-        final DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
-        tokenizer.setDelimiter(";");
-        initialiseNamesOfTokenizer(tokenizer);
-        lineMapper.setLineTokenizer(tokenizer);
+        findFileNameFromJobParameter(jobExecution);
+        moveFileInWorkPlace();
+        initReaderForRefiFile(buildLineMapperForRefiFile());
 
-        final BeanWrapperFieldSetMapper<ApplicationSourcePosition> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
-        fieldSetMapper.setTargetType(ApplicationSourcePosition.class);
-        fieldSetMapper.setConversionService(createConversionService());
-        lineMapper.setFieldSetMapper(fieldSetMapper);
-        this.nameOfFile = jobExecution.getJobParameters().getString(RepositoryOfRefiFileService.PROPERTY_FILE_NAME);
-        log.debug("File : {}", this.nameOfFile);
-        reader.setResource(new FileSystemResource(this.nameOfFile));
-        reader.setLineMapper(lineMapper);
-        reader.setLinesToSkip(1);
-        reader.setEncoding("ISO-8859-1");
-        reader.open(new ExecutionContext());
         isInit = true;
     }
 
@@ -154,11 +149,59 @@ public class RefiReader implements ItemReader<ApplicationSourcePosition>, JobExe
         if (isInit) {
             reader.close();
             try {
-                Files.delete(Paths.get(this.nameOfFile));
+                Files.delete(Paths.get(this.targetLocation.toString()));
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new BusinessException("File management is broked : "+e.getMessage());
             }
             isInit = false;
         }
     }
+    private void moveFileInWorkPlace() {
+        Path fileUploadLocation = Paths.get(reposiroryFluxRefiConfiguration.getUploadDir()).toAbsolutePath().normalize();
+        Path fileWorkLocation = Paths.get(reposiroryFluxRefiConfiguration.getWorkDir()).toAbsolutePath().normalize();
+        targetLocation = fileWorkLocation.resolve(this.nameOfFile);
+        Path sourceLocation = fileUploadLocation.resolve(this.nameOfFile);
+        try {
+            Files.move(sourceLocation, targetLocation);
+        } catch (IOException e) {
+            throw new BusinessException("File management is broked : "+e.getMessage());
+        }
+    }
+
+    private void findFileNameFromJobParameter(JobExecution jobExecution) {
+        Path pathNameOfFile = Paths.get(Objects.requireNonNull(jobExecution.getJobParameters().getString(ReposiroryFluxRefiConfiguration.PROPERTY_FILE_NAME)));
+        this.nameOfFile = pathNameOfFile.getFileName().toString();
+        log.debug("File : {}", this.nameOfFile);
+    }
+
+    private DefaultLineMapper<ApplicationSourcePosition> buildLineMapperForRefiFile() {
+        final DefaultLineMapper<ApplicationSourcePosition> lineMapper = initLineMapperWithDelimitedTokenizer();
+        makeLineMapperWorkWithApplicationBean(lineMapper);
+        return lineMapper;
+    }
+
+    private void initReaderForRefiFile(DefaultLineMapper<ApplicationSourcePosition> lineMapper) {
+        reader = new FlatFileItemReader<>();
+        reader.setResource(new FileSystemResource(targetLocation.toString()));
+        reader.setLineMapper(lineMapper);
+        reader.setLinesToSkip(1);
+        reader.setEncoding("ISO-8859-1");
+        reader.open(new ExecutionContext());
+    }
+
+    private void makeLineMapperWorkWithApplicationBean(DefaultLineMapper<ApplicationSourcePosition> lineMapper) {
+        final BeanWrapperFieldSetMapper<ApplicationSourcePosition> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
+        fieldSetMapper.setTargetType(ApplicationSourcePosition.class);
+        fieldSetMapper.setConversionService(createConversionService());
+        lineMapper.setFieldSetMapper(fieldSetMapper);
+    }
+
+    private DefaultLineMapper<ApplicationSourcePosition> initLineMapperWithDelimitedTokenizer() {
+        final DefaultLineMapper<ApplicationSourcePosition> lineMapper = new DefaultLineMapper<>();
+        final DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer(";");
+        initialiseNamesForMappingLineToBean(tokenizer);
+        lineMapper.setLineTokenizer(tokenizer);
+        return lineMapper;
+    }
+
 }

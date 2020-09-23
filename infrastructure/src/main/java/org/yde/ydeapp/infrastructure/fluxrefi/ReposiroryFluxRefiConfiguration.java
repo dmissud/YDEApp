@@ -9,24 +9,27 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @PropertySource(name = "ydeappProperties", value = "classpath:ydeapp.properties")
 public class ReposiroryFluxRefiConfiguration {
+    public static final String PROPERTY_FILE_NAME = "fileName";
+
     private static final Logger log = LoggerFactory.getLogger(ReposiroryFluxRefiConfiguration.class);
 
-    @Value("${ydeapp.upload.dir}")
-    private String uploadDir;
-
-    @Value("${ydeapp.old.dir}")
-    private String oldDir;
+    @Value("${ydeapp.dir}")
+    private String baseDir;
 
     public ReposiroryFluxRefiConfiguration() {
-        log.info("UploadDir = {}", uploadDir);
+        log.info("UploadDir = {}", baseDir);
     }
 
     public String getUploadDir() {
-        return uploadDir;
-    }
-    public String getOldDir() {
-        return oldDir;
+        return baseDir.concat("/upload");
     }
 
+    public String getWorkDir() {
+        return baseDir.concat("/work");
+    }
+
+    public String getStoreDir() {
+        return baseDir.concat("/store");
+    }
 
 }

@@ -1,20 +1,25 @@
-package org.yde.ydeapp.application.in;
+package org.yde.ydeapp.domain.flux;
 
-public class ResultOfCollection {
+public class StatUpdateApplications {
     private int referenceCounter;
     private int updateCounter;
     private int ignoreCounter;
     private int noMoreUpdated;
 
-    public ResultOfCollection(int ignored, int referenced, int updated, int nomoreupdated) {
-        ignoreCounter = ignored;
-        referenceCounter = referenced;
-        updateCounter = updated;
-        noMoreUpdated = nomoreupdated;
+    public StatUpdateApplications(int referenceCounter, int updateCounter, int ignoreCounter, int noMoreUpdated) {
+        this.referenceCounter = referenceCounter;
+        this.updateCounter = updateCounter;
+        this.ignoreCounter = ignoreCounter;
+        this.noMoreUpdated = noMoreUpdated;
     }
 
-    public ResultOfCollection() {
+    public StatUpdateApplications() {
+        this.referenceCounter = 0;
+        this.updateCounter = 0;
+        this.ignoreCounter = 0;
+        this.noMoreUpdated = 0;
     }
+
 
     public int getReferenceCounter() {
         return referenceCounter;
@@ -32,8 +37,8 @@ public class ResultOfCollection {
         return noMoreUpdated;
     }
 
-    public void referenceResult(StateCmdEnum stateCmdEnum) {
-        switch (stateCmdEnum) {
+    public void referenceResult(StateUpdateEnum stateUpdateEnum) {
+        switch (stateUpdateEnum) {
             case IGNORE:
                 ignoreCounter++;
                 break;

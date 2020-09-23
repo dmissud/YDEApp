@@ -1,6 +1,6 @@
 package org.yde.ydeapp.application.in;
 
 public interface ReferenceCollectionOfApplicationUseCase {
-    ResultOfCollection referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd);
+    void referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd);
 
 }

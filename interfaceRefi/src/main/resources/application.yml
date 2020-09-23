@@ -21,4 +21,4 @@ spring:
 logging:
   level:
     org.yde.ydeapp: debug
-    org.springframework.batch: debug
+    org.springframework.batch: info

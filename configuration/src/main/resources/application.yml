@@ -28,5 +28,5 @@ server:
 logging:
   level:
     org.yde.ydeapp: error
-    org.springframework: error
+    org.springframework: info
 

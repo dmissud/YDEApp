@@ -11,7 +11,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.yde.ydeapp.application.in.ReferenceCollectionOfApplicationUseCase;
-import org.yde.ydeapp.application.in.ResultOfCollection;
 import org.yde.ydeapp.application.in.StoreFileRefiUseCase;
 
 @ExtendWith(SpringExtension.class)
@@ -35,11 +34,6 @@ class RefiResourceTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private ResultOfCollection resultOfCollection;
 
-    @BeforeEach
-    void setup() {
-       resultOfCollection =new ResultOfCollection(IGNORED, REFERENCED, UPDATED, NOMOREUPDATED);
-    }
 
 }

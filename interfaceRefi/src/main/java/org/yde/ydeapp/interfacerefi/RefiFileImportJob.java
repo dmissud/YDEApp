@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.dsl.Pollers;
@@ -26,7 +25,6 @@ import org.springframework.integration.file.filters.SimplePatternFileListFilter;
 import org.springframework.integration.handler.LoggingHandler;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.application.in.StoreFileRefiUseCase;
-import org.yde.ydeapp.application.service.RepositoryOfRefiFileService;
 import org.yde.ydeapp.infrastructure.fluxrefi.ReposiroryFluxRefiConfiguration;
 
 import java.io.File;
@@ -35,6 +33,8 @@ import java.io.File;
 @EnableBatchProcessing
 public class RefiFileImportJob {
 
+    public static final String IMPORT_REFI_STEP = "import-refi-step";
+    public static final String IMPORT_REFI_JOB = "import-refi-job";
     @Autowired
     JobBuilderFactory jobBuilderFactory;
     @Autowired
@@ -53,21 +53,21 @@ public class RefiFileImportJob {
 
     public Job importJob() {
         log.trace("import-job created");
-        return jobBuilderFactory.get("import-job")
+        return jobBuilderFactory.get(IMPORT_REFI_JOB)
             .incrementer(new RunIdIncrementer()) //
             .listener(refiReader)
+            .listener(ydeAppWriter)
             .start(importStep(stepBuilderFactory, ydeAppWriter)) //
             .build();
     }
 
 
     public Step importStep(StepBuilderFactory stepBuilderFactory, YdeAppWriter ydeAppWriter) {
-        return stepBuilderFactory.get("import-step") //
+        return stepBuilderFactory.get(IMPORT_REFI_STEP) //
             .<ApplicationSourcePosition, ReferenceApplicationUseCase.ReferenceApplicationCmd>chunk(5) //
             .reader(refiReader) //
             .processor(processor())
             .writer(ydeAppWriter) //
-            .taskExecutor(taskExecutor())
             .build();
     }
 
@@ -89,14 +89,9 @@ public class RefiFileImportJob {
     }
 
     @Bean
-    public TaskExecutor taskExecutor() {
-        return new SimpleAsyncTaskExecutor("ydeapp_batch");
-    }
-
-    @Bean
     public FileMessageToJobRequest fileMessageToJobRequest() {
         FileMessageToJobRequest fileMessageToJobRequest = new FileMessageToJobRequest();
-        fileMessageToJobRequest.setFileParameterName(RepositoryOfRefiFileService.PROPERTY_FILE_NAME);
+        fileMessageToJobRequest.setFileParameterName(ReposiroryFluxRefiConfiguration.PROPERTY_FILE_NAME);
         fileMessageToJobRequest.setJob(importJob());
         return fileMessageToJobRequest;
     }
