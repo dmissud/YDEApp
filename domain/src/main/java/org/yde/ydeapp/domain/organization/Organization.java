@@ -1,4 +1,6 @@
-package org.yde.ydeapp.domain;
+package org.yde.ydeapp.domain.organization;
+
+import org.yde.ydeapp.domain.application.ApplicationIdent;
 
 import java.util.*;
 

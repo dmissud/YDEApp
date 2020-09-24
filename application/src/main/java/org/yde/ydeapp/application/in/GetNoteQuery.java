@@ -1,6 +1,6 @@
 package org.yde.ydeapp.application.in;
 
-import org.yde.ydeapp.domain.Note;
+import org.yde.ydeapp.domain.application.Note;
 
 import java.util.List;
 

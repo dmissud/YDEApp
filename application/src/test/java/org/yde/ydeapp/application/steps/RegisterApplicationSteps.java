@@ -11,11 +11,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase.ReferenceApplicationCmd;
-import org.yde.ydeapp.application.in.StateCmdEnum;
+import org.yde.ydeapp.domain.flux.StateUpdateEnum;
 import org.yde.ydeapp.application.service.ApplicationManagementService;
-import org.yde.ydeapp.domain.*;
+import org.yde.ydeapp.domain.organization.OrganizationIdent;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 import org.yde.ydeapp.domain.out.RepositoryOfOrganization;
 
@@ -42,7 +41,7 @@ public class RegisterApplicationSteps {
     private RepositoryOfOrganization repositoryOfOrganization;
 
 
-    private StateCmdEnum stateCmdEnum;
+    private StateUpdateEnum stateUpdateEnum;
     private ReferenceApplicationCmd application;
     private DateTimeFormatter formatter;
     private ApplicationDataTableCmd appDescCrea = null;
@@ -120,7 +119,7 @@ public class RegisterApplicationSteps {
         cdvDescCrea =cycLif.get(0);
         buildAnApplication();
 
-        stateCmdEnum = applicationManagementService.referenceOrUpdateApplication(application);
+        stateUpdateEnum = applicationManagementService.referenceOrUpdateApplication(application);
     }
 
     @Then("The application with code {string} is created in the repository")
@@ -217,12 +216,12 @@ public class RegisterApplicationSteps {
          //application.updateCycleLife(cycleLife);
         buildAnApplicationUp();
 
-        stateCmdEnum = applicationManagementService.referenceOrUpdateApplication(application);
+        stateUpdateEnum = applicationManagementService.referenceOrUpdateApplication(application);
     }
     @Then("The application with code {string} is updated in the repository")
     public void the_application_with_code_is_updated_in_the_repository(String codeApp) {
         Mockito.verify(repositoryOfApplication, Mockito.times(1)).retrieveByAppCode(codeApp);
-        assertThat(stateCmdEnum).isEqualByComparingTo(StateCmdEnum.REFERENCE);
+        assertThat(stateUpdateEnum).isEqualByComparingTo(StateUpdateEnum.REFERENCE);
     }
 
     @Then("The application with code {string} rattached to the Organization with idRefog {string}")
@@ -230,7 +229,7 @@ public class RegisterApplicationSteps {
         Mockito.verify(repositoryOfApplication, Mockito.times(1)).retrieveByAppCode(codeApp);
         Mockito.verify(repositoryOfOrganization, Mockito.times(1)).retriveIdentByIdRefog(idRefog);
 
-        assertThat(stateCmdEnum).isEqualByComparingTo(StateCmdEnum.REFERENCE);
+        assertThat(stateUpdateEnum).isEqualByComparingTo(StateUpdateEnum.REFERENCE);
     }
 
     private void buildAnApplicationUp() {

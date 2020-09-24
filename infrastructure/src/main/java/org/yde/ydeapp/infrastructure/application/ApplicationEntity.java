@@ -19,7 +19,7 @@ public class ApplicationEntity {
 
     private String longDescription;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @Embedded
     private PersonneEntity responsable;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -27,8 +27,6 @@ public class ApplicationEntity {
 
     @Embedded
     private CycleLifeEntity cycleLife;
-
-
 
     @ElementCollection
     private List<NoteEntity> notes;

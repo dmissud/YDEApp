@@ -2,9 +2,9 @@ package org.yde.ydeapp.infrastructure.organization;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.yde.ydeapp.domain.ApplicationIdent;
-import org.yde.ydeapp.domain.Organization;
-import org.yde.ydeapp.domain.OrganizationIdent;
+import org.yde.ydeapp.domain.application.ApplicationIdent;
+import org.yde.ydeapp.domain.organization.Organization;
+import org.yde.ydeapp.domain.organization.OrganizationIdent;
 import org.yde.ydeapp.domain.out.RepositoryOfOrganization;
 import org.yde.ydeapp.infrastructure.application.ApplicationEntity;
 

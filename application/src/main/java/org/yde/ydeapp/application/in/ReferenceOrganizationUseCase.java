@@ -2,11 +2,10 @@ package org.yde.ydeapp.application.in;
 
 import org.springframework.validation.annotation.Validated;
 import org.yde.ydeapp.application.common.SelfValidating;
-import org.yde.ydeapp.domain.Organization;
+import org.yde.ydeapp.domain.organization.Organization;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.List;
 
 public interface ReferenceOrganizationUseCase {

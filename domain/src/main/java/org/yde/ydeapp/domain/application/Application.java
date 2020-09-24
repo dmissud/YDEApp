@@ -1,7 +1,8 @@
-package org.yde.ydeapp.domain;
+package org.yde.ydeapp.domain.application;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yde.ydeapp.domain.organization.OrganizationIdent;
 import org.yde.ydeapp.domain.out.EntityIncorrect;
 
 import java.util.Collections;
@@ -82,9 +83,9 @@ public class Application {
     }
 
     public static <K, V> K getKey(Map<K, V> map, V value) {
-        for (K key : map.keySet()) {
-            if (value.equals(map.get(key))) {
-                return key;
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (value.equals(map.get(entry.getKey()))) {
+                return entry.getKey();
             }
         }
         return null;
@@ -141,23 +142,23 @@ public class Application {
             Application application = new Application(this.codeApplication);
             application.shortDescription = this.shortDescription;
             application.longDescription = this.longDescription;
-            Boolean isValide= true;
+            boolean isValide= true;
             String message="";
             if (this.responsable == null) {
                 isValide = false;
-                message = String.format("%s\n Responsable est obligatoire  ", message );
+                message = String.format("%s%n Responsable est obligatoire  ", message );
             }
             if (this.organizationIdent == null) {
                 isValide = false;
-                message = String.format("%s\n Organisation est obligatoire  ", message );
+                message = String.format("%s%n Organisation est obligatoire  ", message );
             }
             if (this.cycleLife == null) {
                 isValide = false;
-                message = String.format("%s\n Cycle de vie est obligatoire  ", message );
+                message = String.format("%s%n Cycle de vie est obligatoire  ", message );
             }
 
             if (!isValide){
-                throw new EntityIncorrect(String.format("%s\nPour l'application %s", message , this.codeApplication));
+                throw new EntityIncorrect(String.format("%s%nPour l'application %s", message , this.codeApplication));
             }
 
             application.responsable = this.responsable;

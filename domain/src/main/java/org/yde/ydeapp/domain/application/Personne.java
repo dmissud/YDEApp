@@ -1,4 +1,4 @@
-package org.yde.ydeapp.domain;
+package org.yde.ydeapp.domain.application;
 
 public class Personne {
 

@@ -9,21 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.yde.ydeapp.domain.Application;
-import org.yde.ydeapp.domain.CycleLife;
-import org.yde.ydeapp.domain.Note;
-import org.yde.ydeapp.domain.OrganizationIdent;
-import org.yde.ydeapp.domain.Personne;
+import org.yde.ydeapp.domain.application.Application;
+import org.yde.ydeapp.domain.application.CycleLife;
+import org.yde.ydeapp.domain.application.Note;
+import org.yde.ydeapp.domain.organization.OrganizationIdent;
+import org.yde.ydeapp.domain.application.Personne;
 import org.yde.ydeapp.infrastructure.organization.OrganizationEntity;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;

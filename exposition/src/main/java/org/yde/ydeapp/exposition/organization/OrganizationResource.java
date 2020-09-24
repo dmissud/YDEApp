@@ -8,7 +8,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.yde.ydeapp.application.in.OrganizationQuery;
 import org.yde.ydeapp.application.in.ReferenceOrganizationUseCase;
 import org.yde.ydeapp.application.in.ReferenceOrganizationUseCase.ReferenceOrganisationCmd;
-import org.yde.ydeapp.domain.Organization;
+import org.yde.ydeapp.domain.organization.Organization;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

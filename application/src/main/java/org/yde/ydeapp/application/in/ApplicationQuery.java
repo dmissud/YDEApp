@@ -1,8 +1,7 @@
 package org.yde.ydeapp.application.in;
 
-import org.yde.ydeapp.domain.Application;
-import org.yde.ydeapp.domain.ApplicationIdent;
-import org.yde.ydeapp.domain.Note;
+import org.yde.ydeapp.domain.application.Application;
+import org.yde.ydeapp.domain.application.ApplicationIdent;
 
 import java.util.List;
 

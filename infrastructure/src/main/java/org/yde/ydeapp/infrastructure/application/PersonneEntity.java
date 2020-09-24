@@ -2,27 +2,14 @@ package org.yde.ydeapp.infrastructure.application;
 
 import javax.persistence.*;
 
-@Entity
+@Embeddable
 public class PersonneEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @Column(unique = true)
     private String uid;
     private String firstName;
     private String lastName;
 
     public void setUid(String uid) {
         this.uid = uid;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getUid() {

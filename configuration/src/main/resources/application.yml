@@ -8,13 +8,15 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
   datasource:
     platform: postgres
     url: jdbc:postgresql://localhost:5436/db_cartographie
     username: yde_users
     password: yde_users
     driverClassName: org.postgresql.Driver
+  batch:
+    initialize-schema: always
   servlet:
     multipart:
       enabled: true
@@ -26,5 +28,5 @@ server:
 logging:
   level:
     org.yde.ydeapp: error
-    org.springframework: error
+    org.springframework: info
 

@@ -21,10 +21,6 @@
             <groupId>org.yde.ydeapp</groupId>
             <artifactId>infrastructure</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.yde.ydeapp</groupId>
-            <artifactId>interfaceRefi</artifactId>
-        </dependency>
 
         <!-- Spring dependence -->
         <dependency>

@@ -1,4 +1,4 @@
-package org.yde.ydeapp.domain;
+package org.yde.ydeapp.domain.organization;
 
 public class OrganizationIdent {
     private final String idRefog;

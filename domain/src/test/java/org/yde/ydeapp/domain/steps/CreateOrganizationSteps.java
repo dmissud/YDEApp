@@ -4,7 +4,7 @@ import io.cucumber.java.DataTableType;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.yde.ydeapp.domain.Organization;
+import org.yde.ydeapp.domain.organization.Organization;
 
 import java.util.List;
 import java.util.Map;

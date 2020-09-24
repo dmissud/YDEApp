@@ -1,11 +1,13 @@
-package org.yde.ydeapp.application.in;
+package org.yde.ydeapp.infrastructure.fluxrefi;
 
-public class ResultOfCollection {
+import javax.persistence.Embeddable;
+
+@Embeddable
+public class StatUpdateEntity {
     private int referenceCounter;
     private int updateCounter;
     private int ignoreCounter;
     private int noMoreUpdated;
-
 
     public int getReferenceCounter() {
         return referenceCounter;
@@ -37,21 +39,5 @@ public class ResultOfCollection {
 
     public void setNoMoreUpdated(int noMoreUpdated) {
         this.noMoreUpdated = noMoreUpdated;
-    }
-    public void addReference(){
-        referenceCounter ++;
-
-    }
-    public void addUpdate(){
-        updateCounter ++;
-
-    }
-    public void addIgnore(){
-        ignoreCounter ++;
-
-    }
-
-    public void addNoMoreUpdated() {
-        noMoreUpdated++;
     }
 }

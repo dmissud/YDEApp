@@ -6,16 +6,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yde.ydeapp.application.in.*;
-import org.yde.ydeapp.domain.*;
+import org.yde.ydeapp.domain.application.Application;
+import org.yde.ydeapp.domain.application.ApplicationIdent;
+import org.yde.ydeapp.domain.application.CycleLife;
+import org.yde.ydeapp.domain.application.Personne;
+import org.yde.ydeapp.domain.flux.ImportFlux;
+import org.yde.ydeapp.domain.flux.StateUpdateEnum;
+import org.yde.ydeapp.domain.organization.OrganizationIdent;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
+import org.yde.ydeapp.domain.out.RepositoryOfFluxRefi;
 import org.yde.ydeapp.domain.out.RepositoryOfOrganization;
 
 import java.util.List;
 
 @Service
-@Transactional
-public class ApplicationManagementService implements ReferenceApplicationUseCase, ApplicationQuery {
+@Transactional()
+public class ApplicationManagementService implements ReferenceApplicationUseCase,
+    ReferenceCollectionOfApplicationUseCase,
+    ApplicationQuery {
 
     private final Logger log = LoggerFactory.getLogger(ApplicationManagementService.class);
 
@@ -25,16 +34,19 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
     @Autowired
     private RepositoryOfOrganization repositoryOforganization;
 
+    @Autowired
+    RepositoryOfFluxRefi repositoryOfFluxRefi;
+
     @Override
-    public StateCmdEnum referenceOrUpdateApplication(ReferenceApplicationCmd referenceApplicationCmd) {
-        StateCmdEnum stateCmd;
+    public StateUpdateEnum referenceOrUpdateApplication(ReferenceApplicationCmd referenceApplicationCmd) {
+        StateUpdateEnum stateCmd;
 
         referenceApplicationCmd.validate();
 
 
         OrganizationIdent organizationIdent = repositoryOforganization.retriveIdentByIdRefog(referenceApplicationCmd.getIdRefOrganizationMoe());
         Application application;
-        stateCmd = StateCmdEnum.IGNORE;
+        stateCmd = StateUpdateEnum.IGNORE;
 
         if (organizationIdent != null) {
             Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
@@ -52,7 +64,7 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
                 application.updateOrganization(organizationIdent);
                 application.updateCycleLife(cycleLife);
                 repositoryOfApplication.updateApplication(application);
-                stateCmd = StateCmdEnum.UPDATE;
+                stateCmd = StateUpdateEnum.UPDATE;
             } else {
                 application = new Application.Builder(referenceApplicationCmd.getCodeApp())
                     .withShortDescription(referenceApplicationCmd.getShortDescription())
@@ -63,7 +75,7 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
                     .build();
                 log.trace("Application {} created", application.getCodeApplication());
                 repositoryOfApplication.referenceApplication(application);
-                stateCmd = StateCmdEnum.REFERENCE;
+                stateCmd = StateUpdateEnum.REFERENCE;
             }
         }
         return stateCmd;
@@ -110,5 +122,16 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
     @Override
     public List<ApplicationIdent> getAllApplicationsIdent() {
         return repositoryOfApplication.retrieveIdentOfAllApplications();
+    }
+
+    @Override
+    public void referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd) {
+        ImportFlux importFlux = repositoryOfFluxRefi.retieveByFluxName(collectionApplicationCmd.getImportName());
+
+        for (ReferenceApplicationUseCase.ReferenceApplicationCmd referenceApplicationCmd : collectionApplicationCmd.getApplicationCmdCollection()) {
+            importFlux.getStatUpdateApplication().referenceResult(referenceOrUpdateApplication(referenceApplicationCmd));
+        }
+
+        repositoryOfFluxRefi.save(importFlux);
     }
 }

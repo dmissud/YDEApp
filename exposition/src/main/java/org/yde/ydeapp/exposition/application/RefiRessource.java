@@ -4,54 +4,60 @@ package org.yde.ydeapp.exposition.application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.yde.ydeapp.application.in.ReferenceCollectionOfApplicationUseCase;
-import org.yde.ydeapp.application.in.ResultOfCollection;
-import org.yde.ydeapp.interfacerefi.StatTraitementRefiFile;
-import org.yde.ydeapp.interfacerefi.StoreFileRefi;
-import org.yde.ydeapp.interfacerefi.TransformerSourceToCmd;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.yde.ydeapp.application.in.RefiImportQuery;
+import org.yde.ydeapp.application.in.StoreFileRefiUseCase;
+import org.yde.ydeapp.application.in.StoreFileRefiUseCase.ImportRefiFluxCmd;
+import org.yde.ydeapp.domain.flux.ImportFlux;
+import org.yde.ydeapp.domain.flux.ImportFluxIdent;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/V1")
 public class RefiRessource {
 
     @Autowired
-    StoreFileRefi storeFileRefi;
+    StoreFileRefiUseCase storeFileRefiUseCase;
 
     @Autowired
-    ReferenceCollectionOfApplicationUseCase referenceCollectionOfApplicationUseCase;
+    RefiImportQuery refiImportQuery;
 
+    @PostMapping("/uploadBatchRefi")
+    public ResponseEntity<Void> uploadFileWithBatch(@RequestParam("file") MultipartFile fileRefi) throws IOException {
+        ImportRefiFluxCmd importRefiFluxCmd = new ImportRefiFluxCmd(fileRefi.getOriginalFilename(),
+            fileRefi.getInputStream());
+        Long importFluxId = storeFileRefiUseCase.importRefiFlux(importRefiFluxCmd);
+        URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{ifOfImportFlux}")
+            .buildAndExpand(importFluxId)
+            .toUri();
 
-    @PostMapping("/uploadRefi")
-    public ResponseEntity<StatRefiFileDto> uploadFile(@RequestParam("file") MultipartFile fileRefi) {
+        return ResponseEntity.created(location).build();
+    }
 
-        LocalDateTime start = LocalDateTime.now();
+    @GetMapping(value = "uploadBatchRefi/{ifOfImportFlux}", produces = {"application/json"})
+    public ResponseEntity<ImportFlux> retrieveApplicationByCodeApplication(
+        @NotNull
+        @PathVariable("ifOfImportFlux") final Long ifOfImportFlux) {
 
-        storeFileRefi.storeRefiFile(fileRefi);
-        TransformerSourceToCmd transformerSourceToCmd = (TransformerSourceToCmd) storeFileRefi.giveTransformerSourceToCmd();
-        ResultOfCollection resultOfCollection = referenceCollectionOfApplicationUseCase.referenceOrUpdateCollectionOfApplication(transformerSourceToCmd);
+        final ImportFlux importFlux = refiImportQuery.getImportFlux(ifOfImportFlux);
 
-        LocalDateTime stop = LocalDateTime.now();
+        return new ResponseEntity<>(importFlux, HttpStatus.OK);
+    }
 
-        final StatTraitementRefiFile statTraitementRefiFile = transformerSourceToCmd.giveResult();
-        StatRefiFileDto statRefiFileDto = new StatRefiFileDto(statTraitementRefiFile.getStatReadLineFile(),
-            statTraitementRefiFile.getStatRejetedLinefile(),
-            resultOfCollection.getReferenceCounter(),
-            resultOfCollection.getUpdateCounter(),
-            resultOfCollection.getIgnoreCounter(),
-            resultOfCollection.getNoMoreUpdated(),
-            Duration.between(start, stop).getSeconds());
+    @GetMapping(value = "uploadBatchRefi", produces = {"application/json"})
+    public ResponseEntity<List<ImportFluxIdent>> retrieveAllApplication() {
 
+        List<ImportFluxIdent> importFluxIdent = refiImportQuery.getAllImportFlux();
 
-        return new ResponseEntity<>(statRefiFileDto, HttpStatus.OK);
-
+        return new ResponseEntity<>(importFluxIdent, HttpStatus.OK);
     }
 
 }
