@@ -12,10 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.yde.ydeapp.application.in.ReferenceNoteUseCase;
 import org.yde.ydeapp.application.service.NoteManagementService;
-import org.yde.ydeapp.domain.application.Application;
-import org.yde.ydeapp.domain.application.CycleLife;
-import org.yde.ydeapp.domain.application.Note;
-import org.yde.ydeapp.domain.application.Personne;
+import org.yde.ydeapp.domain.application.*;
 import org.yde.ydeapp.domain.organization.OrganizationIdent;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
@@ -242,12 +239,14 @@ public class RegisterNoteSteps {
         OrganizationIdent organizationIdent = new OrganizationIdent("12345678", "Organization Name");
         Personne personne = new Personne("123456", "firstName", "lastName");
         CycleLife cycleLife = new CycleLife("Active", LocalDate.now(), LocalDate.now(),LocalDate.now());
+        ItSolution itSolution= new ItSolution("Open","","ibm");
         application = new Application.Builder(codeApplication)
             .withShortDescription("Short description")
             .withLongDescription("Long description Long description")
             .withResponsable(personne)
             .withOrganization(organizationIdent)
             .withCycleLife(cycleLife)
+            .withItSolution(itSolution)
             .build();
     }
 }

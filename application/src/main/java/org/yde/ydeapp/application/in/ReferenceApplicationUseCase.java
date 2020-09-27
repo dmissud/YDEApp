@@ -29,18 +29,22 @@ public interface ReferenceApplicationUseCase {
 
         private final CycleLifeCmd cycleLifeCmd;
 
+        private final ItSolutionCmd itSolutionCmd;
+
         public ReferenceApplicationCmd(String codeApp,
                                        String shortDescription,
                                        String longDescription,
                                        ResponsableCmd responsableCmd,
                                        String idRefOrganizationMoe,
-                                       CycleLifeCmd cycleLifeCmd) {
+                                       CycleLifeCmd cycleLifeCmd,
+                                       ItSolutionCmd itSolutionCmd) {
             this.codeApp = codeApp;
             this.shortDescription = shortDescription;
             this.longDescription = longDescription;
             this.responsableCmd = responsableCmd;
             this.idRefOrganizationMoe= idRefOrganizationMoe;
             this.cycleLifeCmd= cycleLifeCmd;
+            this.itSolutionCmd= itSolutionCmd;
 
         }
         @Override
@@ -72,6 +76,7 @@ public interface ReferenceApplicationUseCase {
             return idRefOrganizationMoe;
         }
 
+
         public String getState() { return cycleLifeCmd.getState();
         }
 
@@ -88,7 +93,17 @@ public interface ReferenceApplicationUseCase {
         }
 
 
+        public String getTypeOfSolution() {
+            return itSolutionCmd.typeOfSolution;
+        }
 
+        public String getNameOfFirmware() {
+            return itSolutionCmd.nameOfFirmware;
+        }
+
+        public String getLabelOfSourcingMode() {
+            return itSolutionCmd.labelOfSourcingMode;
+        }
 
         /*
          * Commande to create the Responsable
@@ -118,6 +133,10 @@ public interface ReferenceApplicationUseCase {
             }
         }
 
+        /*
+         * commande to create cycle life
+         */
+
         public static class CycleLifeCmd extends SelfValidating<CycleLifeCmd> {
             private final String state;
             private final LocalDate dateOfCreation;
@@ -145,6 +164,33 @@ public interface ReferenceApplicationUseCase {
 
             public LocalDate getDateEndInReality() {
                 return dateEndInReality;
+            }
+        }
+
+        /*
+         * commande to create ItSolution
+         */
+        public static class ItSolutionCmd extends SelfValidating<ItSolutionCmd>{
+            private final String typeOfSolution;
+            private final String nameOfFirmware;
+            private final String labelOfSourcingMode;
+
+            public ItSolutionCmd(String typeOfSolution, String nameOfFirmware, String labelOfSourcingMode) {
+                this.typeOfSolution = typeOfSolution;
+                this.nameOfFirmware = nameOfFirmware;
+                this.labelOfSourcingMode = labelOfSourcingMode;
+            }
+
+            public String getTypeOfSolution() {
+                return typeOfSolution;
+            }
+
+            public String getNameOfFirmware() {
+                return nameOfFirmware;
+            }
+
+            public String getLabelOfSourcingMode() {
+                return labelOfSourcingMode;
             }
         }
     }

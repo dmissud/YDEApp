@@ -2,6 +2,7 @@ package org.yde.ydeapp.domain.steps;
 
 import org.yde.ydeapp.domain.application.Application;
 import org.yde.ydeapp.domain.application.CycleLife;
+import org.yde.ydeapp.domain.application.ItSolution;
 import org.yde.ydeapp.domain.organization.OrganizationIdent;
 import org.yde.ydeapp.domain.application.Personne;
 
@@ -15,6 +16,8 @@ public class ScenarioContext {
     private CycleDeVieDataTable cdvDescCrea;
     private final DateTimeFormatter formatter;
     private CycleDeVieDataTable cdvDescUpdate;
+    private ItSolutionDataTable itsDescCrea;
+    private ItSolutionDataTable itsDescUpdate;
     private Application application;
 
     public ScenarioContext() {
@@ -29,6 +32,8 @@ public class ScenarioContext {
         cdvDescUpdate = null;
         responsableDescCrea = null;
         application = null;
+        itsDescCrea=null;
+        itsDescUpdate=null;
     }
 
     public void setAppDescCrea(ApplicationDataTable appDescCrea) {
@@ -49,6 +54,12 @@ public class ScenarioContext {
 
     public void setCdvDescUpdate(CycleDeVieDataTable cdvDescUpdate) {
         this.cdvDescUpdate = cdvDescUpdate;
+    }
+    public void setItsDescCrea(ItSolutionDataTable itsDescCrea) {
+        this.itsDescCrea = itsDescCrea;
+    }
+    public void setItsDescUpdate(ItSolutionDataTable itsDescUpdate) {
+        this.itsDescUpdate = itsDescUpdate;
     }
 
     public ApplicationDataTable getAppDescCrea() {
@@ -75,6 +86,14 @@ public class ScenarioContext {
         return cdvDescUpdate;
     }
 
+    public ItSolutionDataTable getItsDescCrea() {
+        return itsDescCrea;
+    }
+
+    public ItSolutionDataTable getItsDescUpdate() {
+        return itsDescUpdate;
+    }
+
     public Application getApplication() {
         return application;
     }
@@ -83,12 +102,14 @@ public class ScenarioContext {
         OrganizationIdent organizationIdent = new OrganizationIdent(appDescCrea.getIdRefogOrganization(), "Organization Name");
         Personne personne = buildPersonne(responsableDescCrea);
         CycleLife cycleLife = buildCycleLife(cdvDescCrea, formatter);
+        ItSolution itSolution=buildItSolution(itsDescCrea);
         application = new Application.Builder(appDescCrea.getCodeApplication())
             .withShortDescription(appDescCrea.getShortDescription())
             .withLongDescription(appDescCrea.getLongDescription())
             .withResponsable(personne)
             .withOrganization(organizationIdent)
             .withCycleLife(cycleLife)
+            .withItSolution(itSolution)
             .build();
     }
 
@@ -125,4 +146,11 @@ public class ScenarioContext {
         return new Personne(responsableDesc.getUid(), responsableDesc.getFirstName(), responsableDesc.getLastName());
     }
 
+    public ItSolution buildItSolutionForUpdate() {
+        return buildItSolution(itsDescUpdate);
+    }
+
+    private static ItSolution buildItSolution(ItSolutionDataTable itSolutionDesc) {
+        return new ItSolution(itSolutionDesc.getTypeOfSolution(),itSolutionDesc.getNameOfFirmware(),itSolutionDesc.getLabelOfSourcingMode());
+    }
 }

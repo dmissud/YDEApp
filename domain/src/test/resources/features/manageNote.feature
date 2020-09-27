@@ -12,6 +12,9 @@ Feature: Note management
     And With the cycle life
       | state  | dateOfCreation | dateOfLastUpdate | dateEndInReality |
       | Active | 01/01/2020     | 01/08/2020       | 28/08/2020       |
+    And With it solution
+      | typeOfSolution  | nameOfFirmware | LabelOfSourcing |
+      | Open            | Toto           | TMA             |
     And The application exist in the repository
 
   Scenario: creating a new application note

@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yde.ydeapp.application.in.*;
-import org.yde.ydeapp.domain.application.Application;
-import org.yde.ydeapp.domain.application.ApplicationIdent;
-import org.yde.ydeapp.domain.application.CycleLife;
-import org.yde.ydeapp.domain.application.Personne;
+import org.yde.ydeapp.domain.application.*;
 import org.yde.ydeapp.domain.flux.ImportFlux;
 import org.yde.ydeapp.domain.flux.StateUpdateEnum;
 import org.yde.ydeapp.domain.organization.OrganizationIdent;
@@ -55,6 +52,10 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
                 referenceApplicationCmd.getDateOfCreation(),
                 referenceApplicationCmd.getDateOfCreation(),
                 referenceApplicationCmd.getDateEndInReality());
+            ItSolution itSolution = new ItSolution(referenceApplicationCmd.getTypeOfSolution(),
+                    referenceApplicationCmd.getNameOfFirmware(),
+                    referenceApplicationCmd.getLabelOfSourcingMode());
+
             application = repositoryOfApplication.retrieveByAppCode(referenceApplicationCmd.getCodeApp());
             if (application != null) {
                 log.trace("Application {} updated", application.getCodeApplication());
@@ -63,6 +64,7 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
                 application.updateResponsable(personne);
                 application.updateOrganization(organizationIdent);
                 application.updateCycleLife(cycleLife);
+                application.updateItSolution(itSolution);
                 repositoryOfApplication.updateApplication(application);
                 stateCmd = StateUpdateEnum.UPDATE;
             } else {
@@ -72,6 +74,7 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
                     .withResponsable(personne)
                     .withOrganization(organizationIdent)
                     .withCycleLife(cycleLife)
+                    .withItSolution(itSolution)
                     .build();
                 log.trace("Application {} created", application.getCodeApplication());
                 repositoryOfApplication.referenceApplication(application);
@@ -105,6 +108,10 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
             referenceApplicationCmd.getDateOfCreation(),
             referenceApplicationCmd.getDateEndInReality());
         application.updateCycleLife(cycleLife);
+        ItSolution itSolution= new ItSolution(referenceApplicationCmd.getTypeOfSolution(),
+                referenceApplicationCmd.getNameOfFirmware(),
+                referenceApplicationCmd.getLabelOfSourcingMode());
+        application.updateItSolution(itSolution);
         repositoryOfApplication.updateApplication(application);
 
         return application;
