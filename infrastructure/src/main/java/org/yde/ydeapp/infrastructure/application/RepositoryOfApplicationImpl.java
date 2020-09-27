@@ -43,12 +43,16 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
             applicationEntity.getCycleLife().getDateOfCreation(),
             applicationEntity.getCycleLife().getDateOfLastUpdate(),
             applicationEntity.getCycleLife().getDateEndInReality());
+        ItSolution itSolution = new ItSolution(applicationEntity.getItSolution().getTypeOfSolution(),
+                applicationEntity.getItSolution().getNameOfFirmware(),
+                applicationEntity.getItSolution().getLabelOfSourcingMode());
         Application application = new Application.Builder(applicationEntity.getCodeApp())
             .withShortDescription(applicationEntity.getShortDescription())
             .withLongDescription(applicationEntity.getLongDescription())
             .withResponsable(personne)
             .withOrganization(organizationIdent)
             .withCycleLife(cycleLife)
+            .withItSolution(itSolution)
             .build();
 
         // Mapping des Notes
@@ -81,6 +85,10 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
         cycleLifeEntity.setDateOfLastUpdate(application.getCycleLife().getDateOfLastUpdate());
         cycleLifeEntity.setDateEndInReality(application.getCycleLife().getDateEndInReality());
 
+        ItSolutionEntity itSolutionEntity=new ItSolutionEntity();
+        itSolutionEntity.setTypeOfSolution(application.getItSolution().getTypeOfSolution());
+        itSolutionEntity.setLabelOfSourcingMode(application.getItSolution().getLabelOfSourcingMode());
+        itSolutionEntity.setNameOfFirmware(application.getItSolution().getNameOfFirmware());
         OrganizationEntity organizationEntity = repositoryOfOrganizationJpa.findByIdRefog(application.getOrganizationIdent().getIdRefog());
         applicationEntity = new ApplicationEntity();
         applicationEntity.setCodeApp(application.getCodeApplication());
@@ -89,6 +97,7 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
         applicationEntity.setOrganisation(organizationEntity);
         applicationEntity.setResponsable(responsableEntity);
         applicationEntity.setCycleLife(cycleLifeEntity);
+        applicationEntity.setItSolution(itSolutionEntity);
         organizationEntity.getApplications().add(applicationEntity);
         log.debug("Application {} create", application.getCodeApplication());
 
@@ -116,6 +125,7 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
         updateOrganizationRelationShip(application, applicationEntity);
 
         updateCycleLife(application, applicationEntity);
+
 
         log.debug("Application {} update", application.getCodeApplication());
 
@@ -173,5 +183,12 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
         cycleLifeEntity.setDateEndInReality(application.getCycleLife().getDateEndInReality());
 
         applicationEntity.setCycleLife(cycleLifeEntity);
+    }
+
+    private void update(Application application, ApplicationEntity applicationEntity) {
+        ItSolutionEntity itSolutionEntity = new ItSolutionEntity();
+        itSolutionEntity.setTypeOfSolution((application.getItSolution().getTypeOfSolution()));
+        itSolutionEntity.setLabelOfSourcingMode(application.getItSolution().getLabelOfSourcingMode());
+        itSolutionEntity.setNameOfFirmware(application.getItSolution().getNameOfFirmware());
     }
 }

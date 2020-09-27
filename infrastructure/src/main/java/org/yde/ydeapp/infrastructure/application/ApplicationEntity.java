@@ -28,6 +28,9 @@ public class ApplicationEntity {
     @Embedded
     private CycleLifeEntity cycleLife;
 
+    @Embedded
+    private ItSolutionEntity itSolution;
+
     @ElementCollection
     private List<NoteEntity> notes;
 
@@ -77,6 +80,14 @@ public class ApplicationEntity {
 
     public void setCycleLife(CycleLifeEntity cycleLife) {
         this.cycleLife = cycleLife;
+    }
+
+    public ItSolutionEntity getItSolution() {
+        return itSolution;
+    }
+
+    public void setItSolution(ItSolutionEntity itSolution) {
+        this.itSolution = itSolution;
     }
 
     public List<NoteEntity> getNotes() { return notes; }

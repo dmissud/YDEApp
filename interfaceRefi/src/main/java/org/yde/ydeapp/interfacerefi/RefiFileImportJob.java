@@ -85,7 +85,12 @@ public class RefiFileImportJob {
                 item.getState(),
                 item.getDateOfCreation(),
                 item.getDateOfLastUpdate(),
-                item.getDateEndInReality()));
+                item.getDateEndInReality()),
+            new ReferenceApplicationUseCase.ReferenceApplicationCmd.ItSolutionCmd(
+                    item.getTypeOfSolution(),
+                    item.getNameOfFirmware(),
+                    item.getLabelOfSourcingMode()
+            )    );
     }
 
     @Bean
