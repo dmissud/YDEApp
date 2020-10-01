@@ -22,3 +22,6 @@ logging:
   level:
     org.yde.ydeapp: debug
     org.springframework.batch: info
+
+ydeapp:
+  dir: ~/.ydeapp

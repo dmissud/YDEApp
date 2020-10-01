@@ -29,4 +29,6 @@ logging:
   level:
     org.yde.ydeapp: error
     org.springframework: info
-
+ydeapp:
+  dir: ~/.ydeapp
+  client: http://localhost:4201

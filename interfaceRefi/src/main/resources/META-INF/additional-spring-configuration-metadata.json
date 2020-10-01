@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "ydeapp.dir",
+      "type": "java.lang.String",
+      "description": "URL du client pour permettre le Cross Origin Requests for a RESTful Web Service."
+    }
+  ]
+}
