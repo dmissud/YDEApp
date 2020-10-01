@@ -1,5 +1,6 @@
 package org.yde.ydeapp.infrastructure.fluxrefi;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -8,7 +9,9 @@ import java.time.LocalDateTime;
 public class JobInfoEntity {
     private int readCount;
     private String status;
+    @Column(length = 2500)
     private String endStatus;
+    @Column(length = 2500)
     private String resultDescription;
     private LocalDateTime startJob;
     private Duration duration;

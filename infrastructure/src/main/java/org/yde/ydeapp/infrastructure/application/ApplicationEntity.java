@@ -17,6 +17,7 @@ public class ApplicationEntity {
 
     private String shortDescription;
 
+    @Column(length = 2500)
     private String longDescription;
 
     @Embedded
