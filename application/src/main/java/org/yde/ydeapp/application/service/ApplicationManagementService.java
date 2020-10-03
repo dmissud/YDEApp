@@ -55,6 +55,13 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
             ItSolution itSolution = new ItSolution(referenceApplicationCmd.getTypeOfSolution(),
                     referenceApplicationCmd.getNameOfFirmware(),
                     referenceApplicationCmd.getLabelOfSourcingMode());
+            Criticity criticity = new Criticity(referenceApplicationCmd.getPrivilegeInformation(),
+                    referenceApplicationCmd.getPersonalData(),
+                    referenceApplicationCmd.getServiceClass(),
+                    referenceApplicationCmd.getAvailability(),
+                    referenceApplicationCmd.getRpo(),
+                    referenceApplicationCmd.getRto());
+
 
             application = repositoryOfApplication.retrieveByAppCode(referenceApplicationCmd.getCodeApp());
             if (application != null) {
@@ -65,6 +72,7 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
                 application.updateOrganization(organizationIdent);
                 application.updateCycleLife(cycleLife);
                 application.updateItSolution(itSolution);
+                application.updateCriticity(criticity);
                 repositoryOfApplication.updateApplication(application);
                 stateCmd = StateUpdateEnum.UPDATE;
             } else {
@@ -75,6 +83,7 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
                     .withOrganization(organizationIdent)
                     .withCycleLife(cycleLife)
                     .withItSolution(itSolution)
+                    .withCriticity(criticity)
                     .build();
                 log.trace("Application {} created", application.getCodeApplication());
                 repositoryOfApplication.referenceApplication(application);
@@ -107,11 +116,21 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
             referenceApplicationCmd.getDateOfCreation(),
             referenceApplicationCmd.getDateOfCreation(),
             referenceApplicationCmd.getDateEndInReality());
+
         application.updateCycleLife(cycleLife);
         ItSolution itSolution= new ItSolution(referenceApplicationCmd.getTypeOfSolution(),
                 referenceApplicationCmd.getNameOfFirmware(),
                 referenceApplicationCmd.getLabelOfSourcingMode());
         application.updateItSolution(itSolution);
+
+        Criticity criticity = new Criticity(referenceApplicationCmd.getPrivilegeInformation(),
+                referenceApplicationCmd.getPersonalData(),
+                referenceApplicationCmd.getServiceClass(),
+                referenceApplicationCmd.getAvailability(),
+                referenceApplicationCmd.getRpo(),
+                referenceApplicationCmd.getRto());
+        application.updateCriticity(criticity);
+
         repositoryOfApplication.updateApplication(application);
 
         return application;

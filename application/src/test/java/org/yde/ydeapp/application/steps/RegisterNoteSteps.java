@@ -240,6 +240,7 @@ public class RegisterNoteSteps {
         Personne personne = new Personne("123456", "firstName", "lastName");
         CycleLife cycleLife = new CycleLife("Active", LocalDate.now(), LocalDate.now(),LocalDate.now());
         ItSolution itSolution= new ItSolution("Open","","ibm");
+        Criticity criticity = new Criticity("oui","non","c12","service minimum", "00 j 12h 12 min","05 j 11h 55min");
         application = new Application.Builder(codeApplication)
             .withShortDescription("Short description")
             .withLongDescription("Long description Long description")
@@ -247,6 +248,7 @@ public class RegisterNoteSteps {
             .withOrganization(organizationIdent)
             .withCycleLife(cycleLife)
             .withItSolution(itSolution)
+            .withCriticity(criticity)
             .build();
     }
 }

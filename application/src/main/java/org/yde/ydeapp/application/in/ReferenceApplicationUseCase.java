@@ -31,27 +31,33 @@ public interface ReferenceApplicationUseCase {
 
         private final ItSolutionCmd itSolutionCmd;
 
+        private final CriticityCmd criticityCmd;
+
         public ReferenceApplicationCmd(String codeApp,
                                        String shortDescription,
                                        String longDescription,
                                        ResponsableCmd responsableCmd,
                                        String idRefOrganizationMoe,
                                        CycleLifeCmd cycleLifeCmd,
-                                       ItSolutionCmd itSolutionCmd) {
+                                       ItSolutionCmd itSolutionCmd,
+                                       CriticityCmd criticityCmd) {
             this.codeApp = codeApp;
             this.shortDescription = shortDescription;
             this.longDescription = longDescription;
+            this.idRefOrganizationMoe = idRefOrganizationMoe;
             this.responsableCmd = responsableCmd;
-            this.idRefOrganizationMoe= idRefOrganizationMoe;
-            this.cycleLifeCmd= cycleLifeCmd;
-            this.itSolutionCmd= itSolutionCmd;
-
+            this.cycleLifeCmd = cycleLifeCmd;
+            this.itSolutionCmd = itSolutionCmd;
+            this.criticityCmd = criticityCmd;
         }
+
         @Override
         public void validate() {
             super.validate();
             responsableCmd.validate();
             cycleLifeCmd.validate();
+            itSolutionCmd.validate();
+            criticityCmd.validate();
         }
 
         public String getCodeApp() { return codeApp; }
@@ -76,6 +82,9 @@ public interface ReferenceApplicationUseCase {
             return idRefOrganizationMoe;
         }
 
+        /*
+         * Cycle life
+         */
 
         public String getState() { return cycleLifeCmd.getState();
         }
@@ -92,7 +101,9 @@ public interface ReferenceApplicationUseCase {
             return cycleLifeCmd.dateEndInReality;
         }
 
-
+        /*
+        *  It solution
+         */
         public String getTypeOfSolution() {
             return itSolutionCmd.typeOfSolution;
         }
@@ -104,6 +115,28 @@ public interface ReferenceApplicationUseCase {
         public String getLabelOfSourcingMode() {
             return itSolutionCmd.labelOfSourcingMode;
         }
+        /*
+         *  criticity
+         */
+        public String getPrivilegeInformation(){
+            return criticityCmd.privilegeInformation;
+        }
+        public String getPersonalData(){
+            return criticityCmd.personalData;
+        }
+        public String getServiceClass(){
+            return criticityCmd.serviceClass;
+        }
+        public String getAvailability(){
+            return criticityCmd.aviability;
+        }
+        public String getRpo(){
+            return criticityCmd.rpo;
+        }
+        public String getRto(){
+            return criticityCmd.rto;
+        }
+
 
         /*
          * Commande to create the Responsable
@@ -191,6 +224,52 @@ public interface ReferenceApplicationUseCase {
 
             public String getLabelOfSourcingMode() {
                 return labelOfSourcingMode;
+            }
+        }
+
+
+        /*
+         * commande to create criticityCmd
+         */
+        public static class CriticityCmd extends SelfValidating<CriticityCmd>{
+            private final String privilegeInformation;
+            private final String personalData;
+            private final String serviceClass;
+            private final String aviability;
+            private final String rpo;
+            private final String rto;
+
+            public CriticityCmd(String privilegeInformation, String personalData, String serviceClass, String aviability, String rpo, String rto) {
+                this.privilegeInformation = privilegeInformation;
+                this.personalData = personalData;
+                this.serviceClass = serviceClass;
+                this.aviability = aviability;
+                this.rpo = rpo;
+                this.rto = rto;
+            }
+
+            public String getPrivilegeInformation() {
+                return privilegeInformation;
+            }
+
+            public String getPersonalData() {
+                return personalData;
+            }
+
+            public String getServiceClass() {
+                return serviceClass;
+            }
+
+            public String getAviability() {
+                return aviability;
+            }
+
+            public String getRpo() {
+                return rpo;
+            }
+
+            public String getRto() {
+                return rto;
             }
         }
     }

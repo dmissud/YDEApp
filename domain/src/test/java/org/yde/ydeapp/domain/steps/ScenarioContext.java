@@ -1,10 +1,7 @@
 package org.yde.ydeapp.domain.steps;
 
-import org.yde.ydeapp.domain.application.Application;
-import org.yde.ydeapp.domain.application.CycleLife;
-import org.yde.ydeapp.domain.application.ItSolution;
+import org.yde.ydeapp.domain.application.*;
 import org.yde.ydeapp.domain.organization.OrganizationIdent;
-import org.yde.ydeapp.domain.application.Personne;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +15,8 @@ public class ScenarioContext {
     private CycleDeVieDataTable cdvDescUpdate;
     private ItSolutionDataTable itsDescCrea;
     private ItSolutionDataTable itsDescUpdate;
+    private CriticityDataTable criticityDescCrea;
+    private CriticityDataTable criticityDescUpdate;
     private Application application;
 
     public ScenarioContext() {
@@ -34,6 +33,8 @@ public class ScenarioContext {
         application = null;
         itsDescCrea=null;
         itsDescUpdate=null;
+        criticityDescCrea=null;
+        criticityDescUpdate=null;
     }
 
     public void setAppDescCrea(ApplicationDataTable appDescCrea) {
@@ -60,6 +61,14 @@ public class ScenarioContext {
     }
     public void setItsDescUpdate(ItSolutionDataTable itsDescUpdate) {
         this.itsDescUpdate = itsDescUpdate;
+    }
+
+    public void setCriticityDescCrea(CriticityDataTable criticityDescCrea) {
+        this.criticityDescCrea = criticityDescCrea;
+    }
+
+    public void setCriticityDescUpdate(CriticityDataTable criticityDescUpdate) {
+        this.criticityDescUpdate = criticityDescUpdate;
     }
 
     public ApplicationDataTable getAppDescCrea() {
@@ -94,15 +103,28 @@ public class ScenarioContext {
         return itsDescUpdate;
     }
 
+
+    public CriticityDataTable getCriticityDescCrea() {
+        return criticityDescCrea;
+    }
+
+    public CriticityDataTable getCriticityDescUpdate() {
+        return criticityDescUpdate;
+    }
+
     public Application getApplication() {
         return application;
     }
+
+
+    // ----------- build Application  ----/
 
     protected void buildAApplication() {
         OrganizationIdent organizationIdent = new OrganizationIdent(appDescCrea.getIdRefogOrganization(), "Organization Name");
         Personne personne = buildPersonne(responsableDescCrea);
         CycleLife cycleLife = buildCycleLife(cdvDescCrea, formatter);
         ItSolution itSolution=buildItSolution(itsDescCrea);
+        Criticity criticity=buildCriticity((criticityDescCrea));
         application = new Application.Builder(appDescCrea.getCodeApplication())
             .withShortDescription(appDescCrea.getShortDescription())
             .withLongDescription(appDescCrea.getLongDescription())
@@ -110,8 +132,12 @@ public class ScenarioContext {
             .withOrganization(organizationIdent)
             .withCycleLife(cycleLife)
             .withItSolution(itSolution)
+            .withCriticity(criticity)
             .build();
     }
+
+
+    // ----------- build Cycle life  ----/
 
     public CycleLife buildCycleLifeForUpdate() {
         return buildCycleLife(cdvDescUpdate, formatter);
@@ -142,9 +168,15 @@ public class ScenarioContext {
             dateEndInReality);
     }
 
+
+    // ----------- build Personne  ----/
+
     private static Personne buildPersonne(ResponsableDataTable responsableDesc) {
         return new Personne(responsableDesc.getUid(), responsableDesc.getFirstName(), responsableDesc.getLastName());
     }
+
+
+    // ----------- build IT solution  ----/
 
     public ItSolution buildItSolutionForUpdate() {
         return buildItSolution(itsDescUpdate);
@@ -152,5 +184,22 @@ public class ScenarioContext {
 
     private static ItSolution buildItSolution(ItSolutionDataTable itSolutionDesc) {
         return new ItSolution(itSolutionDesc.getTypeOfSolution(),itSolutionDesc.getNameOfFirmware(),itSolutionDesc.getLabelOfSourcingMode());
+    }
+
+
+    // ----------- build Criticity  ----/
+
+    public Criticity buildCriticityForUpdate() {
+        return buildCriticity(criticityDescUpdate);
+    }
+
+
+    private static Criticity buildCriticity(CriticityDataTable criticityDesc) {
+        return new Criticity(criticityDesc.getPrivilegeInformation(),
+                criticityDesc.getPersonalData(),
+                criticityDesc.getServiceClass(),
+                criticityDesc.getAviability(),
+                criticityDesc.getRpo(),
+                criticityDesc.getRto());
     }
 }

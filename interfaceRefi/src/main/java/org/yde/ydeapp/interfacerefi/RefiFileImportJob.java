@@ -89,8 +89,15 @@ public class RefiFileImportJob {
             new ReferenceApplicationUseCase.ReferenceApplicationCmd.ItSolutionCmd(
                     item.getTypeOfSolution(),
                     item.getNameOfFirmware(),
-                    item.getLabelOfSourcingMode()
-            )    );
+                    item.getLabelOfSourcingMode()),
+            new ReferenceApplicationUseCase.ReferenceApplicationCmd.CriticityCmd(
+                    item.getPrivilegeInformation(),
+                    item.getPersonalData(),
+                    item.getServiceClass(),
+                    item.getAvailability(),
+                    item.getRPO(),
+                    item.getRTO())
+        );
     }
 
     @Bean

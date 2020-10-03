@@ -11,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+
+import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
 import org.yde.ydeapp.application.in.ReferenceApplicationUseCase.ReferenceApplicationCmd;
 import org.yde.ydeapp.domain.flux.StateUpdateEnum;
 import org.yde.ydeapp.application.service.ApplicationManagementService;
@@ -52,6 +54,8 @@ public class RegisterApplicationSteps {
     private CycleLifeDataTablecmd cdvDescUpdate;
     private ItSolutionDataTableCmd itsDesCrea;
     private ItSolutionDataTableCmd itsDesUpdate;
+    private CriticityDataTableCmd criticityDesCrea;
+    private CriticityDataTableCmd criticityDesUpdate;
     private OrganizationIdent organizationIdent;
 
     @Before
@@ -88,6 +92,16 @@ public class RegisterApplicationSteps {
         return new ItSolutionDataTableCmd(entry.get("typeOfSolution"),
                 entry.get("nameOfFirmware"),
                 entry.get("labelOfSourcingMode")
+        );
+    }
+    @DataTableType
+    public CriticityDataTableCmd criticityDataTableCmd (Map<String, String> entry) {
+        return new CriticityDataTableCmd(entry.get("privilageInformation"),
+                entry.get("personalData"),
+                entry.get("serviceClass"),
+                entry.get("aviability"),
+                entry.get("rpo"),
+                entry.get("rto")
         );
     }
 
@@ -131,6 +145,15 @@ public class RegisterApplicationSteps {
 
         //stateUpdateEnum = applicationManagementService.referenceOrUpdateApplication(application);
     }
+    @When("With the criticity create")
+    public void with_the_criticity_create(List<CriticityDataTableCmd> crit) {
+        if (crit.size() != 1) {
+            throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
+        }
+        criticityDesCrea =crit.get(0);
+
+    }
+
     @When("With it solution create")
     public void with_the_it_solution_create(List<ItSolutionDataTableCmd> itss) {
         if (itss.size() != 1) {
@@ -195,7 +218,18 @@ public class RegisterApplicationSteps {
 
 
     }
-    @When("With the it solution")
+    @Given("With the criticity")
+    public void with_the_criticity(List<CriticityDataTableCmd> crit) {
+        if (crit.size() != 1) {
+            throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
+        }
+        criticityDesCrea = crit.get(0);
+        // buildAnApplication();
+        // CycleLife cycleLife = buildCycleLife(cdvDescUpdate, formatter) ;
+
+
+    }
+    @Given("With the it solution")
     public void with_the_it_solution(List<ItSolutionDataTableCmd> itss) {
         if (itss.size() != 1) {
             throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
@@ -250,6 +284,14 @@ public class RegisterApplicationSteps {
 
         //stateUpdateEnum = applicationManagementService.referenceOrUpdateApplication(application);
     }
+    @When("With the criticity update")
+    public void with_the_criticity_update(List<CriticityDataTableCmd> crit) {
+        if (crit.size() != 1) {
+            throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
+        }
+        criticityDesUpdate =crit.get(0);
+
+    }
     @When("With the it solution update")
     public void with_the_it_solution_update(List<ItSolutionDataTableCmd> itss) {
         if (itss.size() != 1) {
@@ -280,13 +322,15 @@ public class RegisterApplicationSteps {
         ReferenceApplicationCmd.ResponsableCmd personne = buildPersonne(responsableDescUpdate);
         ReferenceApplicationCmd.CycleLifeCmd cycleLife = buildCycleLife(cdvDescUpdate, formatter);
         ReferenceApplicationCmd.ItSolutionCmd itSolution = buildItSolution(itsDesUpdate);
+        ReferenceApplicationCmd.CriticityCmd criticity = buildCriticity(criticityDesUpdate);
         application = new ReferenceApplicationCmd(appDescUpdate.getCodeApplication(),
                                     appDescUpdate.getShortDescription(),
                                     appDescUpdate.getLongDescription(),
                 personne,
                 appDescUpdate.getIdRefogOrganization(),
                 cycleLife,
-                itSolution);
+                itSolution,
+                criticity);
 
     }
 
@@ -295,13 +339,17 @@ public class RegisterApplicationSteps {
         ReferenceApplicationCmd.ResponsableCmd responsableCmd = buildPersonne(responsableDescCrea);
         ReferenceApplicationCmd.CycleLifeCmd cycleLife = buildCycleLife(cdvDescCrea, formatter);
         ReferenceApplicationCmd.ItSolutionCmd itSolution = buildItSolution(itsDesCrea);
+        ReferenceApplicationCmd.CriticityCmd criticity = buildCriticity(criticityDesCrea);
+
+
         application = new ReferenceApplicationCmd(appDescCrea.getCodeApplication(),
                 appDescCrea.getShortDescription(),
                 appDescCrea.getLongDescription(),
                 responsableCmd,
                 appDescCrea.getIdRefogOrganization(),
                 cycleLife,
-                itSolution);
+                itSolution,
+                criticity);
 
     }
     private static ReferenceApplicationCmd.ResponsableCmd buildPersonne(ResponsableDataTableCmd responsableDesc) {
@@ -318,6 +366,11 @@ public class RegisterApplicationSteps {
     private static ReferenceApplicationCmd.ItSolutionCmd buildItSolution(ItSolutionDataTableCmd itsDesc){
         return new ReferenceApplicationCmd.ItSolutionCmd(itsDesc.getTypeOfSolution(),
                 itsDesc.getNameOfFirmware(),itsDesc.getLabelOfSourcingMode());
+    }
+
+    private static ReferenceApplicationCmd.CriticityCmd buildCriticity(CriticityDataTableCmd critDesc){
+        return new ReferenceApplicationCmd.CriticityCmd(critDesc.getPrivilegeInformation(),
+                critDesc.getPersonalData(),critDesc.getServiceClass(),critDesc.getAviability(),critDesc.getRpo(),critDesc.getRto());
     }
 
 

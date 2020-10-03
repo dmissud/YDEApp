@@ -57,8 +57,8 @@ public class ApplicationSourcePosition {
     private String personalData;
     private String serviceClass;
     private String availability;
-    private String RPO;
-    private String RTO;
+    private String rPO;
+    private String rTO;
     private String integrity;
     private String privacy;
     private String traceability;
@@ -440,19 +440,19 @@ public class ApplicationSourcePosition {
     }
 
     public String getRPO() {
-        return RPO;
+        return rPO;
     }
 
-    public void setRPO(String RPO) {
-        this.RPO = RPO;
+    public void setRPO(String rPO) {
+        this.rPO = rPO;
     }
 
     public String getRTO() {
-        return RTO;
+        return rTO;
     }
 
-    public void setRTO(String RTO) {
-        this.RTO = RTO;
+    public void setRTO(String rTO) {
+        this.rTO = rTO;
     }
 
     public String getIntegrity() {
