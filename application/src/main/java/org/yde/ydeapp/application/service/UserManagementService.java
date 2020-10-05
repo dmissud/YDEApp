@@ -32,7 +32,7 @@ public class UserManagementService implements GetUserQuery, ReferenceUserUseCase
     }
 
     @Override
-    public List<User> GetAllUsers() {
+    public List<User> getAllUsers() {
 
         List<User> users = repositoryOfUser.retrieveAllUsers();
         return users;

@@ -7,6 +7,6 @@ import java.util.List;
 public interface GetUserQuery {
 
     User getUserByUid (String uid);
-    List<User> GetAllUsers();
+    List<User> getAllUsers();
 
 }
