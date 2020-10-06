@@ -32,3 +32,4 @@ logging:
 ydeapp:
   dir: /home/daniel/.ydeapp
   client: http://localhost:4201
+  secret: ydeapp-42-secret-of-life
