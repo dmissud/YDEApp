@@ -30,5 +30,5 @@ logging:
     org.yde.ydeapp: error
     org.springframework: info
 ydeapp:
-  dir: ~/.ydeapp
+  dir: /home/daniel/.ydeapp
   client: http://localhost:4201

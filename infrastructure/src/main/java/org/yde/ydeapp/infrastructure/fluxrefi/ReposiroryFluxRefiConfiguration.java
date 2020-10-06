@@ -7,8 +7,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ReposiroryFluxRefiConfiguration {
-    public static final String PROPERTY_FILE_NAME = "fileName";
-
     private static final Logger log = LoggerFactory.getLogger(ReposiroryFluxRefiConfiguration.class);
 
     @Value("${ydeapp.dir}")

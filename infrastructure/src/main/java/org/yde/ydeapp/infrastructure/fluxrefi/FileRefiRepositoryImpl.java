@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.yde.ydeapp.domain.flux.ImportFlux;
+import org.yde.ydeapp.domain.flux.ImportFluxIdent;
 import org.yde.ydeapp.domain.flux.Job;
 import org.yde.ydeapp.domain.flux.StatUpdateApplications;
 import org.yde.ydeapp.domain.out.EntityNotFound;
@@ -17,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,6 +87,11 @@ public class FileRefiRepositoryImpl implements RepositoryOfFluxRefi {
     public ImportFlux retieveByFluxId(Long ifOfImportFlux) {
         return mapFluxEntityToImportFlux(repositoryOfFluxEntityJpa.findById(ifOfImportFlux)
             .orElseThrow(() -> new EntityNotFound(String.format(FLUX_S_NOT_FOUND, ifOfImportFlux))));
+    }
+
+    @Override
+    public List<ImportFluxIdent> getAllImportFluxId() {
+        return new ArrayList<>();
     }
 
     private ImportFlux mapFluxEntityToImportFlux(FluxEntity fluxEntity) {
