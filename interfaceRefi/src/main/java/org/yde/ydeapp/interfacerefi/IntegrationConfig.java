@@ -3,6 +3,7 @@ package org.yde.ydeapp.interfacerefi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.integration.launch.JobLaunchingMessageHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,10 @@ import java.io.File;
 
 @Configuration
 public class IntegrationConfig {
-    private SimpleJobLauncher jobLauncher;
+
+    @Autowired
+    private JobLauncher jobLauncher;
+
     private static Logger log = LoggerFactory.getLogger(IntegrationConfig.class);
 
     protected DirectChannel inputChannel() {
@@ -36,7 +40,7 @@ public class IntegrationConfig {
     public IntegrationFlow integrationFlow(ReposiroryFluxRefiConfiguration reposiroryFluxRefiConfiguration) {
         return IntegrationFlows
             .from(fileReadingMessageSource(reposiroryFluxRefiConfiguration),
-                c -> c.poller(Pollers.fixedDelay(5000).maxMessagesPerPoll(1)))
+                c -> c.poller(Pollers.fixedDelay(2500).maxMessagesPerPoll(1)))
             .channel(inputChannel())
             .transform(fileMessageToJobRequest())
             .handle(jobLaunchingMessageHandler()) //
