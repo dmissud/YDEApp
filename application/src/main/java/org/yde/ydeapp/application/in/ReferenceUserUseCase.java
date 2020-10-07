@@ -17,6 +17,7 @@ public interface ReferenceUserUseCase {
     @Validated
     class ReferenceUserCmd extends SelfValidating<ReferenceUserCmd> {
 
+        // Todo regex
         @Size(min=5 , max=7)
         private final String uid;
 
@@ -44,3 +45,4 @@ public interface ReferenceUserUseCase {
     }
 
 }
+

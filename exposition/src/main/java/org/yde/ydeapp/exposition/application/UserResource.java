@@ -32,10 +32,11 @@ public class UserResource {
 
     @PostMapping("users")
     public ResponseEntity<Void> createUser(@Valid @RequestBody ReferenceUserUseCase.ReferenceUserCmd referenceUserCmd) {
+        // ToDo crypter le pwd
         User user = referenceUserUseCase.referenceNewUser(referenceUserCmd);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{userName}")
+                .path("/{userUid}")
                 .buildAndExpand(user.getUid())
                 .toUri();
 
@@ -63,7 +64,7 @@ public class UserResource {
         User user = referenceUserUseCase.updateExistingUser(referenceUserCmd, uid);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{noteTitle}")
+                .path("/{userUid}")
                 .buildAndExpand(user.getUid())
                 .toUri();
         return ResponseEntity.created(location).build();
