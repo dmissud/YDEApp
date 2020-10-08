@@ -29,4 +29,7 @@ logging:
   level:
     org.yde.ydeapp: error
     org.springframework: info
-
+ydeapp:
+  dir: $HOME/.ydeapp
+  client: http://localhost:4201
+  secret: ydeapp-42-secret-of-life

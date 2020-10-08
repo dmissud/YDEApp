@@ -12,7 +12,6 @@ import org.yde.ydeapp.domain.flux.ImportFluxIdent;
 import org.yde.ydeapp.domain.flux.Job;
 import org.yde.ydeapp.domain.out.RepositoryOfFluxRefi;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -53,7 +52,7 @@ public class RepositoryOfRefiFileService implements StoreFileRefiUseCase, Report
 
     @Override
     public List<ImportFluxIdent> getAllImportFlux() {
-        return new ArrayList<>();
+        return repositoryOfFluxRefi.getAllImportFluxId();
     }
 }
 

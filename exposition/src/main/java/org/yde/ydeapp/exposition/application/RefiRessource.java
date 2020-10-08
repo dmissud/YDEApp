@@ -4,6 +4,7 @@ package org.yde.ydeapp.exposition.application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -28,6 +29,7 @@ public class RefiRessource {
     @Autowired
     RefiImportQuery refiImportQuery;
 
+    @Secured("ROLE_AMDIN")
     @PostMapping("/uploadBatchRefi")
     public ResponseEntity<Void> uploadFileWithBatch(@RequestParam("file") MultipartFile fileRefi) throws IOException {
         ImportRefiFluxCmd importRefiFluxCmd = new ImportRefiFluxCmd(fileRefi.getOriginalFilename(),
@@ -42,6 +44,7 @@ public class RefiRessource {
         return ResponseEntity.created(location).build();
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping(value = "uploadBatchRefi/{ifOfImportFlux}", produces = {"application/json"})
     public ResponseEntity<ImportFlux> retrieveApplicationByCodeApplication(
         @NotNull
@@ -52,6 +55,7 @@ public class RefiRessource {
         return new ResponseEntity<>(importFlux, HttpStatus.OK);
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping(value = "uploadBatchRefi", produces = {"application/json"})
     public ResponseEntity<List<ImportFluxIdent>> retrieveAllApplication() {
 
