@@ -59,14 +59,13 @@ public class ConfigureMySecurity extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.GET, "/api/V1/organizations/*").permitAll()
             .antMatchers("/authenticate").permitAll()
             // and authorize swagger-ui
-            .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
+            .antMatchers("/", "/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
             // all other requests need to be authenticated
             .anyRequest().authenticated().and().
             // make sure we use stateless session; session won't be used to
             // store user's state.
                 exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint) //
             .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
     }
 
     @Bean
