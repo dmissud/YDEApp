@@ -1,6 +1,7 @@
 package org.yde.ydeapp.exposition.security.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 	private static final Logger log = LoggerFactory.getLogger(JwtRequestFilter.class);
 
-	@Qualifier("customUserDetailsService")
+	@Qualifier("ydeAppUserDetailsService")
 	@Autowired
 	private UserDetailsService jwtUserDetailsService;
 
@@ -49,6 +50,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				log.error("Unable to get JWT Token");
 			} catch (final ExpiredJwtException e) {
 				log.error("JWT Token has expired");
+			} catch (MalformedJwtException e) {
+				log.error("JWT Token Mal formed");
 			}
 		} else {
 			log.warn("JWT Token does not begin with Bearer String");
