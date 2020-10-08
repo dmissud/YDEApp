@@ -23,6 +23,7 @@ public class JwtTokenManager {
 	// retrieve username from jwt token
 	public String getUsernameFromToken(final String token) {
 		return getClaimFromToken(token, Claims::getSubject);
+
 	}
 
 	// retrieve expiration date from jwt token

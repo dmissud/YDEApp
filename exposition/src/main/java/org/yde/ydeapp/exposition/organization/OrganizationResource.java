@@ -3,6 +3,7 @@ package org.yde.ydeapp.exposition.organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.yde.ydeapp.application.in.OrganizationQuery;
@@ -23,6 +24,7 @@ public class OrganizationResource {
     @Autowired
     OrganizationQuery organizationQuery;
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("organizations")
     public ResponseEntity<Void> referenceOrganization(@Valid @RequestBody ReferenceOrganisationCmd referenceOrganisationCmd) {
         Organization organization = referenceOrganizationUseCase.referenceOrganization(referenceOrganisationCmd);

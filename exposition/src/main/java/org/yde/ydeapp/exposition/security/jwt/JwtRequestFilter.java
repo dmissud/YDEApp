@@ -4,9 +4,11 @@ import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -22,8 +24,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 	private static final Logger log = LoggerFactory.getLogger(JwtRequestFilter.class);
 
+	@Qualifier("customUserDetailsService")
 	@Autowired
-	private CustomUserDetailsService jwtUserDetailsService;
+	private UserDetailsService jwtUserDetailsService;
 
 	@Autowired
 	private JwtTokenManager jwtTokenUtil;
@@ -56,22 +59,24 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 			final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
 
-			// if token is valid configure Spring Security to manually set
-			// authentication
 			if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
-				final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-						userDetails, null, userDetails.getAuthorities());
-
-				usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource() //
-						.buildDetails(request));
-
-				// After setting the Authentication in the context, we specify
-				// that the current user is authenticated. So it passes the
-				// Spring Security Configurations successfully.
-				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+				manualySetAuthentification(request, userDetails);
 			}
 		}
 		chain.doFilter(request, response);
+	}
+
+	private void manualySetAuthentification(HttpServletRequest request, UserDetails userDetails) {
+		final UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+			userDetails, null, userDetails.getAuthorities());
+
+		usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource() //
+				.buildDetails(request));
+
+		// After setting the Authentication in the context, we specify
+		// that the current user is authenticated. So it passes the
+		// Spring Security Configurations successfully.
+		SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 	}
 
 }
