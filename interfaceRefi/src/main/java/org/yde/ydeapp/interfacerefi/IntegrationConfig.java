@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.integration.launch.JobLaunchingMessageHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -23,27 +22,23 @@ import java.io.File;
 @Configuration
 public class IntegrationConfig {
 
-    @Autowired
-    private JobLauncher jobLauncher;
-
     private static Logger log = LoggerFactory.getLogger(IntegrationConfig.class);
 
     protected DirectChannel inputChannel() {
         return new DirectChannel();
     }
 
-    @Autowired
-    private Job refiJob;
-
     @Bean
     @Autowired
-    public IntegrationFlow integrationFlow(ReposiroryFluxRefiConfiguration reposiroryFluxRefiConfiguration) {
+    public IntegrationFlow integrationFlow(ReposiroryFluxRefiConfiguration reposiroryFluxRefiConfiguration,
+                                           JobLauncher jobLauncher,
+                                           Job refiJob) {
         return IntegrationFlows
             .from(fileReadingMessageSource(reposiroryFluxRefiConfiguration),
                 c -> c.poller(Pollers.fixedDelay(2500).maxMessagesPerPoll(1)))
             .channel(inputChannel())
-            .transform(fileMessageToJobRequest())
-            .handle(jobLaunchingMessageHandler()) //
+            .transform(fileMessageToJobRequest(refiJob))
+            .handle(jobLaunchingMessageHandler(jobLauncher)) //
             .handle(jobExecution -> log.trace("JobExecution {}", jobExecution.getPayload()))
             .get();
     }
@@ -59,12 +54,14 @@ public class IntegrationConfig {
     }
 
     @Bean
-    JobLaunchingMessageHandler jobLaunchingMessageHandler() {
+    @Autowired
+    JobLaunchingMessageHandler jobLaunchingMessageHandler(JobLauncher jobLauncher) {
         return new JobLaunchingMessageHandler(jobLauncher);
     }
 
     @Bean
-    public FileMessageToJobRequest fileMessageToJobRequest() {
+    @Autowired
+    public FileMessageToJobRequest fileMessageToJobRequest(Job refiJob) {
         FileMessageToJobRequest fileMessageToJobRequest = new FileMessageToJobRequest();
         fileMessageToJobRequest.setFileParameterName("refi_file_name");
         fileMessageToJobRequest.setJob(refiJob);
