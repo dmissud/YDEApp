@@ -18,6 +18,8 @@ public class Application {
     private Personne responsable;
     private OrganizationIdent organizationIdent;
     private CycleLife cycleLife;
+    private ItSolution itSolution;
+    private Criticity criticity;
     private final Map<String, Note> notes;
 
 
@@ -37,6 +39,10 @@ public class Application {
     public CycleLife getCycleLife() {
         return cycleLife;
     }
+    public ItSolution getItSolution() {
+        return itSolution;
+    }
+
 
     public void updateShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
@@ -54,6 +60,10 @@ public class Application {
         return new ApplicationIdent(this.codeApplication, this.shortDescription);
     }
 
+    public Criticity getCriticity() {
+        return criticity;
+    }
+
     public OrganizationIdent getOrganizationIdent() {
         return organizationIdent;
     }
@@ -63,6 +73,10 @@ public class Application {
     }
 
     public void updateCycleLife(CycleLife cycleLife) { this.cycleLife = cycleLife;
+    }
+    public void updateItSolution(ItSolution itSolution) { this.itSolution = itSolution;
+    }
+    public void updateCriticity(Criticity criticity){this.criticity=criticity;
     }
 
     public Map<String, Note> retrieveNotes() {
@@ -107,6 +121,8 @@ public class Application {
         private Personne responsable = null;
         private OrganizationIdent organizationIdent;
         private CycleLife cycleLife= null;
+        private ItSolution itSolution=null;
+        private Criticity criticity=null;
 
         public Builder(String codeApplication) {
             this.codeApplication = codeApplication;
@@ -137,6 +153,14 @@ public class Application {
             this.cycleLife = cycleLife;
             return this;
         }
+        public Builder withItSolution(ItSolution itSolution) {
+            this.itSolution = itSolution;
+            return this;
+        }
+        public Builder withCriticity(Criticity criticity) {
+            this.criticity = criticity;
+            return this;
+        }
 
         public Application build() {
             Application application = new Application(this.codeApplication);
@@ -156,6 +180,14 @@ public class Application {
                 isValide = false;
                 message = String.format("%s%n Cycle de vie est obligatoire  ", message );
             }
+            if (this.itSolution == null) {
+                isValide = false;
+                message = String.format("%s\n la solution It est obligatoire  ", message );
+            }
+            if (this.criticity == null) {
+                isValide = false;
+                message = String.format("%s\n la criticité est obligatoire  ", message );
+            }
 
             if (!isValide){
                 throw new EntityIncorrect(String.format("%s%nPour l'application %s", message , this.codeApplication));
@@ -164,6 +196,8 @@ public class Application {
             application.responsable = this.responsable;
             application.organizationIdent = this.organizationIdent;
             application.cycleLife = this.cycleLife;
+            application.itSolution= this.itSolution;
+            application.criticity=this.criticity;
             log.trace("New Application Create");
             return application;
         }

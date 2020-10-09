@@ -43,12 +43,23 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
             applicationEntity.getCycleLife().getDateOfCreation(),
             applicationEntity.getCycleLife().getDateOfLastUpdate(),
             applicationEntity.getCycleLife().getDateEndInReality());
+        ItSolution itSolution = new ItSolution(applicationEntity.getItSolution().getTypeOfSolution(),
+                applicationEntity.getItSolution().getNameOfFirmware(),
+                applicationEntity.getItSolution().getLabelOfSourcingMode());
+        Criticity criticity = new Criticity(applicationEntity.getCriticity().getPrivilegeInformation(),
+                applicationEntity.getCriticity().getPersonalData(),
+                applicationEntity.getCriticity().getServiceClass(),
+                applicationEntity.getCriticity().getAviability(),
+                applicationEntity.getCriticity().getRpo(),
+                applicationEntity.getCriticity().getRto());
         Application application = new Application.Builder(applicationEntity.getCodeApp())
             .withShortDescription(applicationEntity.getShortDescription())
             .withLongDescription(applicationEntity.getLongDescription())
             .withResponsable(personne)
             .withOrganization(organizationIdent)
             .withCycleLife(cycleLife)
+            .withItSolution(itSolution)
+            .withCriticity(criticity)
             .build();
 
         // Mapping des Notes
@@ -81,6 +92,19 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
         cycleLifeEntity.setDateOfLastUpdate(application.getCycleLife().getDateOfLastUpdate());
         cycleLifeEntity.setDateEndInReality(application.getCycleLife().getDateEndInReality());
 
+        ItSolutionEntity itSolutionEntity=new ItSolutionEntity();
+        itSolutionEntity.setTypeOfSolution(application.getItSolution().getTypeOfSolution());
+        itSolutionEntity.setLabelOfSourcingMode(application.getItSolution().getLabelOfSourcingMode());
+        itSolutionEntity.setNameOfFirmware(application.getItSolution().getNameOfFirmware());
+
+        CriticityEntity criticityEntity= new CriticityEntity();
+        criticityEntity.setPrivilegeInformation(application.getCriticity().getPrivilegeInformation());
+        criticityEntity.setPersonalData(application.getCriticity().getPersonalData());
+        criticityEntity.setServiceClass(application.getCriticity().getServiceClass());
+        criticityEntity.setAviability(application.getCriticity().getAviability());
+        criticityEntity.setRpo(application.getCriticity().getRpo());
+        criticityEntity.setRto(application.getCriticity().getRto());
+
         OrganizationEntity organizationEntity = repositoryOfOrganizationJpa.findByIdRefog(application.getOrganizationIdent().getIdRefog());
         applicationEntity = new ApplicationEntity();
         applicationEntity.setCodeApp(application.getCodeApplication());
@@ -89,6 +113,8 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
         applicationEntity.setOrganisation(organizationEntity);
         applicationEntity.setResponsable(responsableEntity);
         applicationEntity.setCycleLife(cycleLifeEntity);
+        applicationEntity.setItSolution(itSolutionEntity);
+        applicationEntity.setCriticity(criticityEntity);
         organizationEntity.getApplications().add(applicationEntity);
         log.debug("Application {} create", application.getCodeApplication());
 
@@ -116,6 +142,9 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
         updateOrganizationRelationShip(application, applicationEntity);
 
         updateCycleLife(application, applicationEntity);
+
+        updateCriticity(application,applicationEntity);
+
 
         log.debug("Application {} update", application.getCodeApplication());
 
@@ -174,4 +203,18 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
 
         applicationEntity.setCycleLife(cycleLifeEntity);
     }
+
+    private void updateCriticity(Application application, ApplicationEntity applicationEntity) {
+        CriticityEntity criticityEntity = new CriticityEntity();
+        criticityEntity.setPrivilegeInformation(application.getCriticity().getPrivilegeInformation());
+        criticityEntity.setPersonalData(application.getCriticity().getPersonalData());
+        criticityEntity.setServiceClass(application.getCriticity().getServiceClass());
+        criticityEntity.setAviability(application.getCriticity().getAviability());
+        criticityEntity.setRpo(application.getCriticity().getRpo());
+        criticityEntity.setRto(application.getCriticity().getRto());
+
+        applicationEntity.setCriticity(criticityEntity);
+    }
+
+
 }

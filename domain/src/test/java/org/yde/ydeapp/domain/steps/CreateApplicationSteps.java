@@ -6,7 +6,9 @@ import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.yde.ydeapp.domain.application.Criticity;
 import org.yde.ydeapp.domain.application.CycleLife;
+import org.yde.ydeapp.domain.application.ItSolution;
 import org.yde.ydeapp.domain.organization.OrganizationIdent;
 
 import java.time.LocalDate;
@@ -46,6 +48,26 @@ public class CreateApplicationSteps {
             entry.get("dateEndInReality")
         );
     }
+    @DataTableType
+    public ItSolutionDataTable itSolutionDataTable(Map<String, String> entry)  {
+        return new ItSolutionDataTable(entry.get("typeOfSolution"),
+                entry.get("nameOfFirmware"),
+                entry.get("labelOfSourcingMode")
+
+        );
+    }
+    @DataTableType
+    public CriticityDataTable CriticityDataTable(Map<String, String> entry)  {
+        return new CriticityDataTable(entry.get("privilageInformation"),
+                entry.get("personalData"),
+                entry.get("serviceClass"),
+                entry.get("aviability"),
+                entry.get("rpo"),
+                entry.get("rto")
+
+        );
+    }
+
 
     @DataTableType
     public ResponsableDataTable responsableDataTableEntry(Map<String, String> entry)  {
@@ -82,6 +104,23 @@ public class CreateApplicationSteps {
     public void with_the_cycle_life(List<CycleDeVieDataTable> cdvs) {
         if (cdvs.size() == 1) {
             this.scenarioContext.setCdvDescCrea(cdvs.get(0));
+        } else {
+            throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
+        }
+    }
+    @When("With it solution")
+    public void with_it_solution(List<ItSolutionDataTable> itss) {
+        if (itss.size() == 1) {
+            this.scenarioContext.setItsDescCrea(itss.get(0));
+        } else {
+            throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
+        }
+    }
+
+    @When("With criticity")
+    public void with_it_criticity(List<CriticityDataTable> crit) {
+        if (crit.size() == 1) {
+            this.scenarioContext.setCriticityDescCrea(crit.get(0));
         } else {
             throw new PendingException("Bad use of Cucumber scenario: Create a new Application");
         }
@@ -127,6 +166,29 @@ public class CreateApplicationSteps {
         else {
             assertThat(this.scenarioContext.getCdvDescCrea().getDateEndInReality()).isNull();
         }
+        assertThat(this.scenarioContext.getApplication().getItSolution())
+                .isNotNull();
+        assertThat(this.scenarioContext.getApplication().getItSolution().getLabelOfSourcingMode())
+                .isEqualTo(this.scenarioContext.getItsDescCrea().getLabelOfSourcingMode());
+        assertThat(this.scenarioContext.getApplication().getItSolution().getNameOfFirmware())
+                .isEqualTo(this.scenarioContext.getItsDescCrea().getNameOfFirmware());
+        assertThat(this.scenarioContext.getApplication().getItSolution().getTypeOfSolution())
+                .isEqualTo(this.scenarioContext.getItsDescCrea().getTypeOfSolution());
+
+            // criticity
+        assertThat(this.scenarioContext.getApplication().getCriticity().getPrivilegeInformation())
+                .isEqualTo(this.scenarioContext.getCriticityDescCrea().getPrivilegeInformation());
+        assertThat(this.scenarioContext.getApplication().getCriticity().getPersonalData())
+                .isEqualTo(this.scenarioContext.getCriticityDescCrea().getPersonalData());
+        assertThat(this.scenarioContext.getApplication().getCriticity().getServiceClass())
+                .isEqualTo(this.scenarioContext.getCriticityDescCrea().getServiceClass());
+        assertThat(this.scenarioContext.getApplication().getCriticity().getAviability())
+                .isEqualTo(this.scenarioContext.getCriticityDescCrea().getAviability());
+        assertThat(this.scenarioContext.getApplication().getCriticity().getRpo())
+                .isEqualTo(this.scenarioContext.getCriticityDescCrea().getRpo());
+        assertThat(this.scenarioContext.getApplication().getCriticity().getRto())
+                .isEqualTo(this.scenarioContext.getCriticityDescCrea().getRto());
+
     }
 
     @Given("The following application attributes")
@@ -201,7 +263,64 @@ public class CreateApplicationSteps {
             .isEqualTo(LocalDate.parse(this.scenarioContext.getCdvDescUpdate().getDateEndInReality(), this.scenarioContext.getFormatter()));
     }
 
+    @When("Administrator want to update an application with the ItSolution")
+    public void administrator_want_to_update_an_application_with_the_ItSolution(List<ItSolutionDataTable> itss)  {
+        if (itss.size() == 1) {
+            this.scenarioContext.setItsDescUpdate(itss.get(0));
+        } else {
+            throw new PendingException("Bad use of Cucumber scenario: update a new Application");
+        }
 
+        ItSolution itSolution = this.scenarioContext.buildItSolutionForUpdate();
+        this.scenarioContext.getApplication().updateItSolution(itSolution);
+    }
 
+    @Then("the update of itsolution is success")
+    public void the_update_of_itsolution_is_success()  {
+        assertThat(this.scenarioContext.getApplication()).isNotNull();
+        assertThat(this.scenarioContext.getApplication().getCodeApplication())
+                .isEqualTo(this.scenarioContext.getAppDescCrea().getCodeApplication());
+        assertThat(this.scenarioContext.getApplication().getItSolution())
+                .isNotNull();
+        assertThat(this.scenarioContext.getApplication().getItSolution().getLabelOfSourcingMode())
+                .isEqualTo(this.scenarioContext.getItsDescUpdate().getLabelOfSourcingMode());
+        assertThat(this.scenarioContext.getApplication().getItSolution().getNameOfFirmware())
+                .isEqualTo(this.scenarioContext.getItsDescUpdate().getNameOfFirmware());
+        assertThat(this.scenarioContext.getApplication().getItSolution().getTypeOfSolution())
+                .isEqualTo(this.scenarioContext.getItsDescUpdate().getTypeOfSolution());
+    }
+
+    @When("Administrator want to update an application with the criticity")
+    public void administrator_want_to_update_an_application_with_the_criticity(List<CriticityDataTable> crit)  {
+        if (crit.size() == 1) {
+            this.scenarioContext.setCriticityDescUpdate(crit.get(0));
+        } else {
+            throw new PendingException("Bad use of Cucumber scenario: update a new Application");
+        }
+
+        Criticity criticity= this.scenarioContext.buildCriticityForUpdate();
+        this.scenarioContext.getApplication().updateCriticity(criticity);
+    }
+
+    @Then("the update of criticity is success")
+    public void the_update_of_criticity_is_success()  {
+        assertThat(this.scenarioContext.getApplication()).isNotNull();
+        assertThat(this.scenarioContext.getApplication().getCodeApplication())
+                .isEqualTo(this.scenarioContext.getAppDescCrea().getCodeApplication());
+        assertThat(this.scenarioContext.getApplication().getCriticity())
+                .isNotNull();
+        assertThat(this.scenarioContext.getApplication().getCriticity().getPrivilegeInformation())
+                .isEqualTo(this.scenarioContext.getCriticityDescUpdate().getPrivilegeInformation());
+        assertThat(this.scenarioContext.getApplication().getCriticity().getPersonalData())
+                .isEqualTo(this.scenarioContext.getCriticityDescUpdate().getPersonalData());
+        assertThat(this.scenarioContext.getApplication().getCriticity().getServiceClass())
+                .isEqualTo(this.scenarioContext.getCriticityDescUpdate().getServiceClass());
+        assertThat(this.scenarioContext.getApplication().getCriticity().getAviability())
+                .isEqualTo(this.scenarioContext.getCriticityDescUpdate().getAviability());
+        assertThat(this.scenarioContext.getApplication().getCriticity().getRpo())
+                .isEqualTo(this.scenarioContext.getCriticityDescUpdate().getRpo());
+        assertThat(this.scenarioContext.getApplication().getCriticity().getRto())
+                .isEqualTo(this.scenarioContext.getCriticityDescUpdate().getRto());
+    }
 
 }

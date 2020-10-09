@@ -12,6 +12,12 @@ Feature: Note management
     And With the cycle life
       | state  | dateOfCreation | dateOfLastUpdate | dateEndInReality |
       | Active | 01/01/2020     | 01/08/2020       | 28/08/2020       |
+    And With it solution
+      | typeOfSolution  | nameOfFirmware | LabelOfSourcing |
+      | Open            | Toto           | TMA             |
+    And With criticity
+      | privilegeInformation  | personalData | serviceClass | availability    | rpo                 | rto              |
+      | oui                   | oui          | C3           | Service minimum |   01 j 00 h 00 min  | 07 j 00h 00 min  |
     And The application exist in the repository
 
   Scenario: creating a new application note
