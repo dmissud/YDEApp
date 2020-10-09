@@ -1,4 +1,4 @@
-package org.yde.ydeapp.application.in;
+package org.yde.ydeapp.application.in.organization;
 
 import org.yde.ydeapp.domain.organization.Organization;
 

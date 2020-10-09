@@ -1,4 +1,4 @@
-package org.yde.ydeapp.exposition.application;
+package org.yde.ydeapp.exposition.flux;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +8,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.yde.ydeapp.application.in.RefiImportQuery;
-import org.yde.ydeapp.application.in.StoreFileRefiUseCase;
-import org.yde.ydeapp.application.in.StoreFileRefiUseCase.ImportRefiFluxCmd;
+import org.yde.ydeapp.application.in.flux.RefiImportQuery;
+import org.yde.ydeapp.application.in.flux.StoreFileRefiUseCase;
+import org.yde.ydeapp.application.in.flux.StoreFileRefiUseCase.ImportRefiFluxCmd;
 import org.yde.ydeapp.domain.flux.ImportFlux;
 import org.yde.ydeapp.domain.flux.ImportFluxIdent;
 

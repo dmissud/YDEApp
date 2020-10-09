@@ -6,9 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.yde.ydeapp.application.in.OrganizationQuery;
-import org.yde.ydeapp.application.in.ReferenceOrganizationUseCase;
-import org.yde.ydeapp.application.in.ReferenceOrganizationUseCase.ReferenceOrganisationCmd;
+import org.yde.ydeapp.application.in.organization.OrganizationQuery;
+import org.yde.ydeapp.application.in.organization.ReferenceOrganizationUseCase;
+import org.yde.ydeapp.application.in.organization.ReferenceOrganizationUseCase.ReferenceOrganisationCmd;
 import org.yde.ydeapp.domain.organization.Organization;
 
 import javax.validation.Valid;

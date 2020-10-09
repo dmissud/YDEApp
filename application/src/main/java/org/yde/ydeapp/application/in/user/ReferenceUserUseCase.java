@@ -1,31 +1,33 @@
-package org.yde.ydeapp.application.in;
+package org.yde.ydeapp.application.in.user;
 
 import org.springframework.validation.annotation.Validated;
 import org.yde.ydeapp.application.common.SelfValidating;
-import org.yde.ydeapp.domain.application.RoleTypeEnum;
-import org.yde.ydeapp.domain.application.User;
+import org.yde.ydeapp.domain.user.RoleTypeEnum;
+import org.yde.ydeapp.domain.user.User;
 
 import javax.validation.constraints.Size;
-import java.util.Set;
+import java.util.List;
 
 public interface ReferenceUserUseCase {
 
     User referenceNewUser(ReferenceUserCmd referenceUserCmd);
+
     User updateExistingUser(ReferenceUserCmd referenceUserCmd, String uid);
+
     User deleteUserByUid(String uid);
 
     @Validated
     class ReferenceUserCmd extends SelfValidating<ReferenceUserCmd> {
 
         // Todo regex
-        @Size(min=5 , max=7)
+        @Size(min = 5, max = 7)
         private final String uid;
 
         private final String password;
 
-        private final Set<RoleTypeEnum> roles;
+        private final List<RoleTypeEnum> roles;
 
-        public ReferenceUserCmd(String uid, String password, Set<RoleTypeEnum> roles) {
+        public ReferenceUserCmd(String uid, String password, List<RoleTypeEnum> roles) {
             this.uid = uid;
             this.password = password;
             this.roles = roles;
@@ -39,7 +41,7 @@ public interface ReferenceUserUseCase {
             return password;
         }
 
-        public Set<RoleTypeEnum> getRoles() {
+        public List<RoleTypeEnum> getRoles() {
             return roles;
         }
     }

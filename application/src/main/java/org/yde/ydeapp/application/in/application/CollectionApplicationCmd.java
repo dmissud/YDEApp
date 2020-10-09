@@ -1,4 +1,4 @@
-package org.yde.ydeapp.application.in;
+package org.yde.ydeapp.application.in.application;
 
 import java.util.Collection;
 

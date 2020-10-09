@@ -1,4 +1,4 @@
-package org.yde.ydeapp.exposition.application;
+package org.yde.ydeapp.exposition.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,17 +9,16 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.yde.ydeapp.application.in.GetUserQuery;
-import org.yde.ydeapp.application.in.ReferenceUserUseCase;
-import org.yde.ydeapp.application.in.ReferenceUserUseCase.ReferenceUserCmd;
-import org.yde.ydeapp.domain.application.RoleTypeEnum;
-import org.yde.ydeapp.domain.application.User;
+import org.yde.ydeapp.application.in.user.GetUserQuery;
+import org.yde.ydeapp.application.in.user.ReferenceUserUseCase;
+import org.yde.ydeapp.application.in.user.ReferenceUserUseCase.ReferenceUserCmd;
+import org.yde.ydeapp.domain.user.RoleTypeEnum;
+import org.yde.ydeapp.domain.user.User;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/V1")
@@ -79,7 +78,7 @@ public class UserResource {
     @PutMapping("users/{uid}")
     @Secured("ROLE_ADMIN")
     public ResponseEntity<Void> updateUser(
-            @Valid @RequestBody String password, Set<RoleTypeEnum> roles,
+            @Valid @RequestBody String password, List<RoleTypeEnum> roles,
             @PathVariable("uid") final String uid) {
         ReferenceUserUseCase.ReferenceUserCmd referenceUserCmd = new ReferenceUserUseCase.ReferenceUserCmd(uid, password, roles);
         User user = referenceUserUseCase.updateExistingUser(referenceUserCmd, uid);

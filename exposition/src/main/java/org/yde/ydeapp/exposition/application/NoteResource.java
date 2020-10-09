@@ -1,4 +1,4 @@
-package org.yde.ydeapp.exposition.note;
+package org.yde.ydeapp.exposition.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.yde.ydeapp.application.in.GetNoteQuery;
-import org.yde.ydeapp.application.in.ReferenceNoteUseCase;
+import org.yde.ydeapp.application.in.application.GetNoteQuery;
+import org.yde.ydeapp.application.in.application.ReferenceNoteUseCase;
 import org.yde.ydeapp.domain.application.Note;
 
 import javax.validation.Valid;

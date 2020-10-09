@@ -3,7 +3,7 @@ package org.yde.ydeapp.application.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.yde.ydeapp.application.in.OrganizationQuery;
+import org.yde.ydeapp.application.in.organization.OrganizationQuery;
 import org.yde.ydeapp.domain.organization.Organization;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfOrganization;

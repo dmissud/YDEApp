@@ -1,4 +1,4 @@
-package org.yde.ydeapp.domain.application;
+package org.yde.ydeapp.domain.user;
 
 public enum RoleTypeEnum {
 

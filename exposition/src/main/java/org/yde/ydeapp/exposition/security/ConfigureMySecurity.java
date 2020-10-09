@@ -1,6 +1,7 @@
 package org.yde.ydeapp.exposition.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -35,12 +36,13 @@ public class ConfigureMySecurity extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
+    @Qualifier("ydeAppUserDetailsService")
     @Autowired
-    private UserDetailsService customUserDetailsService;
+    private UserDetailsService userDetailsService;
 
     @Override
     public void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
 
@@ -57,7 +59,7 @@ public class ConfigureMySecurity extends WebSecurityConfigurerAdapter {
             // dont authenticate this authentication request
             .authorizeRequests()
             .antMatchers(HttpMethod.GET, "/api/V1/organizations/*").permitAll()
-            .antMatchers("/authenticate").permitAll()
+            .antMatchers(HttpMethod.POST,"/authenticate").permitAll()
             // and authorize swagger-ui
             .antMatchers("/", "/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
             // all other requests need to be authenticated

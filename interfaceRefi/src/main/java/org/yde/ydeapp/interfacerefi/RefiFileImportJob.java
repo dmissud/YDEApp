@@ -15,9 +15,9 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
-import org.yde.ydeapp.application.in.ReferenceCollectionOfApplicationUseCase;
-import org.yde.ydeapp.application.in.StoreFileRefiUseCase;
+import org.yde.ydeapp.application.in.application.ReferenceApplicationUseCase;
+import org.yde.ydeapp.application.in.application.ReferenceCollectionOfApplicationUseCase;
+import org.yde.ydeapp.application.in.flux.StoreFileRefiUseCase;
 
 @Configuration
 @EnableBatchProcessing

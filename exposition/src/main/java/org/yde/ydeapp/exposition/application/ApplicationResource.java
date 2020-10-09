@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.yde.ydeapp.application.in.ApplicationQuery;
-import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
+import org.yde.ydeapp.application.in.application.ApplicationQuery;
+import org.yde.ydeapp.application.in.application.ReferenceApplicationUseCase;
 import org.yde.ydeapp.domain.application.Application;
 import org.yde.ydeapp.domain.application.ApplicationIdent;
 

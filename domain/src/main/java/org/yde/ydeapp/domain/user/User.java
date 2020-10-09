@@ -1,17 +1,16 @@
-package org.yde.ydeapp.domain.application;
+package org.yde.ydeapp.domain.user;
 
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 public class User {
 
     private String uid;
     private String password;
-    private Set<RoleTypeEnum> roles = new HashSet<>();
+    private List<RoleTypeEnum> roles;
 
 
-    public User(String uid, String password, Set<RoleTypeEnum> roles) {
+    public User(String uid, String password, List<RoleTypeEnum> roles) {
         this.uid = uid;
         this.password = password;
         this.roles = roles;
@@ -33,11 +32,11 @@ public class User {
         this.password = password;
     }
 
-    public Set<RoleTypeEnum> getRoles() {
+    public List<RoleTypeEnum> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<RoleTypeEnum> roles) {
+    public void setRoles(List<RoleTypeEnum> roles) {
         this.roles = roles;
     }
 }

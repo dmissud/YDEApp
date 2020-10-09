@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.yde.ydeapp.application.in.GetUserQuery;
-import org.yde.ydeapp.domain.application.User;
+import org.yde.ydeapp.application.in.user.GetUserQuery;
+import org.yde.ydeapp.domain.user.User;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 
 import java.util.Collection;
@@ -64,7 +64,7 @@ public class YdeAppUserDetailsService implements UserDetailsService {
 
                 @Override
                 public boolean isAccountNonExpired() {
-                    return false;
+                    return true;
                 }
 
                 @Override

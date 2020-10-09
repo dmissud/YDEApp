@@ -1,9 +1,9 @@
 package org.yde.ydeapp.interfacerefi;
 
 import org.springframework.batch.item.ItemWriter;
-import org.yde.ydeapp.application.in.CollectionApplicationCmd;
-import org.yde.ydeapp.application.in.ReferenceApplicationUseCase.ReferenceApplicationCmd;
-import org.yde.ydeapp.application.in.ReferenceCollectionOfApplicationUseCase;
+import org.yde.ydeapp.application.in.application.CollectionApplicationCmd;
+import org.yde.ydeapp.application.in.application.ReferenceApplicationUseCase.ReferenceApplicationCmd;
+import org.yde.ydeapp.application.in.application.ReferenceCollectionOfApplicationUseCase;
 
 import java.nio.file.Path;
 import java.util.List;

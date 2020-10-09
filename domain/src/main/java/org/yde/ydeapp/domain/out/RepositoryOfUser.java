@@ -1,6 +1,6 @@
 package org.yde.ydeapp.domain.out;
 
-import org.yde.ydeapp.domain.application.User;
+import org.yde.ydeapp.domain.user.User;
 
 import java.util.List;
 

@@ -1,11 +1,11 @@
-package org.yde.ydeapp.infrastructure.application;
+package org.yde.ydeapp.infrastructure.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import org.yde.ydeapp.domain.application.User;
+import org.yde.ydeapp.domain.user.User;
 import org.yde.ydeapp.domain.out.EntityAlreadyExist;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfUser;
@@ -24,7 +24,10 @@ public class RepositoryOfUserImpl implements RepositoryOfUser {
     @Override
     public User retrieveUserByUid(final String uid) {
         UserEntity userEntity = repositoryOfUserJpa.findByUid(uid);
-        User user = new User(userEntity.getUid(),userEntity.getPassword(), userEntity.getRoles());
+        User user = null;
+        if (userEntity != null) {
+            user = new User(userEntity.getUid(), userEntity.getPassword(), userEntity.getRoles());
+        }
         return user;
     }
 
@@ -40,6 +43,10 @@ public class RepositoryOfUserImpl implements RepositoryOfUser {
             log.debug("User {} already exists", userEntity.getUid());
             throw new EntityAlreadyExist(String.format("User with %s is in repository", userEntity.getUid()));
         } else {
+            userEntity = new UserEntity();
+            userEntity.setUid(user.getUid());
+            userEntity.setPassword(user.getPassword());
+            userEntity.setRoles(user.getRoles());
             repositoryOfUserJpa.save(userEntity);
         }
     }
@@ -51,6 +58,9 @@ public class RepositoryOfUserImpl implements RepositoryOfUser {
             log.error("User {} does not exist", user.getUid());
             throw new EntityNotFound(String.format("User with %s is not in repository", user.getUid()));
         } else {
+            userEntity.setUid(user.getUid());
+            userEntity.setPassword(user.getPassword());
+            userEntity.setRoles(user.getRoles());
             repositoryOfUserJpa.save(userEntity);
         }
     }

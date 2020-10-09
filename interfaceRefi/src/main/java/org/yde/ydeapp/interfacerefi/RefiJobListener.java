@@ -7,7 +7,7 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
-import org.yde.ydeapp.application.in.ReportImportFluxUseCase;
+import org.yde.ydeapp.application.in.flux.ReportImportFluxUseCase;
 
 import java.io.IOException;
 import java.nio.file.Files;
