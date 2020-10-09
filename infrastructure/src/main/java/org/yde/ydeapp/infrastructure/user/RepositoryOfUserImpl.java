@@ -4,11 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import org.yde.ydeapp.domain.user.User;
 import org.yde.ydeapp.domain.out.EntityAlreadyExist;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfUser;
+import org.yde.ydeapp.domain.user.User;
 
 import java.util.List;
 

@@ -46,7 +46,7 @@ public class YdeAppUserDetailsService implements UserDetailsService {
                 @Override
                 public Collection<? extends GrantedAuthority> getAuthorities() {
 
-                    return user.getRoles()
+                    return user.getRolesAsList()
                         .stream()
                         .map(role -> (GrantedAuthority) role::toString)
                         .collect(Collectors.toList());

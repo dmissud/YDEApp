@@ -9,7 +9,6 @@ import java.util.List;
 public interface RepositoryOfUserJpa extends JpaRepository<UserEntity, Integer> {
 
     UserEntity findByUid(String uid);
-
     @Query(value = "SELECT new org.yde.ydeapp.domain.user.User(user.uid, user.password, user.roles) FROM UserEntity user")
     List<User> retrieveAllUsers();
 

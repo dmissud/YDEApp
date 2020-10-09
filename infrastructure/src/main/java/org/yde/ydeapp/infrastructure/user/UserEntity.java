@@ -1,9 +1,9 @@
 package org.yde.ydeapp.infrastructure.user;
 
-import org.yde.ydeapp.domain.user.RoleTypeEnum;
-
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class UserEntity {
@@ -16,8 +16,7 @@ public class UserEntity {
 
     private String password;
 
-    @ElementCollection
-    private List<RoleTypeEnum> roles;
+    private int roles;
 
     public Long getId() {
         return id;
@@ -43,11 +42,11 @@ public class UserEntity {
         this.password = password;
     }
 
-    public List<RoleTypeEnum> getRoles() {
+    public int getRoles() {
         return roles;
     }
 
-    public void setRoles(List<RoleTypeEnum> roles) {
+    public void setRoles(int roles) {
         this.roles = roles;
     }
 }
