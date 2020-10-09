@@ -1,4 +1,4 @@
-package org.yde.ydeapp.application.in;
+package org.yde.ydeapp.application.in.organization;
 
 import org.springframework.validation.annotation.Validated;
 import org.yde.ydeapp.application.common.SelfValidating;

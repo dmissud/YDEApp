@@ -4,15 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.yde.ydeapp.application.in.RefiImportQuery;
-import org.yde.ydeapp.application.in.StoreFileRefiUseCase;
-import org.yde.ydeapp.application.in.ReportImportFluxUseCase;
+import org.yde.ydeapp.application.in.flux.RefiImportQuery;
+import org.yde.ydeapp.application.in.flux.StoreFileRefiUseCase;
+import org.yde.ydeapp.application.in.flux.ReportImportFluxUseCase;
 import org.yde.ydeapp.domain.flux.ImportFlux;
 import org.yde.ydeapp.domain.flux.ImportFluxIdent;
 import org.yde.ydeapp.domain.flux.Job;
 import org.yde.ydeapp.domain.out.RepositoryOfFluxRefi;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -53,7 +52,7 @@ public class RepositoryOfRefiFileService implements StoreFileRefiUseCase, Report
 
     @Override
     public List<ImportFluxIdent> getAllImportFlux() {
-        return new ArrayList<>();
+        return repositoryOfFluxRefi.getAllImportFluxId();
     }
 }
 

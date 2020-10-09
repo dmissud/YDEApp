@@ -1,4 +1,4 @@
-package org.yde.ydeapp.application.in;
+package org.yde.ydeapp.application.in.flux;
 
 import org.yde.ydeapp.domain.flux.ImportFlux;
 import org.yde.ydeapp.domain.flux.ImportFluxIdent;

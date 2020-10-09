@@ -17,8 +17,13 @@ spring:
     driverClassName: org.postgresql.Driver
   batch:
     initialize-schema: always
+    job:
+      enabled: false
 
 logging:
   level:
     org.yde.ydeapp: debug
     org.springframework.batch: info
+
+ydeapp:
+  dir: /home/daniel/.ydeapp

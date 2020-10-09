@@ -1,12 +1,13 @@
-package org.yde.ydeapp.exposition.note;
+package org.yde.ydeapp.exposition.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.yde.ydeapp.application.in.GetNoteQuery;
-import org.yde.ydeapp.application.in.ReferenceNoteUseCase;
+import org.yde.ydeapp.application.in.application.GetNoteQuery;
+import org.yde.ydeapp.application.in.application.ReferenceNoteUseCase;
 import org.yde.ydeapp.domain.application.Note;
 
 import javax.validation.Valid;
@@ -16,7 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/V1")
 public class NoteResource {
 
     @Autowired
@@ -25,6 +26,7 @@ public class NoteResource {
     @Autowired
     GetNoteQuery getNoteQuery;
 
+    @Secured("ROLE_USER")
     @GetMapping(value = "applications/{codeApplication}/notes", produces = {"application/json"})
     public ResponseEntity<List<Note>> getApplicationAllNotes(
             @NotNull
@@ -35,6 +37,7 @@ public class NoteResource {
         return new ResponseEntity<>(notes, HttpStatus.OK);
     }
 
+    @Secured("ROLE_USER")
     @GetMapping(value = "applications/{codeApplication}/notes/{noteTitle}", produces = {"application/json"})
     public ResponseEntity<Note> getNoteByTitle(
             @NotNull
@@ -46,6 +49,7 @@ public class NoteResource {
         return new ResponseEntity<>(note, HttpStatus.OK);
     }
 
+    @Secured("ROLE_USER")
     @PostMapping("applications/{codeApplication}/notes")
     public ResponseEntity<Void> referenceNote(
             @Valid @RequestBody ReferenceNoteUseCase.ReferenceNoteCmd referenceNoteCmd,
@@ -61,6 +65,7 @@ public class NoteResource {
         return ResponseEntity.created(location).build();
     }
 
+    @Secured("ROLE_USER")
     @PutMapping("applications/{codeApplication}/notes/{noteTitle}")
     public ResponseEntity<Void> updateNote(
             @Valid @RequestBody String noteContent,
@@ -76,6 +81,7 @@ public class NoteResource {
         return ResponseEntity.created(location).build();
     }
 
+    @Secured("ROLE_USER")
     @DeleteMapping("applications/{codeApplication}/notes/{noteTitle}")
     public ResponseEntity<String> deleteNote(
             @PathVariable("codeApplication") final String codeApplication,

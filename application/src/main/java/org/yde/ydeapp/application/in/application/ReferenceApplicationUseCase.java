@@ -1,4 +1,4 @@
-package org.yde.ydeapp.application.in;
+package org.yde.ydeapp.application.in.application;
 
 import org.springframework.validation.annotation.Validated;
 import org.yde.ydeapp.application.common.SelfValidating;
@@ -22,7 +22,7 @@ public interface ReferenceApplicationUseCase {
 
         private final String longDescription;
 
-        @Pattern(regexp = "^([0-9]{8})$")
+        @Pattern(regexp = "^([0-9]{7,8})$")
         private final String idRefOrganizationMoe;
 
         private final ResponsableCmd responsableCmd;

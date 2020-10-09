@@ -15,6 +15,7 @@ spring:
     username: yde_users
     password: yde_users
     driverClassName: org.postgresql.Driver
+    initialization-mode: always
   batch:
     initialize-schema: always
   servlet:
@@ -29,4 +30,7 @@ logging:
   level:
     org.yde.ydeapp: error
     org.springframework: info
-
+ydeapp:
+  dir: $HOME/.ydeapp
+  client: http://localhost:4201
+  secret: ydeapp-42-secret-of-life

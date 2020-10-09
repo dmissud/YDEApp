@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.yde.ydeapp.application.in.ReferenceNoteUseCase;
+import org.yde.ydeapp.application.in.application.ReferenceNoteUseCase;
 import org.yde.ydeapp.application.service.NoteManagementService;
 import org.yde.ydeapp.domain.application.*;
 import org.yde.ydeapp.domain.organization.OrganizationIdent;

@@ -1,4 +1,4 @@
-package org.yde.ydeapp.application.in;
+package org.yde.ydeapp.application.in.application;
 
 import org.springframework.validation.annotation.Validated;
 import org.yde.ydeapp.application.common.SelfValidating;
@@ -14,6 +14,7 @@ public interface ReferenceNoteUseCase {
     Note updateNote(String codeApplication, String noteTitle, ReferenceNoteCmd referenceNoteCmd);
 
     void deleteNoteByTitle(String codeApplication, String noteTitle);
+
 
     @Validated
     class ReferenceNoteCmd extends SelfValidating<ReferenceNoteCmd> {

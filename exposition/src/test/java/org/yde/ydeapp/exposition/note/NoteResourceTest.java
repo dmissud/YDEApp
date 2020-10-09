@@ -13,10 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.yde.ydeapp.application.in.GetNoteQuery;
-import org.yde.ydeapp.application.in.ReferenceNoteUseCase;
+import org.yde.ydeapp.application.in.application.GetNoteQuery;
+import org.yde.ydeapp.application.in.application.ReferenceNoteUseCase;
 import org.yde.ydeapp.domain.application.Note;
 import org.yde.ydeapp.domain.out.EntityNotFound;
+import org.yde.ydeapp.exposition.application.NoteResource;
 
 
 import java.time.LocalDate;

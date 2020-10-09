@@ -12,8 +12,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
-import org.yde.ydeapp.application.in.ReferenceApplicationUseCase.ReferenceApplicationCmd;
+import org.yde.ydeapp.application.in.application.ReferenceApplicationUseCase;
+import org.yde.ydeapp.application.in.application.ReferenceApplicationUseCase.ReferenceApplicationCmd;
+import org.yde.ydeapp.application.in.application.ReferenceApplicationUseCase.ReferenceApplicationCmd;
 import org.yde.ydeapp.domain.flux.StateUpdateEnum;
 import org.yde.ydeapp.application.service.ApplicationManagementService;
 import org.yde.ydeapp.domain.organization.OrganizationIdent;
