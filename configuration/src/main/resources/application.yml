@@ -15,6 +15,7 @@ spring:
     username: yde_users
     password: yde_users
     driverClassName: org.postgresql.Driver
+    initialization-mode: always
   batch:
     initialize-schema: always
   servlet:
