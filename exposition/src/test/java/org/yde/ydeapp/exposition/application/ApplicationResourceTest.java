@@ -17,8 +17,8 @@ import org.yde.ydeapp.application.in.application.ApplicationQuery;
 import org.yde.ydeapp.application.in.application.ReferenceApplicationUseCase;
 import org.yde.ydeapp.domain.application.Application;
 import org.yde.ydeapp.domain.application.CycleLife;
-import org.yde.ydeapp.application.in.ApplicationQuery;
-import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
+import org.yde.ydeapp.application.in.application.ApplicationQuery;
+import org.yde.ydeapp.application.in.application.ReferenceApplicationUseCase;
 import org.yde.ydeapp.domain.application.*;
 import org.yde.ydeapp.domain.organization.OrganizationIdent;
 
