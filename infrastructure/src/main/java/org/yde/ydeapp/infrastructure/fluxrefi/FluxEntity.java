@@ -3,6 +3,7 @@ package org.yde.ydeapp.infrastructure.fluxrefi;
 import org.yde.ydeapp.domain.flux.FluxState;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class FluxEntity {
@@ -11,7 +12,7 @@ public class FluxEntity {
     private Long id;
     private String location;
     private FluxState fluxState;
-
+    private LocalDateTime createDate;
     private String orignalFileName;
 
     @Embedded
@@ -66,5 +67,13 @@ public class FluxEntity {
 
     public void setFluxState(FluxState fluxState) {
         this.fluxState = fluxState;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
     }
 }

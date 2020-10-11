@@ -28,7 +28,7 @@ public class RepositoryOfRefiFileService implements StoreFileRefiUseCase, Report
 
         repositoryOfFluxRefi.realize(importFlux);
 
-        log.trace("launch of import job for file : {}", importFlux.getOrigninalName());
+        log.trace("launch of import job for file : {}", importFlux.getOriginalName());
         return jobId;
     }
 

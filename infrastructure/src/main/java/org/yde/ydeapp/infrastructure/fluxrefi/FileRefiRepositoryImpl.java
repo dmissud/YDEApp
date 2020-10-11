@@ -18,7 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +53,7 @@ public class FileRefiRepositoryImpl implements RepositoryOfFluxRefi {
         FluxEntity fluxEntity = fluxEntityOptional.orElseThrow(() -> new EntityNotFound(String.format(FLUX_S_NOT_FOUND, importFlux.getFluxId())));
         Path targetLocation = this.fileUploadLocation.resolve(fluxEntity.getLocation());
         Path sourceLocation = this.fileStorageLocation.resolve(fluxEntity.getLocation());
-        fluxEntity.setOrignalFileName(importFlux.getOrigninalName());
+        fluxEntity.setOrignalFileName(importFlux.getOriginalName());
         repositoryOfFluxEntityJpa.save(fluxEntity);
 
         try {
@@ -91,11 +90,12 @@ public class FileRefiRepositoryImpl implements RepositoryOfFluxRefi {
 
     @Override
     public List<ImportFluxIdent> getAllImportFluxId() {
-        return new ArrayList<>();
+        return repositoryOfFluxEntityJpa.retrieveAllImportFluxIdent();
     }
 
     private ImportFlux mapFluxEntityToImportFlux(FluxEntity fluxEntity) {
-        ImportFlux importFlux = new ImportFlux(fluxEntity.getOrignalFileName(), fluxEntity.getId(), fluxEntity.getFluxState());
+        ImportFlux importFlux =
+            new ImportFlux(fluxEntity.getOrignalFileName(), fluxEntity.getId(), fluxEntity.getFluxState(), fluxEntity.getCreateDate());
         importFlux.setLocation(fluxEntity.getLocation());
         importFlux.setJob(new Job(fluxEntity.getJobInfoEntity().getReadCount(),
             fluxEntity.getJobInfoEntity().getStatus(),
@@ -129,9 +129,10 @@ public class FileRefiRepositoryImpl implements RepositoryOfFluxRefi {
         jobInfoEntity.setDuration(importFlux.getJob().getDuration());
         fluxEntity.setJobInfoEntity(jobInfoEntity);
 
-        fluxEntity.setOrignalFileName(importFlux.getOrigninalName());
+        fluxEntity.setOrignalFileName(importFlux.getOriginalName());
         fluxEntity.setLocation(importFlux.getLocation());
         fluxEntity.setFluxState(importFlux.getFluxState());
+        fluxEntity.setCreateDate(importFlux.getCreateDate());
     }
 
     private FluxEntity storeFluxEntity(String fluxTechName) {
