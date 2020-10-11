@@ -41,7 +41,7 @@ public class RepositoryOfRefiFileService implements StoreFileRefiUseCase, Report
             reportImportFluxCmd.getResult(),
             reportImportFluxCmd.getStart(),
             reportImportFluxCmd.getDuration());
-        importFlux.setJob(job);
+        importFlux.complete(job);
         repositoryOfFluxRefi.save(importFlux);
     }
 

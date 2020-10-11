@@ -31,7 +31,7 @@ public class RefiRessource {
 
     @Secured("ROLE_AMDIN")
     @PostMapping("/uploadBatchRefi")
-    public ResponseEntity<Void> uploadFileWithBatch(@RequestParam("file") MultipartFile fileRefi) throws IOException {
+    public ResponseEntity<Void> uploadFileWithBatch(@RequestParam("fluxRefi") MultipartFile fileRefi) throws IOException {
         ImportRefiFluxCmd importRefiFluxCmd = new ImportRefiFluxCmd(fileRefi.getOriginalFilename(),
             fileRefi.getInputStream());
         Long importFluxId = storeFileRefiUseCase.importRefiFlux(importRefiFluxCmd);

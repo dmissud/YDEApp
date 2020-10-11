@@ -28,7 +28,7 @@ public class JwtAuthenticationController {
     @Autowired
     private YdeAppUserDetailsService userDetailsService;
 
-    @PostMapping(value = "/authenticate")
+    @PostMapping(value = "/api/V1/authenticate")
     public ResponseEntity<JwtResponse> createAuthenticationToken(@RequestBody final JwtRequest authenticationRequest) {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());

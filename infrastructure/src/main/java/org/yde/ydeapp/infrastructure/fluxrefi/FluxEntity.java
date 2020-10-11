@@ -1,5 +1,7 @@
 package org.yde.ydeapp.infrastructure.fluxrefi;
 
+import org.yde.ydeapp.domain.flux.FluxState;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,6 +10,7 @@ public class FluxEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String location;
+    private FluxState fluxState;
 
     private String orignalFileName;
 
@@ -57,4 +60,11 @@ public class FluxEntity {
         return orignalFileName;
     }
 
+    public FluxState getFluxState() {
+        return fluxState;
+    }
+
+    public void setFluxState(FluxState fluxState) {
+        this.fluxState = fluxState;
+    }
 }

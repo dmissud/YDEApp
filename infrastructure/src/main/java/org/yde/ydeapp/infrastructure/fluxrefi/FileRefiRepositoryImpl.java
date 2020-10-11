@@ -95,7 +95,7 @@ public class FileRefiRepositoryImpl implements RepositoryOfFluxRefi {
     }
 
     private ImportFlux mapFluxEntityToImportFlux(FluxEntity fluxEntity) {
-        ImportFlux importFlux = new ImportFlux(fluxEntity.getOrignalFileName(), fluxEntity.getId());
+        ImportFlux importFlux = new ImportFlux(fluxEntity.getOrignalFileName(), fluxEntity.getId(), fluxEntity.getFluxState());
         importFlux.setLocation(fluxEntity.getLocation());
         importFlux.setJob(new Job(fluxEntity.getJobInfoEntity().getReadCount(),
             fluxEntity.getJobInfoEntity().getStatus(),
@@ -131,6 +131,7 @@ public class FileRefiRepositoryImpl implements RepositoryOfFluxRefi {
 
         fluxEntity.setOrignalFileName(importFlux.getOrigninalName());
         fluxEntity.setLocation(importFlux.getLocation());
+        fluxEntity.setFluxState(importFlux.getFluxState());
     }
 
     private FluxEntity storeFluxEntity(String fluxTechName) {
