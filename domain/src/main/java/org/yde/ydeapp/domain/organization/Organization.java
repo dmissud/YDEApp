@@ -9,12 +9,22 @@ public class Organization {
     private String name;
     private List<Organization> children;
     private Map<String, ApplicationIdent> applications;
+    private boolean root;
 
     public Organization(String idRefog, String name) {
         this.idRefog = idRefog;
         this.name = name;
-        children = new ArrayList<>();
-        applications = new HashMap<>();
+        this.children = new ArrayList<>();
+        this.applications = new HashMap<>();
+        this.root = false;
+    }
+
+    public void doItRoot() {
+        root = true;
+    }
+
+    public boolean isRoot() {
+        return root;
     }
 
     public void setName(String name) {
@@ -38,6 +48,14 @@ public class Organization {
             totalOfOrganization = totalOfOrganization + organization.numberOfOrganizationForThisTree();
         }
         return totalOfOrganization;
+    }
+
+    public int numberOfApplicationForThisTree() {
+        int totalOfApplications = applications.size();
+        for(Organization organization: children) {
+            totalOfApplications = totalOfApplications + organization.numberOfApplicationForThisTree();
+        }
+        return totalOfApplications;
     }
 
     public String getName() {

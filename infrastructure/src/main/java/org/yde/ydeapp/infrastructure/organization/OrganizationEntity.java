@@ -16,6 +16,8 @@ public class OrganizationEntity {
 
     private String name;
 
+    private boolean root;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrganizationEntity> children;
 
@@ -52,6 +54,14 @@ public class OrganizationEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isRoot() {
+        return root;
+    }
+
+    public void setRoot(boolean root) {
+        this.root = root;
     }
 
     public List<OrganizationEntity> getChildren() {

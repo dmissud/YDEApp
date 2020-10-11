@@ -10,6 +10,7 @@ import org.yde.ydeapp.infrastructure.application.ApplicationEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class RepositoryOfOrganizationImpl implements RepositoryOfOrganization {
@@ -29,12 +30,30 @@ public class RepositoryOfOrganizationImpl implements RepositoryOfOrganization {
     }
 
     @Override
+    public void storeOrganization(Organization organization) {
+        repositoryOfOrganizationJpa.save(mapDomainToEntity(organization));
+    }
+
+    @Override
+    public List<Organization> retrieveRootOrganizations() {
+        return repositoryOfOrganizationJpa.findAllByRootIs(true).stream().map(this::mapEntityToDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Organization> retrieveOrganizations() {
+        return repositoryOfOrganizationJpa.findAllByIdAfter(-1L).stream().map(this::mapEntityToDomain).collect(Collectors.toList());
+    }
+
+    @Override
     public OrganizationIdent retriveIdentByIdRefog(String idRefog) {
         return repositoryOfOrganizationJpa.retrieveOrganizationIdent(idRefog);
     }
 
     private Organization mapEntityToDomain(OrganizationEntity organizationEntity) {
         Organization organization = new Organization(organizationEntity.getIdRefog(), organizationEntity.getName());
+        if (organizationEntity.isRoot()) {
+            organization.doItRoot();
+        }
         for(ApplicationEntity applicationEntity : organizationEntity.getApplications()) {
             ApplicationIdent applicationIdent = new ApplicationIdent(applicationEntity.getCodeApp(), applicationEntity.getShortDescription());
             organization.addApplication(applicationIdent);
@@ -45,11 +64,6 @@ public class RepositoryOfOrganizationImpl implements RepositoryOfOrganization {
         return organization;
     }
 
-    @Override
-    public void storeOrganization(Organization organization) {
-        repositoryOfOrganizationJpa.save(mapDomainToEntity(organization));
-    }
-
     private OrganizationEntity mapDomainToEntity(Organization organization) {
         OrganizationEntity organizationEntity = repositoryOfOrganizationJpa.findByIdRefog(organization.getIdRefog());
 
@@ -58,7 +72,7 @@ public class RepositoryOfOrganizationImpl implements RepositoryOfOrganization {
             organizationEntity.setIdRefog(organization.getIdRefog());
         }
         organizationEntity.setName(organization.getName());
-
+        organizationEntity.setRoot(organization.isRoot());
         List<OrganizationEntity> children = new ArrayList<>();
 
         for (Organization organizationChild : organization.getChildren()) {

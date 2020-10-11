@@ -14,6 +14,8 @@ import org.yde.ydeapp.domain.organization.Organization;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/V1")
@@ -23,6 +25,22 @@ public class OrganizationResource {
 
     @Autowired
     OrganizationQuery organizationQuery;
+
+    @GetMapping(value = "organizations/{idRefog}/applications", produces = {"application/json"})
+    public ResponseEntity<Organization> retrieveOrganization(@Valid @NotNull @PathVariable("idRefog") final String idRefog) {
+        Organization organization = organizationQuery.getOrganizationTree(idRefog);
+
+        return new ResponseEntity<>(organization, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "organizations/root", produces = {"application/json"})
+    public ResponseEntity<List<OrganizationDTO>> retrieveOrganizationRoot() {
+        List<OrganizationDTO> organizationDTOList = organizationQuery.getOrganizationRoot().stream()
+            .map(this::mapDomainToDto)
+            .collect(Collectors.toList());
+
+        return new ResponseEntity<>(organizationDTOList, HttpStatus.OK);
+    }
 
     @Secured("ROLE_ADMIN")
     @PostMapping("organizations")
@@ -37,11 +55,20 @@ public class OrganizationResource {
         return ResponseEntity.created(location).build();
     }
 
-    @GetMapping(value = "organizations/{idRefog}", produces = {"application/json"})
-    public ResponseEntity<Organization> retrieveOrganization(@Valid @NotNull @PathVariable("idRefog") final String idRefog) {
-        Organization organization = organizationQuery.getOrganizationTree(idRefog);
+    @Secured("ROLE_ADMIN")
+    @GetMapping(value = "organizations", produces = {"application/json"})
+    public ResponseEntity<List<OrganizationDTO>> retrieveOrganizations() {
+        List<OrganizationDTO> organizationDTOList = organizationQuery.getOrganizations().stream()
+            .map(this::mapDomainToDto)
+            .collect(Collectors.toList());
 
-        return new ResponseEntity<>(organization, HttpStatus.OK);
+        return new ResponseEntity<>(organizationDTOList, HttpStatus.OK);
     }
 
+    private OrganizationDTO mapDomainToDto(Organization organization) {
+        return new OrganizationDTO(organization.getIdRefog(),
+            organization.getName(),
+            organization.numberOfOrganizationForThisTree(),
+            organization.numberOfApplicationForThisTree());
+    }
 }

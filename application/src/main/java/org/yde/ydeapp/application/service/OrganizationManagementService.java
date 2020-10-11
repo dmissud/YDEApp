@@ -23,7 +23,7 @@ public class OrganizationManagementService implements ReferenceOrganizationUseCa
     @Override
     public Organization referenceOrganization(ReferenceOrganisationCmd referenceOrganisationCmd) {
         Organization rootOrganization = buildOrganization(referenceOrganisationCmd);
-
+        rootOrganization.doItRoot();
         repositoryOfOrganization.storeOrganization(rootOrganization);
         log.debug("Reference of the organization {}", rootOrganization.getName());
 
