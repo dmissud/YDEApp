@@ -3,6 +3,7 @@ package org.yde.ydeapp.exposition.security.jwt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,12 +18,10 @@ import org.yde.ydeapp.domain.out.EntityNotFound;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+@Profile(("!nosecurity"))
 @Service
 @Transactional
 public class YdeAppUserDetailsService implements UserDetailsService {
-
-    public static final String ADMIN = "admin";
-    public static final String USER = "user";
 
     @Autowired
     GetUserQuery getUserQuery;
@@ -31,8 +30,6 @@ public class YdeAppUserDetailsService implements UserDetailsService {
     public PasswordEncoder passwordEncoder;
 
     private static Logger log = LoggerFactory.getLogger(YdeAppUserDetailsService.class);
-    final String[] userRoles = {"ROLE_USER"};
-    final String[] adminRoles = {"ROLE_ADMIN"};
 
     // ici je transforme mes objets du domain en objets internes de Spring Security
     @Override
@@ -79,7 +76,7 @@ public class YdeAppUserDetailsService implements UserDetailsService {
 
                 @Override
                 public boolean isEnabled() {
-                    return true;
+                    return (user.getRoles() != 0);
                 }
             };
             return userDetails;

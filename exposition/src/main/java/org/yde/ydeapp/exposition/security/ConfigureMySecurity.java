@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -22,6 +22,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.yde.ydeapp.exposition.security.jwt.JwtAuthenticationEntryPoint;
 import org.yde.ydeapp.exposition.security.jwt.JwtRequestFilter;
 
+@Profile("!nosecurity")
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -34,6 +35,9 @@ public class ConfigureMySecurity extends WebSecurityConfigurerAdapter {
     private JwtRequestFilter jwtRequestFilter;
 
     @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Qualifier("ydeAppUserDetailsService")
@@ -42,7 +46,7 @@ public class ConfigureMySecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
 
@@ -58,7 +62,8 @@ public class ConfigureMySecurity extends WebSecurityConfigurerAdapter {
             .and()
             // dont authenticate this authentication request
             .authorizeRequests()
-            .antMatchers(HttpMethod.GET, "/api/V1/organizations/*").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/V1/organizations/*/applications").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/V1/organizations/root").permitAll()
             .antMatchers(HttpMethod.POST,"/authenticate").permitAll()
             // and authorize swagger-ui
             .antMatchers("/", "/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
@@ -74,11 +79,6 @@ public class ConfigureMySecurity extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Bean
