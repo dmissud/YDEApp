@@ -29,7 +29,7 @@ public class RefiRessource {
     @Autowired
     RefiImportQuery refiImportQuery;
 
-    @Secured("ROLE_AMDIN")
+    @Secured("ROLE_ADMIN")
     @PostMapping("/uploadBatchRefi")
     public ResponseEntity<Void> uploadFileWithBatch(@RequestParam("fluxRefi") MultipartFile fileRefi) throws IOException {
         ImportRefiFluxCmd importRefiFluxCmd = new ImportRefiFluxCmd(fileRefi.getOriginalFilename(),

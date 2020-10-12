@@ -2,7 +2,7 @@ package org.yde.ydeapp.domain.user;
 
 public enum RoleTypeEnum {
 
-    USER,
-    ADMIN
+    ROLE_USER,
+    ROLE_ADMIN
 
 }

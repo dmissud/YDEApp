@@ -76,7 +76,7 @@ public class YdeAppUserDetailsService implements UserDetailsService {
 
                 @Override
                 public boolean isEnabled() {
-                    return (user.getRoles() != 0);
+                    return true;
                 }
             };
             return userDetails;
