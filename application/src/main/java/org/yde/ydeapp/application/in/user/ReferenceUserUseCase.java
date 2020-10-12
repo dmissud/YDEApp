@@ -23,12 +23,16 @@ public interface ReferenceUserUseCase {
         @Size(min = 5, max = 7)
         private final String uid;
 
+        private final String firstName;
+        private final String lastName;
         private final String password;
 
         private final List<RoleTypeEnum> roles;
 
-        public ReferenceUserCmd(String uid, String password, List<RoleTypeEnum> roles) {
+        public ReferenceUserCmd(String uid, String firstName, String lastName, String password, List<RoleTypeEnum> roles) {
             this.uid = uid;
+            this.firstName = firstName;
+            this.lastName = lastName;
             this.password = password;
             this.roles = roles;
         }
@@ -43,6 +47,14 @@ public interface ReferenceUserUseCase {
 
         public List<RoleTypeEnum> getRoles() {
             return roles;
+        }
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
         }
     }
 

@@ -12,6 +12,7 @@ import org.yde.ydeapp.domain.user.User;
 import org.yde.ydeapp.domain.out.EntityAlreadyExist;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfUser;
+import org.yde.ydeapp.domain.user.UserDesc;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class UserManagementService implements GetUserQuery, ReferenceUserUseCase
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<UserDesc> getAllUsers() {
 
         return repositoryOfUser.retrieveAllUsers();
     }
@@ -46,7 +47,11 @@ public class UserManagementService implements GetUserQuery, ReferenceUserUseCase
     public User referenceNewUser(ReferenceUserCmd referenceUserCmd) {
         User user = repositoryOfUser.retrieveUserByUid(referenceUserCmd.getUid());
         if (user == null) {
-            user = new User(referenceUserCmd.getUid(), referenceUserCmd.getPassword(), referenceUserCmd.getRoles());
+            user = new User(referenceUserCmd.getUid(),
+                referenceUserCmd.getFirstName(),
+                referenceUserCmd.getLastName(),
+                referenceUserCmd.getPassword(),
+                referenceUserCmd.getRoles());
             repositoryOfUser.referenceUser(user);
             return user;
         } else {
@@ -59,6 +64,8 @@ public class UserManagementService implements GetUserQuery, ReferenceUserUseCase
     @Override
     public User updateExistingUser(ReferenceUserCmd referenceUserCmd, String uid) {
         User user = repositoryOfUser.retrieveUserByUid(uid);
+        user.setFirstName(referenceUserCmd.getFirstName());
+        user.setLastName(referenceUserCmd.getLastName());
         user.setPassword(referenceUserCmd.getPassword());
         user.setRoles(referenceUserCmd.getRoles());
         repositoryOfUser.updateUser(user);

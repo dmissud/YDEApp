@@ -8,6 +8,7 @@ import org.yde.ydeapp.domain.out.EntityAlreadyExist;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfUser;
 import org.yde.ydeapp.domain.user.User;
+import org.yde.ydeapp.domain.user.UserDesc;
 
 import java.util.List;
 
@@ -25,13 +26,13 @@ public class RepositoryOfUserImpl implements RepositoryOfUser {
         UserEntity userEntity = repositoryOfUserJpa.findByUid(uid);
         User user = null;
         if (userEntity != null) {
-            user = new User(userEntity.getUid(), userEntity.getPassword(), userEntity.getRoles());
+            user = mapEntityToDomain(userEntity);
         }
         return user;
     }
 
     @Override
-    public List<User> retrieveAllUsers() {
+    public List<UserDesc> retrieveAllUsers() {
         return repositoryOfUserJpa.retrieveAllUsers();
     }
 
@@ -43,9 +44,7 @@ public class RepositoryOfUserImpl implements RepositoryOfUser {
             throw new EntityAlreadyExist(String.format("User with %s is in repository", userEntity.getUid()));
         } else {
             userEntity = new UserEntity();
-            userEntity.setUid(user.getUid());
-            userEntity.setPassword(user.getPassword());
-            userEntity.setRoles(user.getRoles());
+            mapDomainToEntity(user, userEntity);
             repositoryOfUserJpa.save(userEntity);
         }
     }
@@ -57,9 +56,7 @@ public class RepositoryOfUserImpl implements RepositoryOfUser {
             log.error("User {} does not exist", user.getUid());
             throw new EntityNotFound(String.format("User with %s is not in repository", user.getUid()));
         } else {
-            userEntity.setUid(user.getUid());
-            userEntity.setPassword(user.getPassword());
-            userEntity.setRoles(user.getRoles());
+            mapDomainToEntity(user, userEntity);
             repositoryOfUserJpa.save(userEntity);
         }
     }
@@ -74,4 +71,24 @@ public class RepositoryOfUserImpl implements RepositoryOfUser {
             repositoryOfUserJpa.delete(userEntity);
         }
     }
+
+    private void mapDomainToEntity(User user, UserEntity userEntity) {
+        userEntity.setUid(user.getUid());
+        userEntity.setFirstName(user.getFirstName());
+        userEntity.setLastName(user.getLastName());
+        userEntity.setPassword(user.getPassword());
+        userEntity.setRoles(user.getRoles());
+    }
+
+    private User mapEntityToDomain(UserEntity userEntity) {
+        User user;
+        user = new User(userEntity.getUid(),
+            userEntity.getFirstName(),
+            userEntity.getLastName(),
+            userEntity.getPassword(),
+            userEntity.getRoles());
+        return user;
+    }
+
+
 }

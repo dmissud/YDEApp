@@ -6,19 +6,25 @@ import java.util.List;
 
 public class User {
 
+    private String firstName;
+    private String lastName;
     private String uid;
     private String password;
     private int roles;
 
 
-    public User(String uid, String password, List<RoleTypeEnum> roles) {
+    public User(String uid, String lastName, String firstName, String password, List<RoleTypeEnum> roles) {
         this.uid = uid;
+        this.lastName = lastName;
+        this.firstName = firstName;
         this.password = password;
         this.roles = convertRoleAsListToRoleAsInteger(roles);
     }
 
-    public User(String uid, String password, int roles) {
+    public User(String uid, String lastName, String firstName, String password, int roles) {
         this.uid = uid;
+        this.lastName = lastName;
+        this.firstName = firstName;
         this.password = password;
         this.roles = roles;
     }
@@ -49,6 +55,22 @@ public class User {
 
     public void setRoles(List<RoleTypeEnum> roles) {
         this.roles = convertRoleAsListToRoleAsInteger(roles);
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public static int convertRoleAsListToRoleAsInteger(List<RoleTypeEnum> roles) {
