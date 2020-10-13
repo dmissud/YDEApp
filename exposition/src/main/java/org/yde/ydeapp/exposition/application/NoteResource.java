@@ -62,7 +62,7 @@ public class NoteResource {
                 .buildAndExpand(note.getNoteTitle())
                 .toUri();
 
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).header("Access-Control-Expose-Headers", "Location").build();
     }
 
     @Secured("ROLE_USER")

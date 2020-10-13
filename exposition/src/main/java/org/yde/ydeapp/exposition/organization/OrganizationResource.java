@@ -52,7 +52,7 @@ public class OrganizationResource {
             .buildAndExpand(organization.getIdRefog())
             .toUri();
 
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).header("Access-Control-Expose-Headers", "Location").build();
     }
 
     @Secured("ROLE_ADMIN")
