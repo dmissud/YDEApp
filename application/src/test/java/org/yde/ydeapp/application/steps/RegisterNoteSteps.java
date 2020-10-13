@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.yde.ydeapp.application.in.application.ReferenceNoteUseCase;
+import org.yde.ydeapp.application.in.application.UpdateNoteUseCase;
 import org.yde.ydeapp.application.service.NoteManagementService;
 import org.yde.ydeapp.domain.application.*;
 import org.yde.ydeapp.domain.organization.OrganizationIdent;
@@ -127,7 +128,8 @@ public class RegisterNoteSteps {
         } else {
             throw new PendingException("Bad use of Cucumber scenario: update a new Application");
         }
-        noteManagementService.updateExistingNote(application.getCodeApplication(), noteTitle, noteTable.getNoteContent());
+        UpdateNoteUseCase.UpdateNoteCmd noteCmd = new UpdateNoteUseCase.UpdateNoteCmd(noteTable.getNoteContent());
+        noteManagementService.updateExistingNote(application.getCodeApplication(), noteTitle, noteCmd);
     }
 
     @Then("Note {string} has been updated")
