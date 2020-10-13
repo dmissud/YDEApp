@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/V1")
+@CrossOrigin()
 public class OrganizationResource {
     @Autowired
     ReferenceOrganizationUseCase referenceOrganizationUseCase;
