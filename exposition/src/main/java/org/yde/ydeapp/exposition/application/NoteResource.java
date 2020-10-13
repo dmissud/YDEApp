@@ -72,7 +72,7 @@ public class NoteResource {
 
 
     @Secured("ROLE_USER")
-    @DeleteMapping("/applications/{codeApplication}/notes/{noteTitle}")
+    @DeleteMapping("/applications/{codeApplication}/{noteTitle}")
     public ResponseEntity<Void> deleteNote(
             @PathVariable("codeApplication") final String codeApplication,
             @PathVariable("noteTitle") final String noteTitle) {
