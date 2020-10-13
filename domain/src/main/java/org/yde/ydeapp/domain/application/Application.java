@@ -43,6 +43,9 @@ public class Application {
         return itSolution;
     }
 
+    public Map<String, Note> getNotes() {
+        return notes;
+    }
 
     public void updateShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
