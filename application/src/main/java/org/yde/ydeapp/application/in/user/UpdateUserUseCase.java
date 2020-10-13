@@ -5,42 +5,22 @@ import org.yde.ydeapp.application.common.SelfValidating;
 import org.yde.ydeapp.domain.user.RoleTypeEnum;
 import org.yde.ydeapp.domain.user.User;
 
-import javax.validation.constraints.Size;
 import java.util.List;
 
-public interface ReferenceUserUseCase {
+public interface UpdateUserUseCase {
 
-    User referenceNewUser(ReferenceUserCmd referenceUserCmd);
-
-    User deleteUserByUid(String uid);
-
+    User updateExistingUser(String uid, UpdateUserCmd updateUserCmd );
     @Validated
-    class ReferenceUserCmd extends SelfValidating<ReferenceUserCmd> {
-
-        // Todo regex
-        @Size(min = 5, max = 7)
-        private final String uid;
-
+    class UpdateUserCmd extends SelfValidating<UpdateUserCmd> {
         private final String firstName;
         private final String lastName;
-        private final String password;
 
         private final List<RoleTypeEnum> roles;
 
-        public ReferenceUserCmd(String uid, String firstName, String lastName, String password, List<RoleTypeEnum> roles) {
-            this.uid = uid;
+        public UpdateUserCmd(String firstName, String lastName, List<RoleTypeEnum> roles) {
             this.firstName = firstName;
             this.lastName = lastName;
-            this.password = password;
             this.roles = roles;
-        }
-
-        public String getUid() {
-            return uid;
-        }
-
-        public String getPassword() {
-            return password;
         }
 
         public List<RoleTypeEnum> getRoles() {

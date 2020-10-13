@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.yde.ydeapp.application.in.user.GetUserQuery;
 
 import org.yde.ydeapp.application.in.user.ReferenceUserUseCase;
+import org.yde.ydeapp.application.in.user.UpdateUserUseCase;
 import org.yde.ydeapp.domain.user.User;
 import org.yde.ydeapp.domain.out.EntityAlreadyExist;
 import org.yde.ydeapp.domain.out.EntityNotFound;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class UserManagementService implements GetUserQuery, ReferenceUserUseCase {
+public class UserManagementService implements GetUserQuery, ReferenceUserUseCase, UpdateUserUseCase {
 
     private final Logger log = LoggerFactory.getLogger(UserManagementService.class);
 
@@ -62,12 +63,12 @@ public class UserManagementService implements GetUserQuery, ReferenceUserUseCase
     }
 
     @Override
-    public User updateExistingUser(ReferenceUserCmd referenceUserCmd, String uid) {
+    public User updateExistingUser(String uid, UpdateUserCmd updateUserCmd) {
+        updateUserCmd.validate();
         User user = repositoryOfUser.retrieveUserByUid(uid);
-        user.setFirstName(referenceUserCmd.getFirstName());
-        user.setLastName(referenceUserCmd.getLastName());
-        user.setPassword(referenceUserCmd.getPassword());
-        user.setRoles(referenceUserCmd.getRoles());
+        user.setFirstName(updateUserCmd.getFirstName());
+        user.setLastName(updateUserCmd.getLastName());
+        user.setRoles(updateUserCmd.getRoles());
         repositoryOfUser.updateUser(user);
         return user;
     }

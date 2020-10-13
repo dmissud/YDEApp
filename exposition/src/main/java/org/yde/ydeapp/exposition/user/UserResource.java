@@ -12,7 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.yde.ydeapp.application.in.user.GetUserQuery;
 import org.yde.ydeapp.application.in.user.ReferenceUserUseCase;
 import org.yde.ydeapp.application.in.user.ReferenceUserUseCase.ReferenceUserCmd;
-import org.yde.ydeapp.domain.user.RoleTypeEnum;
+import org.yde.ydeapp.application.in.user.UpdateUserUseCase;
 import org.yde.ydeapp.domain.user.User;
 import org.yde.ydeapp.domain.user.UserDesc;
 
@@ -30,6 +30,9 @@ public class UserResource {
 
     @Autowired
     ReferenceUserUseCase referenceUserUseCase;
+
+    @Autowired
+    UpdateUserUseCase updateUserUseCase;
 
     @Autowired
     GetUserQuery getUserQuery;
@@ -81,11 +84,9 @@ public class UserResource {
 
     @Secured("ROLE_ADMIN")
     @PutMapping("users/{uid}")
-    public ResponseEntity<Void> updateUser(String password, String firstName, String lastName, List<RoleTypeEnum> roles,
-        @PathVariable("uid") final String uid) {
-        ReferenceUserUseCase.ReferenceUserCmd referenceUserCmd =
-            new ReferenceUserUseCase.ReferenceUserCmd(uid, firstName, lastName, password, roles);
-        User user = referenceUserUseCase.updateExistingUser(referenceUserCmd, uid);
+    public ResponseEntity<Void> updateUser(@RequestBody UpdateUserUseCase.UpdateUserCmd updateUserCmd,
+                                           @PathVariable("uid") final String uid) {
+        User user = updateUserUseCase.updateExistingUser(uid, updateUserCmd);
         URI location = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{userUid}")
