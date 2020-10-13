@@ -54,6 +54,7 @@ public class FileRefiRepositoryImpl implements RepositoryOfFluxRefi {
         Path targetLocation = this.fileUploadLocation.resolve(fluxEntity.getLocation());
         Path sourceLocation = this.fileStorageLocation.resolve(fluxEntity.getLocation());
         fluxEntity.setOrignalFileName(importFlux.getOriginalName());
+        fluxEntity.setCreateDate(importFlux.getCreateDate());
         repositoryOfFluxEntityJpa.save(fluxEntity);
 
         try {
