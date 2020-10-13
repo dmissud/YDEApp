@@ -64,7 +64,7 @@ public class ConfigureMySecurity extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers(HttpMethod.GET, "/api/V1/organizations/*/applications").permitAll()
             .antMatchers(HttpMethod.GET, "/api/V1/organizations/root").permitAll()
-            .antMatchers(HttpMethod.POST,"/api/V1/authenticate").permitAll()
+            .antMatchers(HttpMethod.POST, "/api/V1/authenticate").permitAll()
             // and authorize swagger-ui
             .antMatchers("/", "/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
             // all other requests need to be authenticated
@@ -84,7 +84,21 @@ public class ConfigureMySecurity extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("OPTIONS");
+        config.addAllowedMethod("HEAD");
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("POST");
+        config.addAllowedMethod("DELETE");
+        config.addAllowedMethod("PATCH");
+        config.addExposedHeader("Location");
+        source.registerCorsConfiguration("/**", config);
+
         return source;
     }
+
 }

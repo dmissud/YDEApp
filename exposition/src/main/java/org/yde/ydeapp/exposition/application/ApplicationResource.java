@@ -36,9 +36,9 @@ public class ApplicationResource {
     @GetMapping(value = "applications", produces = {"application/json"})
     public ResponseEntity<List<ApplicationIdent>> retrieveAllApplication() {
 
-        List<ApplicationIdent> applicationsIdent = applicationQuery.getAllApplicationsIdent();
+        applicationQuery.getAllApplicationsIdent();
 
-        return new ResponseEntity<>(applicationsIdent, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
