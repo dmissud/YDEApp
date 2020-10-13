@@ -54,7 +54,7 @@ public class UserResource {
 
         log.error("Creation de {}", user.getUid());
 
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).header("Access-Control-Expose-Headers", "Location").build();
 
     }
 
@@ -80,8 +80,7 @@ public class UserResource {
 
     @Secured("ROLE_ADMIN")
     @PutMapping("users/{uid}")
-    public ResponseEntity<Void> updateUser(
-        @Valid @RequestBody String password, String firstName, String lastName, List<RoleTypeEnum> roles,
+    public ResponseEntity<Void> updateUser(String password, String firstName, String lastName, List<RoleTypeEnum> roles,
         @PathVariable("uid") final String uid) {
         ReferenceUserUseCase.ReferenceUserCmd referenceUserCmd =
             new ReferenceUserUseCase.ReferenceUserCmd(uid, firstName, lastName, password, roles);

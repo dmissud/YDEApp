@@ -46,13 +46,18 @@ public class RepositoryOfRefiFileService implements StoreFileRefiUseCase, Report
     }
 
     @Override
-    public ImportFlux getImportFlux(Long ifOfImportFlux) {
-        return repositoryOfFluxRefi.retieveByFluxId(ifOfImportFlux);
+    public ImportFlux getImportFlux(Long idOfImportFlux) {
+        return repositoryOfFluxRefi.retieveByFluxId(idOfImportFlux);
     }
 
     @Override
     public List<ImportFluxIdent> getAllImportFlux() {
         return repositoryOfFluxRefi.getAllImportFluxId();
+    }
+
+    @Override
+    public void deleteImportFlux(Long idOfImportFlux) {
+        repositoryOfFluxRefi.deleteByFluxId(idOfImportFlux);
     }
 }
 

@@ -9,4 +9,6 @@ public interface RefiImportQuery {
     ImportFlux getImportFlux(Long ifOfImportFlux);
 
     List<ImportFluxIdent> getAllImportFlux();
+
+    void deleteImportFlux(Long ifOfImportFlux);
 }

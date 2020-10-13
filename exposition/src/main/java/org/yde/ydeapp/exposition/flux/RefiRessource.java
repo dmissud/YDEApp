@@ -40,13 +40,12 @@ public class RefiRessource {
             .path("/{ifOfImportFlux}")
             .buildAndExpand(importFluxId)
             .toUri();
-
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).header("Access-Control-Expose-Headers", "Location").build();
     }
 
     @Secured("ROLE_ADMIN")
-    @GetMapping(value = "uploadBatchRefi/{ifOfImportFlux}", produces = {"application/json"})
-    public ResponseEntity<ImportFlux> retrieveApplicationByCodeApplication(
+    @GetMapping(value = "/uploadBatchRefi/{ifOfImportFlux}", produces = {"application/json"})
+    public ResponseEntity<ImportFlux> retrieveImportFluxById(
         @NotNull
         @PathVariable("ifOfImportFlux") final Long ifOfImportFlux) {
 
@@ -56,7 +55,18 @@ public class RefiRessource {
     }
 
     @Secured("ROLE_ADMIN")
-    @GetMapping(value = "uploadBatchRefi", produces = {"application/json"})
+    @DeleteMapping(value = "/uploadBatchRefi/{ifOfImportFlux}", produces = {"application/json"})
+    public ResponseEntity<Void> deleteImportFluxById(
+        @NotNull
+        @PathVariable("ifOfImportFlux") final Long ifOfImportFlux) {
+
+        refiImportQuery.deleteImportFlux(ifOfImportFlux);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping(value = "/uploadBatchRefi", produces = {"application/json"})
     public ResponseEntity<List<ImportFluxIdent>> retrieveAllApplication() {
 
         List<ImportFluxIdent> importFluxIdent = refiImportQuery.getAllImportFlux();

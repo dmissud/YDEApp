@@ -15,4 +15,6 @@ public interface RepositoryOfFluxRefi {
     ImportFlux retieveByFluxId(Long ifOfImportFlux);
 
     List<ImportFluxIdent> getAllImportFluxId();
+
+    void deleteByFluxId(Long idOfImportFlux);
 }

@@ -93,6 +93,12 @@ public class FileRefiRepositoryImpl implements RepositoryOfFluxRefi {
         return repositoryOfFluxEntityJpa.retrieveAllImportFluxIdent();
     }
 
+    @Override
+    public void deleteByFluxId(Long idOfImportFlux) {
+        Optional<FluxEntity> fluxEntity = repositoryOfFluxEntityJpa.findById(idOfImportFlux);
+        repositoryOfFluxEntityJpa.delete(fluxEntity.orElseThrow(() -> new EntityNotFound(String.format("%s n'existe pas", idOfImportFlux))));
+    }
+
     private ImportFlux mapFluxEntityToImportFlux(FluxEntity fluxEntity) {
         ImportFlux importFlux =
             new ImportFlux(fluxEntity.getOrignalFileName(), fluxEntity.getId(), fluxEntity.getFluxState(), fluxEntity.getCreateDate());
