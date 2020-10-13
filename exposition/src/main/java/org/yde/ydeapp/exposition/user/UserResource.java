@@ -84,7 +84,7 @@ public class UserResource {
     }
 
     @Secured("ROLE_ADMIN")
-    @PutMapping("users/{uid}")
+    @PutMapping(value = "users/{uid}")
     public ResponseEntity<Void> updateUser(@RequestBody UpdateUserUseCase.UpdateUserCmd updateUserCmd,
                                            @PathVariable("uid") final String uid) {
         User user = updateUserUseCase.updateExistingUser(uid, updateUserCmd);

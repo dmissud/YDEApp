@@ -32,7 +32,7 @@ public class NoteResource {
     GetNoteQuery getNoteQuery;
 
     @Secured("ROLE_USER")
-    @GetMapping(value = "applications/{codeApplication}/notes", produces = {"application/json"})
+    @GetMapping(value = "/applications/{codeApplication}/notes", produces = {"application/json"})
     public ResponseEntity<List<Note>> getApplicationAllNotes(
             @NotNull
             @PathVariable("codeApplication") final String codeApplication) {
@@ -43,7 +43,7 @@ public class NoteResource {
     }
 
     @Secured("ROLE_USER")
-    @GetMapping(value = "applications/{codeApplication}/notes/{noteTitle}", produces = {"application/json"})
+    @GetMapping(value = "/applications/{codeApplication}/notes/{noteTitle}", produces = {"application/json"})
     public ResponseEntity<Note> getNoteByTitle(
             @NotNull
             @PathVariable("codeApplication") final String codeApplication,
@@ -55,7 +55,7 @@ public class NoteResource {
     }
 
     @Secured("ROLE_USER")
-    @PostMapping("applications/{codeApplication}/notes")
+    @PostMapping("/applications/{codeApplication}/notes")
     public ResponseEntity<Void> referenceNote(
             @Valid @RequestBody ReferenceNoteUseCase.ReferenceNoteCmd referenceNoteCmd,
             @PathVariable("codeApplication") final String codeApplication) {
@@ -70,23 +70,9 @@ public class NoteResource {
         return ResponseEntity.created(location).header("Access-Control-Expose-Headers", "Location").build();
     }
 
-    @Secured("ROLE_USER")
-    @PutMapping("applications/{codeApplication}/notes/{noteTitle}")
-    public ResponseEntity<Void> updateNote(
-            @Valid @RequestBody UpdateNoteUseCase.UpdateNoteCmd updateNoteCmd,
-            @PathVariable("codeApplication") final String codeApplication,
-            @PathVariable("noteTitle") final String noteTitle) {
-        Note note = updateNoteUseCase.updateExistingNote(codeApplication, noteTitle, updateNoteCmd);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{noteTitle}")
-                .buildAndExpand(note.getNoteTitle())
-                .toUri();
-        return ResponseEntity.created(location).build();
-    }
 
     @Secured("ROLE_USER")
-    @DeleteMapping("applications/{codeApplication}/notes/{noteTitle}")
+    @DeleteMapping("/applications/{codeApplication}/notes/{noteTitle}")
     public ResponseEntity<Void> deleteNote(
             @PathVariable("codeApplication") final String codeApplication,
             @PathVariable("noteTitle") final String noteTitle) {
@@ -94,5 +80,20 @@ public class NoteResource {
         referenceNoteUseCase.deleteNoteByTitle(codeApplication, noteTitle);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PutMapping(value = "/applications/{codeApplication}/notes")
+    public ResponseEntity<Void> updateNote(
+        @RequestBody UpdateNoteUseCase.UpdateNoteCmd updateNoteCmd,
+        @PathVariable("codeApplication") final String codeApplication) {
+
+        Note note = updateNoteUseCase.updateExistingNote(codeApplication, updateNoteCmd);
+        URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{noteTitle}")
+            .buildAndExpand(note.getNoteTitle())
+            .toUri();
+        return ResponseEntity.created(location).build();
     }
 }

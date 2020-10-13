@@ -40,11 +40,11 @@ public class NoteManagementService implements ReferenceNoteUseCase, GetNoteQuery
     }
 
     @Override
-    public Note updateExistingNote(String codeApplication, String noteTitle, UpdateNoteCmd updateNoteCmd) {
+    public Note updateExistingNote(String codeApplication, UpdateNoteCmd updateNoteCmd) {
 
         Application application = repositoryOfApplication.retrieveByAppCode(codeApplication);
 
-        Note note = application.storeOfNote(noteTitle, updateNoteCmd.getNoteContent());
+        Note note = application.storeOfNote(updateNoteCmd.getNoteTitle(), updateNoteCmd.getNoteContent());
 
         repositoryOfApplication.updateApplication(application);
         log.trace("For application {} user updated an existing note entitled {}", application.getCodeApplication(), note.getNoteTitle());

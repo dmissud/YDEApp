@@ -128,8 +128,9 @@ public class RegisterNoteSteps {
         } else {
             throw new PendingException("Bad use of Cucumber scenario: update a new Application");
         }
-        UpdateNoteUseCase.UpdateNoteCmd noteCmd = new UpdateNoteUseCase.UpdateNoteCmd(noteTable.getNoteContent());
-        noteManagementService.updateExistingNote(application.getCodeApplication(), noteTitle, noteCmd);
+        UpdateNoteUseCase.UpdateNoteCmd noteCmd = new UpdateNoteUseCase.UpdateNoteCmd(
+            noteTable.getNoteTitle(), noteTable.getNoteContent());
+        noteManagementService.updateExistingNote(application.getCodeApplication(), noteCmd);
     }
 
     @Then("Note {string} has been updated")
