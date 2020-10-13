@@ -67,7 +67,7 @@ public class RepositoryOfApplicationImpl implements RepositoryOfApplication {
             Note note = new Note(noteEntity.getNoteTitle(),
                 noteEntity.getNoteContent(),
                 noteEntity.getNoteCreationDate());
-            application.addNote(note);
+            application.storeOfNote(note);
         }
 
         return application;

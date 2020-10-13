@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.yde.ydeapp.application.in.application.GetNoteQuery;
 import org.yde.ydeapp.application.in.application.ReferenceNoteUseCase;
+import org.yde.ydeapp.application.in.application.UpdateNoteUseCase;
 import org.yde.ydeapp.domain.application.Note;
 
 import javax.validation.Valid;
@@ -23,6 +24,9 @@ public class NoteResource {
 
     @Autowired
     ReferenceNoteUseCase referenceNoteUseCase;
+
+    @Autowired
+    UpdateNoteUseCase updateNoteUseCase;
 
     @Autowired
     GetNoteQuery getNoteQuery;
@@ -69,11 +73,10 @@ public class NoteResource {
     @Secured("ROLE_USER")
     @PutMapping("applications/{codeApplication}/notes/{noteTitle}")
     public ResponseEntity<Void> updateNote(
-            @Valid @RequestBody String noteContent,
+            @Valid @RequestBody UpdateNoteUseCase.UpdateNoteCmd updateNoteCmd,
             @PathVariable("codeApplication") final String codeApplication,
             @PathVariable("noteTitle") final String noteTitle) {
-        ReferenceNoteUseCase.ReferenceNoteCmd referenceNoteCmd = new ReferenceNoteUseCase.ReferenceNoteCmd(noteTitle, noteContent, LocalDate.now());
-        Note note = referenceNoteUseCase.updateNote(codeApplication, noteTitle, referenceNoteCmd);
+        Note note = updateNoteUseCase.updateExistingNote(codeApplication, noteTitle, updateNoteCmd);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{noteTitle}")

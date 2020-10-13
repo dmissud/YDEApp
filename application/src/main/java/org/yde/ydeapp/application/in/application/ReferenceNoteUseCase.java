@@ -11,7 +11,7 @@ public interface ReferenceNoteUseCase {
 
     Note referenceNote(String codeApplication, ReferenceNoteCmd referenceNoteCmd);
 
-    Note updateNote(String codeApplication, String noteTitle, ReferenceNoteCmd referenceNoteCmd);
+
 
     void deleteNoteByTitle(String codeApplication, String noteTitle);
 

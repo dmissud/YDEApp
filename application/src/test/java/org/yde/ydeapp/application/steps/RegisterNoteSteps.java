@@ -112,7 +112,7 @@ public class RegisterNoteSteps {
     public void an_existing_note_referenced_to_an_application(String noteTitle, String noteContent, String noteCreationDate, String codeApplication) {
         buildApplication(codeApplication);
         note = new Note(noteTitle, noteContent, LocalDate.parse(noteCreationDate, formatter));
-        application.addNote(note);
+        application.storeOfNote(note);
         Mockito
             .when(repositoryOfApplication.retrieveByAppCode(codeApplication))
             .thenReturn(application);
@@ -127,7 +127,7 @@ public class RegisterNoteSteps {
         } else {
             throw new PendingException("Bad use of Cucumber scenario: update a new Application");
         }
-        noteManagementService.updateNote(application.getCodeApplication(), noteTitle, noteTable);
+        noteManagementService.updateExistingNote(application.getCodeApplication(), noteTitle, noteTable.getNoteContent());
     }
 
     @Then("Note {string} has been updated")
@@ -141,7 +141,7 @@ public class RegisterNoteSteps {
     public void an_existing_application(String codeApplication, String noteTitle, String noteContent, String noteCreationDate) {
         buildApplication(codeApplication);
         note = new Note(noteTitle, noteContent, LocalDate.parse(noteCreationDate, formatter));
-        application.addNote(note);
+        application.storeOfNote(note);
         Mockito
             .when(repositoryOfApplication.retrieveByAppCode(codeApplication))
             .thenReturn(application);
@@ -165,8 +165,8 @@ public class RegisterNoteSteps {
         buildApplication(codeApplication);
         Note note1 = new Note(noteTitle1, noteContent1, LocalDate.parse(noteCreationDate1, formatter));
         Note note2 = new Note(noteTitle2, noteContent2, LocalDate.parse(noteCreationDate2, formatter));
-        application.addNote(note1);
-        application.addNote(note2);
+        application.storeOfNote(note1);
+        application.storeOfNote(note2);
     }
 
     @When("User wants to get a note-list")
@@ -185,7 +185,7 @@ public class RegisterNoteSteps {
     public void an_existing_application_with_the_note(String codeApplication, String noteTitle, String noteContent, String noteCreationDate) {
         buildApplication(codeApplication);
         note = new Note(noteTitle, noteContent, LocalDate.parse(noteCreationDate, formatter));
-        application.addNote(note);
+        application.storeOfNote(note);
         Mockito
             .when(repositoryOfApplication.retrieveByAppCode(codeApplication))
             .thenReturn(application);
@@ -208,7 +208,7 @@ public class RegisterNoteSteps {
     public void an_existing_application_with_following_note(String codeApplication, String noteTitle, String noteContent, String noteCreationDate) {
         buildApplication(codeApplication);
         note = new Note(noteTitle, noteContent, LocalDate.parse(noteCreationDate, formatter));
-        application.addNote(note);
+        application.storeOfNote(note);
         Mockito
             .when(repositoryOfApplication.retrieveByAppCode(codeApplication))
             .thenReturn(application);

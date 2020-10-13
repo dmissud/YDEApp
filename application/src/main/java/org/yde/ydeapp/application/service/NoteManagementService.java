@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yde.ydeapp.application.in.application.GetNoteQuery;
 import org.yde.ydeapp.application.in.application.ReferenceNoteUseCase;
+import org.yde.ydeapp.application.in.application.UpdateNoteUseCase;
 import org.yde.ydeapp.domain.application.Application;
 import org.yde.ydeapp.domain.application.Note;
 import org.yde.ydeapp.domain.out.EntityNotFound;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class NoteManagementService implements ReferenceNoteUseCase,GetNoteQuery {
+public class NoteManagementService implements ReferenceNoteUseCase, GetNoteQuery, UpdateNoteUseCase {
 
     private final Logger log = LoggerFactory.getLogger(NoteManagementService.class);
 
@@ -30,7 +31,7 @@ public class NoteManagementService implements ReferenceNoteUseCase,GetNoteQuery 
         Application application = repositoryOfApplication.retrieveByAppCode(codeApplication);
 
         Note note = new Note(referenceNoteCmd.getNoteTitle(), referenceNoteCmd.getNoteContent(), referenceNoteCmd.getNoteCreationDate());
-        application.addNote(note);
+        application.storeOfNote(note);
 
         repositoryOfApplication.updateApplication(application);
         log.trace("For application {} user referenced a new note entitled {}", application.getCodeApplication(), note.getNoteTitle());
@@ -39,11 +40,11 @@ public class NoteManagementService implements ReferenceNoteUseCase,GetNoteQuery 
     }
 
     @Override
-    public Note updateNote(String codeApplication, String noteTitle, ReferenceNoteCmd referenceNoteCmd) {
+    public Note updateExistingNote(String codeApplication, String noteTitle, UpdateNoteCmd updateNoteCmd) {
 
-        Application application  = repositoryOfApplication.retrieveByAppCode(codeApplication);
-        Note note = new Note(noteTitle, referenceNoteCmd.getNoteContent(), referenceNoteCmd.getNoteCreationDate());
-        application.addNote(note);
+        Application application = repositoryOfApplication.retrieveByAppCode(codeApplication);
+
+        Note note = application.storeOfNote(noteTitle, updateNoteCmd.getNoteContent());
 
         repositoryOfApplication.updateApplication(application);
         log.trace("For application {} user updated an existing note entitled {}", application.getCodeApplication(), note.getNoteTitle());

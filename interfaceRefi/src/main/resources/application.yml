@@ -26,4 +26,4 @@ logging:
     org.springframework.batch: info
 
 ydeapp:
-  dir: /home/daniel/.ydeapp
+  dir: c:\ydeapp

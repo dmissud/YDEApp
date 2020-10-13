@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.yde.ydeapp.domain.organization.OrganizationIdent;
 import org.yde.ydeapp.domain.out.EntityIncorrect;
 
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,8 +45,8 @@ public class Application {
         return itSolution;
     }
 
-    public Map<String, Note> getNotes() {
-        return notes;
+    public Collection<Note> getNotes() {
+        return notes.values();
     }
 
     public void updateShortDescription(String shortDescription) {
@@ -91,13 +93,7 @@ public class Application {
     }
 
 
-    public void addNote(Note newNote) {
-        if (notes.get(newNote.getNoteTitle()) == null) {
-            notes.put(newNote.getNoteTitle(), newNote);
-        } else {
-            notes.replace(newNote.getNoteTitle(), newNote);
-        }
-    }
+
 
     public static <K, V> K getKey(Map<K, V> map, V value) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
@@ -114,6 +110,27 @@ public class Application {
             if (note.getNoteTitle().equals(noteTitle)) {
                 notes.remove(getKey(notes, note));
             }
+        }
+    }
+
+    public Note storeOfNote(String noteTitle, String noteContent) {
+        Note note = notes.get(noteTitle);
+        if ( note == null) {
+
+            notes.put(noteTitle, new Note(noteTitle,noteContent, LocalDate.now()));
+        } else {
+            notes.replace(noteTitle, new Note(noteTitle,noteContent, note.getNoteCreationDate()));
+        }
+        return notes.get(noteTitle);
+    }
+
+    public void storeOfNote(Note newNote) {
+        Note note = notes.get(newNote.getNoteTitle());
+        if ( note == null) {
+
+            notes.put(newNote.getNoteTitle(), newNote);
+        } else {
+            notes.replace(newNote.getNoteTitle(), newNote);
         }
     }
 

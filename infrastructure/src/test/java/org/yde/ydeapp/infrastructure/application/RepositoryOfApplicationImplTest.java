@@ -342,7 +342,7 @@ class RepositoryOfApplicationImplTest {
             .build();
 
         Note noteUpdate = new Note(NOTE_TITLE, NOTE_CONTENT, NOTE_CREATION_DATE);
-        application.addNote(noteUpdate);
+        application.storeOfNote(noteUpdate);
 
         repositoryOfApplicationImpl.updateApplication(application);
 
@@ -381,12 +381,12 @@ class RepositoryOfApplicationImplTest {
             .build();
 
         Note noteInit = new Note(NOTE_TITLE, NOTE_CONTENT, NOTE_CREATION_DATE);
-        application.addNote(noteInit);
+        application.storeOfNote(noteInit);
 
         repositoryOfApplicationImpl.updateApplication(application);
 
         Note notePlus = new Note(NOTE_2ND_TITLE, NOTE_2ND_CONTENT, NOTE_2ND_CREATION_DATE);
-        application.addNote(notePlus);
+        application.storeOfNote(notePlus);
 
         repositoryOfApplicationImpl.updateApplication(application);
 
@@ -427,17 +427,17 @@ class RepositoryOfApplicationImplTest {
             .build();
 
         Note noteInit = new Note(NOTE_TITLE, NOTE_CONTENT, NOTE_CREATION_DATE);
-        application.addNote(noteInit);
+        application.storeOfNote(noteInit);
 
         repositoryOfApplicationImpl.updateApplication(application);
 
         Note notePlus = new Note(NOTE_2ND_TITLE, NOTE_2ND_CONTENT, NOTE_2ND_CREATION_DATE);
-        application.addNote(notePlus);
+        application.storeOfNote(notePlus);
 
         repositoryOfApplicationImpl.updateApplication(application);
 
         noteInit = new Note(NOTE_TITLE, NOTE_CONTENT_UPDATE, NOTE_CREATION_DATE_UPDATE);
-        application.addNote(noteInit);
+        application.storeOfNote(noteInit);
 
         repositoryOfApplicationImpl.updateApplication(application);
 
