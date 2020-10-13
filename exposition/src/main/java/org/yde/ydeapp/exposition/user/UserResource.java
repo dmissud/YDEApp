@@ -52,7 +52,7 @@ public class UserResource {
             .buildAndExpand(user.getUid())
             .toUri();
 
-        log.error("Creation de {}", user.getUid());
+        log.debug("Creation de {}", user.getUid());
 
         return ResponseEntity.created(location).header("Access-Control-Expose-Headers", "Location").build();
 
@@ -63,7 +63,7 @@ public class UserResource {
     public ResponseEntity<User> getUserByUid(@Valid @NotNull @PathVariable("uid") final String uid) {
         User user = getUserQuery.getUserByUid(uid);
 
-        log.error("Get de {}", user.getUid());
+        log.debug("Get de {}", user.getUid());
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -73,7 +73,7 @@ public class UserResource {
     public ResponseEntity<List<UserDesc>> getAllUsers() {
         List<UserDesc> users = getUserQuery.getAllUsers();
 
-        log.error("Get de tois les Users");
+        log.debug("Get de tous les Users");
 
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
@@ -91,7 +91,7 @@ public class UserResource {
             .buildAndExpand(user.getUid())
             .toUri();
 
-        log.error("Put de {}", user.getUid());
+        log.debug("Put de {}", user.getUid());
 
         return ResponseEntity.created(location).build();
     }
@@ -102,7 +102,7 @@ public class UserResource {
         @PathVariable("uid") final String uid) {
         referenceUserUseCase.deleteUserByUid(uid);
 
-        log.error("Delete de {}", uid);
+        log.debug("Delete de {}", uid);
 
         return new ResponseEntity<>(uid, HttpStatus.OK);
     }
