@@ -84,12 +84,12 @@ public class NoteResource {
 
     @Secured("ROLE_USER")
     @DeleteMapping("applications/{codeApplication}/notes/{noteTitle}")
-    public ResponseEntity<String> deleteNote(
+    public ResponseEntity<Void> deleteNote(
             @PathVariable("codeApplication") final String codeApplication,
             @PathVariable("noteTitle") final String noteTitle) {
 
         referenceNoteUseCase.deleteNoteByTitle(codeApplication, noteTitle);
 
-        return new ResponseEntity<>(noteTitle, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

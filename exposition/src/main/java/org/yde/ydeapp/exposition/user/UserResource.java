@@ -105,7 +105,7 @@ public class UserResource {
 
         log.debug("Delete de {}", uid);
 
-        return new ResponseEntity<>(uid, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
