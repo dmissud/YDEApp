@@ -23,13 +23,13 @@ public class RepositoryOfRefiFileService implements StoreFileRefiUseCase, Report
 
     @Override
     public Long importRefiFlux(ImportRefiFluxCmd importRefiFluxCmd) {
-        Long jobId = repositoryOfFluxRefi.referenceFlux(importRefiFluxCmd.getInputStream());
-        ImportFlux importFlux = new ImportFlux(importRefiFluxCmd.getOriginalName(), jobId);
+        ImportFlux importFlux = new ImportFlux(importRefiFluxCmd.getOriginalName());
+        repositoryOfFluxRefi.referenceFlux(importFlux, importRefiFluxCmd.getInputStream());
 
         repositoryOfFluxRefi.realize(importFlux);
 
         log.trace("launch of import job for file : {}", importFlux.getOriginalName());
-        return jobId;
+        return importFlux.getFluxId();
     }
 
     @Override
@@ -40,7 +40,7 @@ public class RepositoryOfRefiFileService implements StoreFileRefiUseCase, Report
             reportImportFluxCmd.getEndStatus(),
             reportImportFluxCmd.getResult(),
             reportImportFluxCmd.getStart(),
-            reportImportFluxCmd.getDuration());
+            reportImportFluxCmd.getDuration().getSeconds());
         importFlux.complete(job);
         repositoryOfFluxRefi.save(importFlux);
     }

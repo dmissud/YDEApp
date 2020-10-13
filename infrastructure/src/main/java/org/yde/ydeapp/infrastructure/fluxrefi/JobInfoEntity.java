@@ -2,7 +2,6 @@ package org.yde.ydeapp.infrastructure.fluxrefi;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Embeddable
@@ -14,7 +13,7 @@ public class JobInfoEntity {
     @Column(length = 2500)
     private String resultDescription;
     private LocalDateTime startJob;
-    private Duration duration;
+    private Long duration;
 
     public String getStatus() {
         return status;
@@ -48,11 +47,11 @@ public class JobInfoEntity {
         this.startJob = startJob;
     }
 
-    public Duration getDuration() {
+    public Long getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 

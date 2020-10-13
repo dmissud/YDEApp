@@ -41,10 +41,13 @@ public class FileRefiRepositoryImpl implements RepositoryOfFluxRefi {
     }
 
     @Override
-    public Long referenceFlux(InputStream flux) {
+    public void referenceFlux(ImportFlux importFlux, InputStream flux) {
         String fluxTechName = storeFileInRepertoire(flux);
-        FluxEntity fluxEntity = storeFluxEntity(fluxTechName);
-        return fluxEntity.getId();
+        importFlux.setLocation(fluxTechName);
+        FluxEntity fluxEntity = new FluxEntity();
+        mapImportFluxToFluxEntity(importFlux, fluxEntity);
+        repositoryOfFluxEntityJpa.save(fluxEntity);
+        importFlux.setFluxId(fluxEntity.getId());
     }
 
     @Override
@@ -56,6 +59,7 @@ public class FileRefiRepositoryImpl implements RepositoryOfFluxRefi {
         fluxEntity.setOrignalFileName(importFlux.getOriginalName());
         fluxEntity.setCreateDate(importFlux.getCreateDate());
         repositoryOfFluxEntityJpa.save(fluxEntity);
+
 
         try {
             Files.copy(sourceLocation, targetLocation, StandardCopyOption.REPLACE_EXISTING);
@@ -140,16 +144,6 @@ public class FileRefiRepositoryImpl implements RepositoryOfFluxRefi {
         fluxEntity.setLocation(importFlux.getLocation());
         fluxEntity.setFluxState(importFlux.getFluxState());
         fluxEntity.setCreateDate(importFlux.getCreateDate());
-    }
-
-    private FluxEntity storeFluxEntity(String fluxTechName) {
-        FluxEntity fluxEntity = new FluxEntity();
-        fluxEntity.setLocation(fluxTechName);
-        fluxEntity.setOrignalFileName("noNameYet");
-        fluxEntity.setJobInfoEntity(new JobInfoEntity());
-        fluxEntity.setStatUpdateEntity(new StatUpdateEntity());
-        fluxEntity = repositoryOfFluxEntityJpa.save(fluxEntity);
-        return fluxEntity;
     }
 
     private String storeFileInRepertoire(InputStream flux) {

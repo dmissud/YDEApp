@@ -1,6 +1,5 @@
 package org.yde.ydeapp.domain.flux;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Job {
@@ -9,14 +8,14 @@ public class Job {
     private final String existStatus;
     private final String resultDescription;
     private final LocalDateTime startDate;
-    private final Duration duration;
+    private final Long duration;
 
     public Job(int readCount,
                String jobStatus,
                String existStatus,
                String resultDescription,
                LocalDateTime startDate,
-               Duration duration) {
+               Long duration) {
         this.readCount = readCount;
         this.jobStatus = jobStatus;
         this.existStatus = existStatus;
@@ -31,7 +30,7 @@ public class Job {
         this.existStatus = "none";
         this.resultDescription = "none";
         this.startDate = null;
-        this.duration = null;
+        this.duration = 0L;
     }
 
     public int getReadCount() {
@@ -50,7 +49,7 @@ public class Job {
         return startDate;
     }
 
-    public Duration getDuration() {
+    public Long getDuration() {
         return duration;
     }
 

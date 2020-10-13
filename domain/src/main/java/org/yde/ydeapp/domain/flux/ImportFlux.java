@@ -4,20 +4,20 @@ import java.time.LocalDateTime;
 
 public class ImportFlux {
     private final String originalName;
-    private final Long fluxId;
+    private Long fluxId;
     private String location;
-    private final LocalDateTime createDate;
+    private LocalDateTime createDate;
 
     private FluxState fluxState;
     private Job job;
     private StatUpdateApplications statUpdateApplications;
 
-    public ImportFlux(String orignalFileName, Long fluxId) {
+    public ImportFlux(String orignalFileName) {
         this.originalName = orignalFileName;
         this.location = "none";
         this.fluxState = FluxState.ASKED;
         this.createDate = LocalDateTime.now();
-        this.fluxId = fluxId;
+        this.fluxId = 0L;
         this.job = new Job();
         this.statUpdateApplications = new StatUpdateApplications();
     }
@@ -54,6 +54,10 @@ public class ImportFlux {
 
     public Long getFluxId() {
         return fluxId;
+    }
+
+    public void setFluxId(Long fluxId) {
+        this.fluxId = fluxId;
     }
 
     public Job getJob() {
