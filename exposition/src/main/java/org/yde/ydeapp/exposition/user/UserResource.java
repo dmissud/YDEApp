@@ -26,6 +26,7 @@ import java.util.List;
 @CrossOrigin()
 public class UserResource {
 
+    public static final String YDE_PASSWORD = "yde-password";
     private static Logger log = LoggerFactory.getLogger(UserResource.class);
 
     @Autowired
@@ -46,7 +47,7 @@ public class UserResource {
         ReferenceUserCmd cyptedReferenceUserCmd = new ReferenceUserCmd(referenceUserCmd.getUid(),
             referenceUserCmd.getFirstName(),
             referenceUserCmd.getLastName(),
-            passwordEncoder.encode(referenceUserCmd.getPassword()),
+            passwordEncoder.encode(YDE_PASSWORD),
             referenceUserCmd.getRoles());
         User user = referenceUserUseCase.referenceNewUser(cyptedReferenceUserCmd);
 
