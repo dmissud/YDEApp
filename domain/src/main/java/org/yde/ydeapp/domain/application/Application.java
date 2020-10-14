@@ -109,6 +109,7 @@ public class Application {
         for (Note note : notes.values()) {
             if (note.getNoteTitle().equals(noteTitle)) {
                 notes.remove(getKey(notes, note));
+                break;
             }
         }
     }
