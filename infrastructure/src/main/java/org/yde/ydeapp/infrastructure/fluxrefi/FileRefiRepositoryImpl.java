@@ -12,6 +12,7 @@ import org.yde.ydeapp.domain.flux.StatUpdateApplications;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfFluxRefi;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -59,8 +60,6 @@ public class FileRefiRepositoryImpl implements RepositoryOfFluxRefi {
         fluxEntity.setOrignalFileName(importFlux.getOriginalName());
         fluxEntity.setCreateDate(importFlux.getCreateDate());
         repositoryOfFluxEntityJpa.save(fluxEntity);
-
-
         try {
             Files.copy(sourceLocation, targetLocation, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
@@ -69,7 +68,7 @@ public class FileRefiRepositoryImpl implements RepositoryOfFluxRefi {
     }
 
     @Override
-    public ImportFlux retieveByFluxName(String fluxName) {
+    public ImportFlux retrieveByFluxName(String fluxName) {
         List<FluxEntity> fluxEntities = repositoryOfFluxEntityJpa.findFluxEntitiesByLocation(fluxName);
         if (fluxEntities.size() != 1) {
             throw new EntityNotFound(String.format("Flux %s not present in the repository", fluxName));
@@ -102,6 +101,12 @@ public class FileRefiRepositoryImpl implements RepositoryOfFluxRefi {
     public void deleteByFluxId(Long idOfImportFlux) {
         Optional<FluxEntity> fluxEntity = repositoryOfFluxEntityJpa.findById(idOfImportFlux);
         repositoryOfFluxEntityJpa.delete(fluxEntity.orElseThrow(() -> new EntityNotFound(String.format("%s n'existe pas", idOfImportFlux))));
+        Path pathLocation = this.fileStorageLocation.resolve(fluxEntity.get().getLocation());
+        try {
+            Files.delete(pathLocation);
+        } catch (IOException e) {
+            throw new FileStorageException(String.format("Could not delete the location file with error : %s", e.getMessage()));
+        }
     }
 
     private ImportFlux mapFluxEntityToImportFlux(FluxEntity fluxEntity) {
