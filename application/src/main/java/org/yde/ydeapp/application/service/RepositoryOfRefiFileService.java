@@ -34,7 +34,7 @@ public class RepositoryOfRefiFileService implements StoreFileRefiUseCase, Report
 
     @Override
     public void reportImportFlux(ReportImportFluxCmd reportImportFluxCmd) {
-        ImportFlux importFlux = repositoryOfFluxRefi.retieveByFluxName(reportImportFluxCmd.getFluxName());
+        ImportFlux importFlux = repositoryOfFluxRefi.retrieveByFluxName(reportImportFluxCmd.getFluxName());
         Job job = new Job(reportImportFluxCmd.getReadCount(),
             reportImportFluxCmd.getStatus(),
             reportImportFluxCmd.getEndStatus(),

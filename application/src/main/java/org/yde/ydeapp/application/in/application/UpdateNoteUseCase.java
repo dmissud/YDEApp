@@ -5,8 +5,6 @@ import org.yde.ydeapp.application.common.SelfValidating;
 import org.yde.ydeapp.domain.application.Note;
 
 public interface UpdateNoteUseCase {
-
-
     Note updateExistingNote(String codeApplication, UpdateNoteCmd updateNoteCmd);
 
     @Validated
@@ -17,11 +15,9 @@ public interface UpdateNoteUseCase {
             this.noteTitle = noteTitle;
             this.noteContent = noteContent;
         }
-
         public String getNoteTitle() {
             return noteTitle;
         }
-
         public String getNoteContent() {
             return noteContent;
         }

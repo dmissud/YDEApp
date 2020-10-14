@@ -1,0 +1,84 @@
+{
+  "idRefog": "20000000",
+  "organizationName": "ITG FRESH",
+  "children": [
+    {
+      "idRefog": "20001000",
+      "organizationName": "Groupe 1",
+      "children": [
+        {
+          "idRefog": "20001010",
+          "organizationName": "Domaine 11",
+          "children": []
+        },
+        {
+          "idRefog": "20001020",
+          "organizationName": "Domaine 12",
+          "children": []
+        },
+        {
+          "idRefog": "20001030",
+          "organizationName": "Domaine 13",
+          "children": []
+        },
+        {
+          "idRefog": "20001040",
+          "organizationName": "Domaine 14",
+          "children": []
+        }
+      ]
+    },
+    {
+      "idRefog": "20002000",
+      "organizationName": "Groupe 2",
+      "children": [
+        {
+          "idRefog": "20002010",
+          "organizationName": "Domaine 21",
+          "children": []
+        },
+        {
+          "idRefog": "20002020",
+          "organizationName": "Domaine 22",
+          "children": []
+        },
+        {
+          "idRefog": "20002030",
+          "organizationName": "Domaine 23",
+          "children": []
+        }
+      ]
+    },
+    {
+      "idRefog": "20003000",
+      "organizationName": "Groupe 3",
+      "children": [
+        {
+          "idRefog": "20003010",
+          "organizationName": "Domaine 31",
+          "children": []
+        },
+        {
+          "idRefog": "20003020",
+          "organizationName": "Domaine 32",
+          "children": []
+        },
+        {
+          "idRefog": "20003030",
+          "organizationName": "Domaine 33",
+          "children": []
+        },
+        {
+          "idRefog": "20003040",
+          "organizationName": "Domaine 34",
+          "children": []
+        },
+        {
+          "idRefog": "20003050",
+          "organizationName": "Domaine 35",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

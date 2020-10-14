@@ -9,7 +9,7 @@ import java.util.List;
 public interface RepositoryOfFluxRefi {
     void referenceFlux(ImportFlux importFlux, InputStream flux);
     void realize(ImportFlux importFlux);
-    ImportFlux retieveByFluxName(String fluxName);
+    ImportFlux retrieveByFluxName(String fluxName);
     void save(ImportFlux importFlux);
 
     ImportFlux retieveByFluxId(Long ifOfImportFlux);

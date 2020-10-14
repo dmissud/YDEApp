@@ -7,7 +7,5 @@ import java.util.List;
 
 public interface ApplicationQuery {
     Application getApplication(String codeApplication);
-
     List<ApplicationIdent> getAllApplicationsIdent();
-
 }

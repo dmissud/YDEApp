@@ -155,7 +155,7 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
 
     @Override
     public void referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd) {
-        ImportFlux importFlux = repositoryOfFluxRefi.retieveByFluxName(collectionApplicationCmd.getImportName());
+        ImportFlux importFlux = repositoryOfFluxRefi.retrieveByFluxName(collectionApplicationCmd.getImportName());
         importFlux.running();
 
         for (ReferenceApplicationUseCase.ReferenceApplicationCmd referenceApplicationCmd : collectionApplicationCmd.getApplicationCmdCollection()) {
