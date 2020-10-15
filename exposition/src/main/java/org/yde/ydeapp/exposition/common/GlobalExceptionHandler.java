@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.yde.ydeapp.domain.out.BusinessException;
+import org.yde.ydeapp.domain.out.EntityAlreadyExist;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
@@ -31,6 +32,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public static final String MESSAGE = "message";
     public static final String INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
 
+    @ExceptionHandler(EntityAlreadyExist.class)
+    public ResponseEntity<Object> handleEntityAllReadyExist(final EntityAlreadyExist ex) {
+
+        final ErrorDTO error = new ErrorDTO();
+        error.setMessage(ex.getMessage());
+        error.setCode(ex.getCode());
+
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Object> handleBusinessException(final BusinessException ex) {
 

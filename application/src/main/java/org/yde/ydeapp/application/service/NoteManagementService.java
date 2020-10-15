@@ -10,6 +10,7 @@ import org.yde.ydeapp.application.in.application.ReferenceNoteUseCase;
 import org.yde.ydeapp.application.in.application.UpdateNoteUseCase;
 import org.yde.ydeapp.domain.application.Application;
 import org.yde.ydeapp.domain.application.Note;
+import org.yde.ydeapp.domain.out.EntityAlreadyExist;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 
@@ -29,14 +30,20 @@ public class NoteManagementService implements ReferenceNoteUseCase, GetNoteQuery
     @Override
     public Note referenceNote(String codeApplication, ReferenceNoteCmd referenceNoteCmd) {
         Application application = repositoryOfApplication.retrieveByAppCode(codeApplication);
+        if (application.retrieveNoteByTitle(referenceNoteCmd.getNoteTitle()) != null) {
+            log.error("Note {} exist on {}", referenceNoteCmd.getNoteTitle(), codeApplication);
+            throw new EntityAlreadyExist(String.format("Note already exist", referenceNoteCmd.getNoteTitle()));
+        }
+        else{
+            Note note = new Note(referenceNoteCmd.getNoteTitle(), referenceNoteCmd.getNoteContent(), referenceNoteCmd.getNoteCreationDate());
+            application.storeOfNote(note);
 
-        Note note = new Note(referenceNoteCmd.getNoteTitle(), referenceNoteCmd.getNoteContent(), referenceNoteCmd.getNoteCreationDate());
-        application.storeOfNote(note);
+            repositoryOfApplication.updateApplication(application);
+            log.trace("For application {} user referenced a new note entitled {}", application.getCodeApplication(), note.getNoteTitle());
 
-        repositoryOfApplication.updateApplication(application);
-        log.trace("For application {} user referenced a new note entitled {}", application.getCodeApplication(), note.getNoteTitle());
+            return note;
 
-        return note;
+        }
     }
 
     @Override
