@@ -243,10 +243,6 @@
                         </includes>
                     </configuration>
                 </plugin>
-
-
-
-
             </plugins>
 
         </pluginManagement>
