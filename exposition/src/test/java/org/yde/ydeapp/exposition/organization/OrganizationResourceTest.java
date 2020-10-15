@@ -51,10 +51,10 @@ class OrganizationResourceTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private GetUserQuery getUserQuery;
+    private ApplicationQuery applicationQuery;
 
     @MockBean
-    private ApplicationQuery applicationQuery;
+    private GetUserQuery getUserQuery;
 
     @MockBean
     JwtTokenManager jwtTokenManager;
@@ -95,7 +95,7 @@ class OrganizationResourceTest {
     }
 
     @Test
-    @WithMockUser(roles = {"ADMIN"})
+    @WithMockUser()
     @DisplayName("Retrieve a organization")
     void when_i_retrieve_the_detail_of_a_organization_http_status_is_ok() throws Exception {
         // Given
@@ -105,7 +105,7 @@ class OrganizationResourceTest {
 
         mockMvc
             // When
-            .perform(MockMvcRequestBuilders.get("/api/V1/organizations/" + ORGANIZATION_IDREFOG_ONE)
+            .perform(MockMvcRequestBuilders.get("/api/V1/organizations/" + ORGANIZATION_IDREFOG_ONE + "/applications")
                 .accept(MediaType.APPLICATION_JSON))
             // Then
             .andExpect(status().isOk());

@@ -36,9 +36,6 @@ public class ConfigureMySecurity extends WebSecurityConfigurerAdapter {
     private JwtRequestFilter jwtRequestFilter;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Qualifier("ydeAppUserDetailsService")
@@ -47,7 +44,7 @@ public class ConfigureMySecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
 
@@ -106,6 +103,4 @@ public class ConfigureMySecurity extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 }
