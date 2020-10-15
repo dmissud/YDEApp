@@ -68,7 +68,7 @@ public class RefiRessource {
 
     @Secured("ROLE_ADMIN")
     @GetMapping(value = "/uploadBatchRefi", produces = {"application/json"})
-    public ResponseEntity<List<ImportFluxIdent>> retrieveAllApplication() {
+    public ResponseEntity<List<ImportFluxIdent>> retrieveAllImportFlux() {
 
         List<ImportFluxIdent> importFluxIdent = refiImportQuery.getAllImportFlux();
 

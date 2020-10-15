@@ -3,4 +3,5 @@ spring:
     name: YDEApp
   datasource:
     platform: H2
+    initialization-mode: never
 

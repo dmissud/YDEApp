@@ -31,6 +31,6 @@ logging:
     org.yde.ydeapp: error
     org.springframework: info
 ydeapp:
-  dir: c:\ydeapp
+  dir: /home/daniel/.ydeapp
   client: http://localhost:4201
   secret: ydeapp-42-secret-of-life

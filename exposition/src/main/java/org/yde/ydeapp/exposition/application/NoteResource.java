@@ -82,7 +82,7 @@ public class NoteResource {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Secured("ROLE_ADMIN")
+    @Secured("ROLE_USER")
     @PutMapping(value = "/applications/{codeApplication}/notes")
     public ResponseEntity<Void> updateNote(
         @RequestBody UpdateNoteUseCase.UpdateNoteCmd updateNoteCmd,
