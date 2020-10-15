@@ -5,17 +5,26 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.yde.ydeapp.application.in.*;
-import org.yde.ydeapp.domain.*;
+import org.yde.ydeapp.application.in.application.ApplicationQuery;
+import org.yde.ydeapp.application.in.application.CollectionApplicationCmd;
+import org.yde.ydeapp.application.in.application.ReferenceApplicationUseCase;
+import org.yde.ydeapp.application.in.application.ReferenceCollectionOfApplicationUseCase;
+import org.yde.ydeapp.domain.application.*;
+import org.yde.ydeapp.domain.flux.ImportFlux;
+import org.yde.ydeapp.domain.flux.StateUpdateEnum;
+import org.yde.ydeapp.domain.organization.OrganizationIdent;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
+import org.yde.ydeapp.domain.out.RepositoryOfFluxRefi;
 import org.yde.ydeapp.domain.out.RepositoryOfOrganization;
 
 import java.util.List;
 
 @Service
-@Transactional
-public class ApplicationManagementService implements ReferenceApplicationUseCase, ApplicationQuery {
+@Transactional()
+public class ApplicationManagementService implements ReferenceApplicationUseCase,
+    ReferenceCollectionOfApplicationUseCase,
+    ApplicationQuery {
 
     private final Logger log = LoggerFactory.getLogger(ApplicationManagementService.class);
 
@@ -25,16 +34,19 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
     @Autowired
     private RepositoryOfOrganization repositoryOforganization;
 
+    @Autowired
+    RepositoryOfFluxRefi repositoryOfFluxRefi;
+
     @Override
-    public StateCmdEnum referenceOrUpdateApplication(ReferenceApplicationCmd referenceApplicationCmd) {
-        StateCmdEnum stateCmd;
+    public StateUpdateEnum referenceOrUpdateApplication(ReferenceApplicationCmd referenceApplicationCmd) {
+        StateUpdateEnum stateCmd;
 
         referenceApplicationCmd.validate();
 
 
         OrganizationIdent organizationIdent = repositoryOforganization.retriveIdentByIdRefog(referenceApplicationCmd.getIdRefOrganizationMoe());
         Application application;
-        stateCmd = StateCmdEnum.IGNORE;
+        stateCmd = StateUpdateEnum.IGNORE;
 
         if (organizationIdent != null) {
             Personne personne = new Personne(referenceApplicationCmd.getUid(), referenceApplicationCmd.getFirstName(), referenceApplicationCmd.getLastName());
@@ -43,6 +55,17 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
                 referenceApplicationCmd.getDateOfCreation(),
                 referenceApplicationCmd.getDateOfCreation(),
                 referenceApplicationCmd.getDateEndInReality());
+            ItSolution itSolution = new ItSolution(referenceApplicationCmd.getTypeOfSolution(),
+                referenceApplicationCmd.getNameOfFirmware(),
+                referenceApplicationCmd.getLabelOfSourcingMode());
+            Criticity criticity = new Criticity(referenceApplicationCmd.getPrivilegeInformation(),
+                referenceApplicationCmd.getPersonalData(),
+                referenceApplicationCmd.getServiceClass(),
+                referenceApplicationCmd.getAvailability(),
+                referenceApplicationCmd.getRpo(),
+                referenceApplicationCmd.getRto());
+
+
             application = repositoryOfApplication.retrieveByAppCode(referenceApplicationCmd.getCodeApp());
             if (application != null) {
                 log.trace("Application {} updated", application.getCodeApplication());
@@ -51,8 +74,10 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
                 application.updateResponsable(personne);
                 application.updateOrganization(organizationIdent);
                 application.updateCycleLife(cycleLife);
+                application.updateItSolution(itSolution);
+                application.updateCriticity(criticity);
                 repositoryOfApplication.updateApplication(application);
-                stateCmd = StateCmdEnum.UPDATE;
+                stateCmd = StateUpdateEnum.UPDATE;
             } else {
                 application = new Application.Builder(referenceApplicationCmd.getCodeApp())
                     .withShortDescription(referenceApplicationCmd.getShortDescription())
@@ -60,10 +85,12 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
                     .withResponsable(personne)
                     .withOrganization(organizationIdent)
                     .withCycleLife(cycleLife)
+                    .withItSolution(itSolution)
+                    .withCriticity(criticity)
                     .build();
                 log.trace("Application {} created", application.getCodeApplication());
                 repositoryOfApplication.referenceApplication(application);
-                stateCmd = StateCmdEnum.REFERENCE;
+                stateCmd = StateUpdateEnum.REFERENCE;
             }
         }
         return stateCmd;
@@ -92,7 +119,21 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
             referenceApplicationCmd.getDateOfCreation(),
             referenceApplicationCmd.getDateOfCreation(),
             referenceApplicationCmd.getDateEndInReality());
+
         application.updateCycleLife(cycleLife);
+        ItSolution itSolution = new ItSolution(referenceApplicationCmd.getTypeOfSolution(),
+            referenceApplicationCmd.getNameOfFirmware(),
+            referenceApplicationCmd.getLabelOfSourcingMode());
+        application.updateItSolution(itSolution);
+
+        Criticity criticity = new Criticity(referenceApplicationCmd.getPrivilegeInformation(),
+            referenceApplicationCmd.getPersonalData(),
+            referenceApplicationCmd.getServiceClass(),
+            referenceApplicationCmd.getAvailability(),
+            referenceApplicationCmd.getRpo(),
+            referenceApplicationCmd.getRto());
+        application.updateCriticity(criticity);
+
         repositoryOfApplication.updateApplication(application);
 
         return application;
@@ -110,5 +151,17 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
     @Override
     public List<ApplicationIdent> getAllApplicationsIdent() {
         return repositoryOfApplication.retrieveIdentOfAllApplications();
+    }
+
+    @Override
+    public void referenceOrUpdateCollectionOfApplication(CollectionApplicationCmd collectionApplicationCmd) {
+        ImportFlux importFlux = repositoryOfFluxRefi.retrieveByFluxName(collectionApplicationCmd.getImportName());
+        importFlux.running();
+
+        for (ReferenceApplicationUseCase.ReferenceApplicationCmd referenceApplicationCmd : collectionApplicationCmd.getApplicationCmdCollection()) {
+            importFlux.getStatUpdateApplication().referenceResult(referenceOrUpdateApplication(referenceApplicationCmd));
+        }
+
+        repositoryOfFluxRefi.save(importFlux);
     }
 }

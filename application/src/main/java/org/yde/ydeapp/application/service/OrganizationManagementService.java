@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.yde.ydeapp.application.in.ReferenceOrganizationUseCase;
-import org.yde.ydeapp.domain.Organization;
+import org.yde.ydeapp.application.in.organization.ReferenceOrganizationUseCase;
+import org.yde.ydeapp.domain.organization.Organization;
 import org.yde.ydeapp.domain.out.EntityAlreadyExist;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfOrganization;
@@ -23,7 +23,7 @@ public class OrganizationManagementService implements ReferenceOrganizationUseCa
     @Override
     public Organization referenceOrganization(ReferenceOrganisationCmd referenceOrganisationCmd) {
         Organization rootOrganization = buildOrganization(referenceOrganisationCmd);
-
+        rootOrganization.doItRoot();
         repositoryOfOrganization.storeOrganization(rootOrganization);
         log.debug("Reference of the organization {}", rootOrganization.getName());
 

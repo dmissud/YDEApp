@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "ydeapp.dir",
+      "type": "java.lang.String",
+      "description": "Répertoire pour l'échange de fichier avec le Batch."
+    },
+    {
+      "name": "ydeapp.client",
+      "type": "java.lang.String",
+      "description": "URL du client pour permettre le Cross Origin Requests for a RESTful Web Service."
+    },
+    {
+      "name": "ydeapp.secret",
+      "type": "java.lang.String",
+      "description": "Sert à la génération du Token."
+    }
+  ]
+}

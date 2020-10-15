@@ -1,7 +1,7 @@
 package org.yde.ydeapp.domain.out;
 
-import org.yde.ydeapp.domain.Application;
-import org.yde.ydeapp.domain.ApplicationIdent;
+import org.yde.ydeapp.domain.application.Application;
+import org.yde.ydeapp.domain.application.ApplicationIdent;
 
 import java.util.List;
 

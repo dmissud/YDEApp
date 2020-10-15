@@ -3,20 +3,18 @@ package org.yde.ydeapp.exposition.application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.yde.ydeapp.application.in.ApplicationQuery;
-import org.yde.ydeapp.application.in.ReferenceApplicationUseCase;
-import org.yde.ydeapp.domain.Application;
-import org.yde.ydeapp.domain.ApplicationIdent;
+import org.springframework.web.bind.annotation.*;
+import org.yde.ydeapp.application.in.application.ApplicationQuery;
+import org.yde.ydeapp.application.in.application.ReferenceApplicationUseCase;
+import org.yde.ydeapp.domain.application.Application;
+import org.yde.ydeapp.domain.application.ApplicationIdent;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/V1")
+@CrossOrigin()
 public class ApplicationResource {
 
     @Autowired
@@ -38,9 +36,9 @@ public class ApplicationResource {
     @GetMapping(value = "applications", produces = {"application/json"})
     public ResponseEntity<List<ApplicationIdent>> retrieveAllApplication() {
 
-        List<ApplicationIdent> applicationsIdent = applicationQuery.getAllApplicationsIdent();
+        applicationQuery.getAllApplicationsIdent();
 
-        return new ResponseEntity<>(applicationsIdent, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

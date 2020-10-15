@@ -6,10 +6,9 @@ import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.yde.ydeapp.domain.*;
+import org.yde.ydeapp.domain.application.Note;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -85,7 +84,7 @@ public class CreateNoteSteps {
         Note newNote = new Note(note.get(0).getNoteTitle(),
             note.get(0).getNoteContent(),
             LocalDate.parse(note.get(0).getNoteCreationDate(), this.scenarioContext.getFormatter()));
-        this.scenarioContext.getApplication().addNote(newNote);
+        this.scenarioContext.getApplication().storeOfNote(newNote);
     }
 
     @When("the user wants to delete a note entitled {string}")

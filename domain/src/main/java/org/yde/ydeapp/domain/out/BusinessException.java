@@ -14,10 +14,16 @@ public class BusinessException extends RuntimeException {
         this.code = "UNKNOW_BUSINESS_ERROR";
     }
 
+    public BusinessException(String message, Exception exception) {
+        super(message, exception);
+        this.code = "UNKNOW_BUSINESS_ERROR";
+    }
+
     public BusinessException(String message, String code) {
         super(message);
         this.code = code;
     }
+
 
     private final String code;
 

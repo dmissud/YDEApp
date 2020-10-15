@@ -1,5 +1,6 @@
 package org.yde.ydeapp.infrastructure.application;
 
+
 import org.yde.ydeapp.infrastructure.organization.OrganizationEntity;
 
 import javax.persistence.*;
@@ -17,9 +18,10 @@ public class ApplicationEntity {
 
     private String shortDescription;
 
+    @Column(length = 2500)
     private String longDescription;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @Embedded
     private PersonneEntity responsable;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -28,7 +30,11 @@ public class ApplicationEntity {
     @Embedded
     private CycleLifeEntity cycleLife;
 
+    @Embedded
+    private ItSolutionEntity itSolution;
 
+    @Embedded
+    private CriticityEntity criticity;
 
     @ElementCollection
     private List<NoteEntity> notes;
@@ -81,8 +87,25 @@ public class ApplicationEntity {
         this.cycleLife = cycleLife;
     }
 
+    public ItSolutionEntity getItSolution() {
+        return itSolution;
+    }
+
+    public void setItSolution(ItSolutionEntity itSolution) {
+        this.itSolution = itSolution;
+    }
+
+    public CriticityEntity getCriticity() {
+        return criticity;
+    }
+
+    public void setCriticity(CriticityEntity criticity) {
+        this.criticity = criticity;
+    }
+
     public List<NoteEntity> getNotes() { return notes; }
 
     public void setNotes(List<NoteEntity> notes) { this.notes = notes; }
+
 
 }

@@ -7,13 +7,15 @@ spring:
     hibernate:
       ddl-auto: update
     properties:
+      hibernate:
         dialect: org.hibernate.dialect.H2Dialect
   datasource:
     platform: h2
-    url: jdbc:h2:mem:db_cartographie
+    url: jdbc:h2:file:c:\ydeapp\db\db_cartographie
     username: sa
     password:
     driverClassName: org.h2.Driver
+    initialization-mode: always
   h2:
     console:
       enabled: true
@@ -27,5 +29,8 @@ server:
   port: 9090
 logging:
   level:
-    org.yde.ydeapp: debug
-    org.springframework: error
+    org.yde.ydeapp: error
+    org.springframework: info
+ydeapp:
+  dir: c:\ydeapp
+  client: http://localhost:4201

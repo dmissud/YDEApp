@@ -9,21 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.yde.ydeapp.domain.Application;
-import org.yde.ydeapp.domain.CycleLife;
-import org.yde.ydeapp.domain.Note;
-import org.yde.ydeapp.domain.OrganizationIdent;
-import org.yde.ydeapp.domain.Personne;
+import org.yde.ydeapp.domain.application.*;
+import org.yde.ydeapp.domain.organization.OrganizationIdent;
 import org.yde.ydeapp.infrastructure.organization.OrganizationEntity;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,11 +49,34 @@ class RepositoryOfApplicationImplTest {
     private static final String NOTE_2ND_CONTENT = "Another story...";
     private static final LocalDate NOTE_2ND_CREATION_DATE = LocalDate.of(2000, 6, 15);
 
+    /*
+    * data for ItSolution
+     */
+    public static final String TYPE_OF_SOLUTION = "10000000";
+    public static final String NAME_OF_FIRMWARE = "NameOfFirmware";
+    private static final String LABEL_OF_SOURCING = "IBM";
+
+    /*
+    * data for Criticity
+     */
+
+    private static final String PRIVILEGE_INFORMATION ="NON";
+    private static final String PERSONAL_DATA ="OUI";
+    private static final String SERVICE_CLASS ="Service minimum";
+    private static final String AVAILABILITY ="C12";
+    private static final String RPO ="01 J 01 H 12 MIN";
+    private static final String RTO ="02 J 03 H 22 MIN";
+
+    /*
+     * data for Personne
+     */
 
     public static final String ID_REFOG_MOE = "10000000";
     public static final String NAME_OF_MOE = "NAME_OF_MOE";
     public static final String ID_REFOG_MOE_OTHER = "10000001";
     public static final String NAME_OF_MOE_OTHER = "NAME_OF_OTHER_MOE";
+
+
 
 
     @Autowired
@@ -90,6 +105,7 @@ class RepositoryOfApplicationImplTest {
         assertThat(application.getOrganizationIdent()).isNotNull();
         assertThat(application.getOrganizationIdent().getIdRefog()).isEqualTo(ID_REFOG_MOE);
         assertThat(application.getCycleLife()).isNotNull();
+        assertThat(application.getItSolution()).isNotNull();
         assertThat(application.retrieveNotes()).isNotNull();
         assertThat(application.retrieveNoteByTitle(NOTE_TITLE)).isNotNull();
         assertThat(application.retrieveNoteByTitle(NOTE_TITLE).getNoteTitle()).isEqualTo(NOTE_TITLE);
@@ -116,6 +132,8 @@ class RepositoryOfApplicationImplTest {
         // Application not in base
         Personne personne = new Personne(UID_OF_RESPONSABLE, FIRSTNAME_OF_RESPONSABLE, LASTNAME_OF_RESPONSABLE);
         CycleLife cycleLife = new CycleLife(STATE,DATE_OF_CREATION,DATE_OF_LAST_UPDATE,DATE_END_IN_REALITY);
+        ItSolution itSolution=new ItSolution(TYPE_OF_SOLUTION,NAME_OF_FIRMWARE,LABEL_OF_SOURCING);
+        Criticity criticity=new Criticity(PRIVILEGE_INFORMATION,PERSONAL_DATA,SERVICE_CLASS,AVAILABILITY,RPO,RTO);
         OrganizationIdent organizationIdent = new OrganizationIdent(ID_REFOG_MOE, NAME_OF_MOE);
         Application application = new Application.Builder(CODE_APP)
             .withShortDescription(SHORT_DESCRIPTION)
@@ -123,6 +141,8 @@ class RepositoryOfApplicationImplTest {
             .withResponsable(personne)
             .withOrganization(organizationIdent)
             .withCycleLife(cycleLife)
+            .withItSolution(itSolution)
+            .withCriticity(criticity)
             .build();
 
         // When
@@ -142,6 +162,8 @@ class RepositoryOfApplicationImplTest {
         Personne personne = new Personne(UID_OF_RESPONSABLE, FIRSTNAME_OF_RESPONSABLE, LASTNAME_OF_RESPONSABLE);
         OrganizationIdent organizationIdent = new OrganizationIdent(ID_REFOG_MOE, NAME_OF_MOE);
         CycleLife cycleLife = new CycleLife(STATE,DATE_OF_CREATION,DATE_OF_LAST_UPDATE,DATE_END_IN_REALITY);
+        ItSolution itSolution=new ItSolution(TYPE_OF_SOLUTION,NAME_OF_FIRMWARE,LABEL_OF_SOURCING);
+        Criticity criticity=new Criticity(PRIVILEGE_INFORMATION,PERSONAL_DATA,SERVICE_CLASS,AVAILABILITY,RPO,RTO);
 
         Application application = new Application.Builder(CODE_APP)
             .withShortDescription(SHORT_DESCRIPTION)
@@ -149,6 +171,8 @@ class RepositoryOfApplicationImplTest {
             .withResponsable(personne)
             .withOrganization(organizationIdent)
             .withCycleLife(cycleLife)
+            .withItSolution(itSolution)
+            .withCriticity(criticity)
             .build();
 
         // When
@@ -166,6 +190,8 @@ class RepositoryOfApplicationImplTest {
         assertThat(((ApplicationEntity) lstApp.get(0)).getOrganisation().getApplications().get(0)).isNotNull();
         assertThat(((ApplicationEntity) lstApp.get(0)).getOrganisation().getApplications().get(0).getCodeApp()).isEqualTo(CODE_APP);
         assertThat(((ApplicationEntity) lstApp.get(0)).getCycleLife()).isNotNull();
+        assertThat(((ApplicationEntity) lstApp.get(0)).getItSolution()).isNotNull();
+        assertThat(((ApplicationEntity) lstApp.get(0)).getCriticity()).isNotNull();
     }
 
     @Test
@@ -180,6 +206,8 @@ class RepositoryOfApplicationImplTest {
         Personne personne = new Personne(UID_OF_RESPONSABLE, FIRSTNAME_OF_RESPONSABLE, LASTNAME_OF_RESPONSABLE);
         OrganizationIdent organizationIdent = new OrganizationIdent(ID_REFOG_MOE_OTHER, NAME_OF_MOE_OTHER);
         CycleLife cycleLife = new CycleLife(STATE,DATE_OF_CREATION,DATE_OF_LAST_UPDATE,DATE_END_IN_REALITY);
+        ItSolution itSolution=new ItSolution(TYPE_OF_SOLUTION,NAME_OF_FIRMWARE,LABEL_OF_SOURCING);
+        Criticity criticity=new Criticity(PRIVILEGE_INFORMATION,PERSONAL_DATA,SERVICE_CLASS,AVAILABILITY,RPO,RTO);
 
 
         Application application = new Application.Builder(CODE_APP)
@@ -188,6 +216,8 @@ class RepositoryOfApplicationImplTest {
             .withResponsable(personne)
             .withOrganization(organizationIdent)
             .withCycleLife(cycleLife)
+            .withItSolution(itSolution)
+            .withCriticity(criticity)
             .build();
 
         // When
@@ -206,6 +236,8 @@ class RepositoryOfApplicationImplTest {
         assertThat(((ApplicationEntity) lstApp.get(0)).getOrganisation().getApplications().get(0)).isNotNull();
         assertThat(((ApplicationEntity) lstApp.get(0)).getOrganisation().getApplications().get(0).getCodeApp()).isEqualTo(CODE_APP);
         assertThat(((ApplicationEntity) lstApp.get(0)).getCycleLife()).isNotNull();
+        assertThat(((ApplicationEntity) lstApp.get(0)).getItSolution()).isNotNull();
+        assertThat(((ApplicationEntity) lstApp.get(0)).getCriticity()).isNotNull();
 
         List lstOrga = testEntityManager.getEntityManager().createQuery("select c from OrganizationEntity c where c.idRefog = :idRefogAttenduDansQuery")
             .setParameter("idRefogAttenduDansQuery", ID_REFOG_MOE)
@@ -266,6 +298,22 @@ class RepositoryOfApplicationImplTest {
 
         applicationEntity.setCycleLife(cycleLifeEntity);
 
+        ItSolutionEntity itSolutionEntity= new ItSolutionEntity();
+        itSolutionEntity.setTypeOfSolution(TYPE_OF_SOLUTION);
+        itSolutionEntity.setNameOfFirmware(NAME_OF_FIRMWARE);
+        itSolutionEntity.setLabelOfSourcingMode(LABEL_OF_SOURCING);
+
+        applicationEntity.setItSolution(itSolutionEntity);
+
+        CriticityEntity criticityEntity =new CriticityEntity();
+        criticityEntity.setPrivilegeInformation(PRIVILEGE_INFORMATION);
+        criticityEntity.setPersonalData(PERSONAL_DATA);
+        criticityEntity.setServiceClass(SERVICE_CLASS);
+        criticityEntity.setAviability(AVAILABILITY);
+        criticityEntity.setRpo(RPO);
+        criticityEntity.setRto(RTO);
+        applicationEntity.setCriticity(criticityEntity);
+
 
         testEntityManager.persistAndFlush(applicationEntity);
     }
@@ -279,17 +327,22 @@ class RepositoryOfApplicationImplTest {
         // When
         OrganizationIdent organizationIdent = new OrganizationIdent(ID_REFOG_MOE, NAME_OF_MOE);
         CycleLife cycleLife = new CycleLife(STATE,DATE_OF_CREATION,DATE_OF_LAST_UPDATE,DATE_END_IN_REALITY);
+        ItSolution itSolution=new ItSolution(TYPE_OF_SOLUTION,NAME_OF_FIRMWARE,LABEL_OF_SOURCING);
+        Criticity criticity=new Criticity(PRIVILEGE_INFORMATION,PERSONAL_DATA,SERVICE_CLASS,AVAILABILITY,RPO,RTO);
         Personne responsable = new Personne(UID_OF_RESPONSABLE, FIRSTNAME_OF_RESPONSABLE, LASTNAME_OF_RESPONSABLE);
+
         Application application = new Application.Builder(CODE_APP)
             .withShortDescription(SHORT_DESCRIPTION)
             .withLongDescription(LONG_DESCRIPTION)
             .withResponsable(responsable)
             .withOrganization(organizationIdent)
             .withCycleLife(cycleLife)
+            .withItSolution(itSolution)
+            .withCriticity(criticity)
             .build();
 
         Note noteUpdate = new Note(NOTE_TITLE, NOTE_CONTENT, NOTE_CREATION_DATE);
-        application.addNote(noteUpdate);
+        application.storeOfNote(noteUpdate);
 
         repositoryOfApplicationImpl.updateApplication(application);
 
@@ -314,6 +367,8 @@ class RepositoryOfApplicationImplTest {
         // When
         Personne responsable = new Personne(UID_OF_RESPONSABLE, FIRSTNAME_OF_RESPONSABLE, LASTNAME_OF_RESPONSABLE);
         CycleLife cycleLife = new CycleLife(STATE,DATE_OF_CREATION,DATE_OF_LAST_UPDATE,DATE_END_IN_REALITY);
+        ItSolution itSolution=new ItSolution(TYPE_OF_SOLUTION,NAME_OF_FIRMWARE,LABEL_OF_SOURCING);
+        Criticity criticity=new Criticity(PRIVILEGE_INFORMATION,PERSONAL_DATA,SERVICE_CLASS,AVAILABILITY,RPO,RTO);
         OrganizationIdent organizationIdent = new OrganizationIdent(ID_REFOG_MOE, NAME_OF_MOE);
         Application application = new Application.Builder(CODE_APP)
             .withShortDescription(SHORT_DESCRIPTION)
@@ -321,15 +376,17 @@ class RepositoryOfApplicationImplTest {
             .withResponsable(responsable)
             .withOrganization(organizationIdent)
             .withCycleLife(cycleLife)
+            .withItSolution(itSolution)
+            .withCriticity(criticity)
             .build();
 
         Note noteInit = new Note(NOTE_TITLE, NOTE_CONTENT, NOTE_CREATION_DATE);
-        application.addNote(noteInit);
+        application.storeOfNote(noteInit);
 
         repositoryOfApplicationImpl.updateApplication(application);
 
         Note notePlus = new Note(NOTE_2ND_TITLE, NOTE_2ND_CONTENT, NOTE_2ND_CREATION_DATE);
-        application.addNote(notePlus);
+        application.storeOfNote(notePlus);
 
         repositoryOfApplicationImpl.updateApplication(application);
 
@@ -356,6 +413,8 @@ class RepositoryOfApplicationImplTest {
         // When
         Personne responsable = new Personne(UID_OF_RESPONSABLE, FIRSTNAME_OF_RESPONSABLE, LASTNAME_OF_RESPONSABLE);
         CycleLife cycleLife = new CycleLife(STATE,DATE_OF_CREATION,DATE_OF_LAST_UPDATE,DATE_END_IN_REALITY);
+        ItSolution itSolution=new ItSolution(TYPE_OF_SOLUTION,NAME_OF_FIRMWARE,LABEL_OF_SOURCING);
+        Criticity criticity=new Criticity(PRIVILEGE_INFORMATION,PERSONAL_DATA,SERVICE_CLASS,AVAILABILITY,RPO,RTO);
         OrganizationIdent organizationIdent = new OrganizationIdent(ID_REFOG_MOE, NAME_OF_MOE);
         Application application = new Application.Builder(CODE_APP)
             .withShortDescription(SHORT_DESCRIPTION)
@@ -363,20 +422,22 @@ class RepositoryOfApplicationImplTest {
             .withResponsable(responsable)
             .withOrganization(organizationIdent)
             .withCycleLife(cycleLife)
+            .withItSolution(itSolution)
+            .withCriticity(criticity)
             .build();
 
         Note noteInit = new Note(NOTE_TITLE, NOTE_CONTENT, NOTE_CREATION_DATE);
-        application.addNote(noteInit);
+        application.storeOfNote(noteInit);
 
         repositoryOfApplicationImpl.updateApplication(application);
 
         Note notePlus = new Note(NOTE_2ND_TITLE, NOTE_2ND_CONTENT, NOTE_2ND_CREATION_DATE);
-        application.addNote(notePlus);
+        application.storeOfNote(notePlus);
 
         repositoryOfApplicationImpl.updateApplication(application);
 
         noteInit = new Note(NOTE_TITLE, NOTE_CONTENT_UPDATE, NOTE_CREATION_DATE_UPDATE);
-        application.addNote(noteInit);
+        application.storeOfNote(noteInit);
 
         repositoryOfApplicationImpl.updateApplication(application);
 

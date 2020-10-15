@@ -10,9 +10,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.yde.ydeapp.application.in.ReferenceNoteUseCase;
+import org.yde.ydeapp.application.in.application.ReferenceNoteUseCase;
+import org.yde.ydeapp.application.in.application.UpdateNoteUseCase;
 import org.yde.ydeapp.application.service.NoteManagementService;
-import org.yde.ydeapp.domain.*;
+import org.yde.ydeapp.domain.application.*;
+import org.yde.ydeapp.domain.organization.OrganizationIdent;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfApplication;
 
@@ -111,7 +113,7 @@ public class RegisterNoteSteps {
     public void an_existing_note_referenced_to_an_application(String noteTitle, String noteContent, String noteCreationDate, String codeApplication) {
         buildApplication(codeApplication);
         note = new Note(noteTitle, noteContent, LocalDate.parse(noteCreationDate, formatter));
-        application.addNote(note);
+        application.storeOfNote(note);
         Mockito
             .when(repositoryOfApplication.retrieveByAppCode(codeApplication))
             .thenReturn(application);
@@ -126,7 +128,9 @@ public class RegisterNoteSteps {
         } else {
             throw new PendingException("Bad use of Cucumber scenario: update a new Application");
         }
-        noteManagementService.updateNote(application.getCodeApplication(), noteTitle, noteTable);
+        UpdateNoteUseCase.UpdateNoteCmd noteCmd = new UpdateNoteUseCase.UpdateNoteCmd(
+            noteTable.getNoteTitle(), noteTable.getNoteContent());
+        noteManagementService.updateExistingNote(application.getCodeApplication(), noteCmd);
     }
 
     @Then("Note {string} has been updated")
@@ -140,7 +144,7 @@ public class RegisterNoteSteps {
     public void an_existing_application(String codeApplication, String noteTitle, String noteContent, String noteCreationDate) {
         buildApplication(codeApplication);
         note = new Note(noteTitle, noteContent, LocalDate.parse(noteCreationDate, formatter));
-        application.addNote(note);
+        application.storeOfNote(note);
         Mockito
             .when(repositoryOfApplication.retrieveByAppCode(codeApplication))
             .thenReturn(application);
@@ -164,8 +168,8 @@ public class RegisterNoteSteps {
         buildApplication(codeApplication);
         Note note1 = new Note(noteTitle1, noteContent1, LocalDate.parse(noteCreationDate1, formatter));
         Note note2 = new Note(noteTitle2, noteContent2, LocalDate.parse(noteCreationDate2, formatter));
-        application.addNote(note1);
-        application.addNote(note2);
+        application.storeOfNote(note1);
+        application.storeOfNote(note2);
     }
 
     @When("User wants to get a note-list")
@@ -184,7 +188,7 @@ public class RegisterNoteSteps {
     public void an_existing_application_with_the_note(String codeApplication, String noteTitle, String noteContent, String noteCreationDate) {
         buildApplication(codeApplication);
         note = new Note(noteTitle, noteContent, LocalDate.parse(noteCreationDate, formatter));
-        application.addNote(note);
+        application.storeOfNote(note);
         Mockito
             .when(repositoryOfApplication.retrieveByAppCode(codeApplication))
             .thenReturn(application);
@@ -207,7 +211,7 @@ public class RegisterNoteSteps {
     public void an_existing_application_with_following_note(String codeApplication, String noteTitle, String noteContent, String noteCreationDate) {
         buildApplication(codeApplication);
         note = new Note(noteTitle, noteContent, LocalDate.parse(noteCreationDate, formatter));
-        application.addNote(note);
+        application.storeOfNote(note);
         Mockito
             .when(repositoryOfApplication.retrieveByAppCode(codeApplication))
             .thenReturn(application);
@@ -238,12 +242,16 @@ public class RegisterNoteSteps {
         OrganizationIdent organizationIdent = new OrganizationIdent("12345678", "Organization Name");
         Personne personne = new Personne("123456", "firstName", "lastName");
         CycleLife cycleLife = new CycleLife("Active", LocalDate.now(), LocalDate.now(),LocalDate.now());
+        ItSolution itSolution= new ItSolution("Open","","ibm");
+        Criticity criticity = new Criticity("oui","non","c12","service minimum", "00 j 12h 12 min","05 j 11h 55min");
         application = new Application.Builder(codeApplication)
             .withShortDescription("Short description")
             .withLongDescription("Long description Long description")
             .withResponsable(personne)
             .withOrganization(organizationIdent)
             .withCycleLife(cycleLife)
+            .withItSolution(itSolution)
+            .withCriticity(criticity)
             .build();
     }
 }

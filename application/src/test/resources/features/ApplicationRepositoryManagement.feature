@@ -14,6 +14,12 @@ Feature: Management of the repository of Application
     And With the cycle life create
       | state  | dateOfCreation | dateOfLastUpdate | dateEndInReality |
       | Active | 01/01/2020     | 01/08/2020       | 28/08/2020       |
+    And With the criticity create
+      | privilegeInformation  | personalData | serviceClass | availability    | rpo                 | rto              |
+      | oui                   | oui          | C3           | Service minimum |   01 j 00 h 00 min  | 07 j 00h 00 min  |
+    And With it solution create
+      | typeOfSolution  | nameOfFirmware | LabelOfSourcing |
+      | Open            | Toto           | TMA             |
     Then The application with code "AP00001" is created in the repository
     And The application with code "AP00001" rattached to the Organization with idRefog "10000000"
 
@@ -28,6 +34,12 @@ Feature: Management of the repository of Application
     And With the cycle life
       | state  | dateOfCreation | dateOfLastUpdate | dateEndInReality |
       | Active | 01/01/2020     | 01/08/2020       | 28/08/2020       |
+    And With the criticity
+      | privilegeInformation  | personalData | serviceClass | availability    | rpo                 | rto              |
+      | oui                   | oui          | C3           | Service minimum |   01 j 00 h 00 min  | 07 j 00h 00 min  |
+    And With the it solution
+      | typeOfSolution  | nameOfFirmware | LabelOfSourcing |
+      | Open            | Toto           | TMA             |
     When The administrator update the repository with this application with this data
       | codeApplication | shortDescription | longDescription               | IdRefogOrganization |
       | AP00001         | Test App update  | Long description for update   | 10000001            |
@@ -37,6 +49,12 @@ Feature: Management of the repository of Application
     And With the cycle life update
       | state  | dateOfCreation | dateOfLastUpdate | dateEndInReality |
       | Active | 01/02/2020     | 01/07/2020       | 28/07/2020       |
+    And With the criticity update
+      | privilegeInformation  | personalData | serviceClass | availability    | rpo                 | rto              |
+      | non                   | non          | C1           | Service maximum |   02 j 01 h 02 min  | 06 j 05h 05 min  |
+    And With the it solution update
+      | typeOfSolution  | nameOfFirmware | LabelOfSourcing |
+      | Open            |                |                 |
     Then The application with code "AP00001" is updated in the repository
     And The application with code "AP00001" rattached to the Organization with idRefog "10000001"
 
