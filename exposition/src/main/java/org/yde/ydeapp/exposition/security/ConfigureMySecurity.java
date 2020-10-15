@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -28,7 +29,7 @@ import org.yde.ydeapp.exposition.security.jwt.JwtRequestFilter;
 @EnableGlobalMethodSecurity(
     securedEnabled = true,
     jsr250Enabled = true,
-    prePostEnabled = true
+    proxyTargetClass = true
 )
 public class ConfigureMySecurity extends WebSecurityConfigurerAdapter {
     @Autowired
@@ -100,5 +101,11 @@ public class ConfigureMySecurity extends WebSecurityConfigurerAdapter {
 
         return source;
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
 }

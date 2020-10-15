@@ -11,13 +11,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.yde.ydeapp.application.in.application.ApplicationQuery;
 import org.yde.ydeapp.application.in.organization.OrganizationQuery;
 import org.yde.ydeapp.application.in.organization.ReferenceOrganizationUseCase;
 import org.yde.ydeapp.application.in.organization.ReferenceOrganizationUseCase.ReferenceOrganisationCmd;
+import org.yde.ydeapp.application.in.user.GetUserQuery;
 import org.yde.ydeapp.domain.organization.Organization;
+import org.yde.ydeapp.exposition.security.jwt.JwtAuthenticationEntryPoint;
+import org.yde.ydeapp.exposition.security.jwt.JwtTokenManager;
+import org.yde.ydeapp.exposition.security.jwt.YdeAppUserDetailsService;
 
 import java.util.ArrayList;
 
@@ -25,7 +31,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest({OrganizationResource.class})
+@WebMvcTest({OrganizationResource.class, YdeAppUserDetailsService.class})
 class OrganizationResourceTest {
 
     public static final String ORGANIZATION_ONE = "Organization One";
@@ -44,6 +50,18 @@ class OrganizationResourceTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @MockBean
+    private GetUserQuery getUserQuery;
+
+    @MockBean
+    private ApplicationQuery applicationQuery;
+
+    @MockBean
+    JwtTokenManager jwtTokenManager;
+
+    @MockBean
+    JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
     private Organization organization;
 
 
@@ -54,6 +72,7 @@ class OrganizationResourceTest {
 
     @Test
     @DisplayName("Reference a new organization")
+    @WithMockUser(roles = {"ADMIN"})
     void when_i_reference_a_new_organization_http_status_is_created() throws Exception {
         // Given
 
@@ -76,6 +95,7 @@ class OrganizationResourceTest {
     }
 
     @Test
+    @WithMockUser(roles = {"ADMIN"})
     @DisplayName("Retrieve a organization")
     void when_i_retrieve_the_detail_of_a_organization_http_status_is_ok() throws Exception {
         // Given
