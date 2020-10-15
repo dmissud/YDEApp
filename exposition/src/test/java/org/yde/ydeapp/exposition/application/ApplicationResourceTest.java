@@ -83,13 +83,11 @@ class ApplicationResourceTest {
     private ObjectMapper objectMapper;
 
 
-    private User user;
     private Application application;
     private Application application_updated;
 
     @BeforeEach
     void setup() {
-        user = new User("Admin", "UserAdmin", "FromAdmin", "$2a$10$hKDVYxLefVHV/vtuPhWD3OigtRyOykRLDdUAp80Z1crSoS1lFqaFS", 6);
         application = new Application.Builder(CODE_APPLICATION)
             .withShortDescription(A_SHORT_DESCRIPTION_INIT)
             .withLongDescription(A_LONG_DESCRIPTION_INIT)
@@ -119,10 +117,6 @@ class ApplicationResourceTest {
             .when(applicationQuery.getApplication(CODE_APPLICATION))
             .thenReturn(application);
 
-        Mockito
-            .when(getUserQuery.getUserByUid(Mockito.anyString()))
-            .thenReturn(user);
-
         mockMvc
             // When
             .perform(MockMvcRequestBuilders.get("/api/V1/applications/" + CODE_APPLICATION)
@@ -139,9 +133,6 @@ class ApplicationResourceTest {
         Mockito
             .when(applicationQuery.getApplication(CODE_APPLICATION))
             .thenReturn(application);
-        Mockito
-            .when(getUserQuery.getUserByUid(Mockito.anyString()))
-            .thenReturn(user);
         mockMvc
             // When
             .perform(MockMvcRequestBuilders.get("/api/V1/applications/")
