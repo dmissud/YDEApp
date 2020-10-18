@@ -9,15 +9,17 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.launch.support.SimpleJobLauncher;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.skip.SkipPolicy;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.yde.ydeapp.application.in.application.ReferenceApplicationUseCase;
 import org.yde.ydeapp.application.in.application.ReferenceCollectionOfApplicationUseCase;
-import org.yde.ydeapp.application.in.flux.StoreFileRefiUseCase;
 
 @Configuration
 @EnableBatchProcessing
@@ -25,12 +27,6 @@ public class RefiFileImportJob {
 
     public static final String IMPORT_REFI_STEP = "import-refi-step";
     public static final String IMPORT_REFI_JOB = "import-refi-job";
-
-    @Autowired
-    StoreFileRefiUseCase storeFileRefiUseCase;
-
-    @Autowired
-    JobLauncher jobLauncher;
 
     private static final Logger log = LoggerFactory.getLogger(RefiFileImportJob.class);
 
@@ -106,5 +102,15 @@ public class RefiFileImportJob {
     YdeAppWriter ydeAppWriterBuilder(ReferenceCollectionOfApplicationUseCase referenceCollectionOfApplicationUseCase) {
         return new YdeAppWriter(referenceCollectionOfApplicationUseCase);
     }
+
+    @Bean
+    public JobLauncher simpleJobLauncher(JobRepository jobRepository) throws Exception {
+        SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
+        jobLauncher.setJobRepository(jobRepository);
+        jobLauncher.setTaskExecutor(new SimpleAsyncTaskExecutor());
+        jobLauncher.afterPropertiesSet();
+        return jobLauncher;
+    }
+
 
 }

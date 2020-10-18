@@ -10,6 +10,7 @@ import org.yde.ydeapp.application.in.organization.OrganizationQuery;
 import org.yde.ydeapp.application.in.organization.ReferenceOrganizationUseCase;
 import org.yde.ydeapp.application.in.organization.ReferenceOrganizationUseCase.ReferenceOrganisationCmd;
 import org.yde.ydeapp.domain.organization.Organization;
+import org.yde.ydeapp.domain.organization.OrganizationIdent;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -58,12 +59,10 @@ public class OrganizationResource {
 
     @Secured("ROLE_ADMIN")
     @GetMapping(value = "organizations", produces = {"application/json"})
-    public ResponseEntity<List<OrganizationDTO>> retrieveOrganizations() {
-        List<OrganizationDTO> organizationDTOList = organizationQuery.getOrganizations().stream()
-            .map(this::mapDomainToDto)
-            .collect(Collectors.toList());
+    public ResponseEntity<List<OrganizationIdent>> retrieveOrganizations() {
+        List<OrganizationIdent> organizationList = organizationQuery.getOrganizations();
 
-        return new ResponseEntity<>(organizationDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(organizationList, HttpStatus.OK);
     }
 
     private OrganizationDTO mapDomainToDto(Organization organization) {

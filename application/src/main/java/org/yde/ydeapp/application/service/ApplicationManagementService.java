@@ -92,6 +92,8 @@ public class ApplicationManagementService implements ReferenceApplicationUseCase
                 repositoryOfApplication.referenceApplication(application);
                 stateCmd = StateUpdateEnum.REFERENCE;
             }
+        } else {
+            log.trace("Application {} Ignored chez {}", referenceApplicationCmd.getCodeApp(), referenceApplicationCmd.getIdRefOrganizationMoe());
         }
         return stateCmd;
     }

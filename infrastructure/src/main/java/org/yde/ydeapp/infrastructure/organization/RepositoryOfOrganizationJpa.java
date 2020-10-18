@@ -12,5 +12,7 @@ public interface RepositoryOfOrganizationJpa extends JpaRepository<OrganizationE
     @Query(value = "select new org.yde.ydeapp.domain.organization.OrganizationIdent(orga.idRefog, orga.name) from OrganizationEntity orga where orga.idRefog = :idRefog")
     OrganizationIdent retrieveOrganizationIdent(String idRefog);
     List<OrganizationEntity> findAllByRootIs(boolean isRoot);
-    List<OrganizationEntity> findAllByIdAfter(Long id);
+
+    @Query(value = "SELECT new org.yde.ydeapp.domain.organization.OrganizationIdent(organization.idRefog, organization.name) FROM OrganizationEntity organization ")
+    List<OrganizationIdent> findAllOrganizationIdent();
 }

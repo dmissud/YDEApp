@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yde.ydeapp.application.in.organization.OrganizationQuery;
 import org.yde.ydeapp.domain.organization.Organization;
+import org.yde.ydeapp.domain.organization.OrganizationIdent;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfOrganization;
 
@@ -32,7 +33,7 @@ public class OrganizationQueryService implements OrganizationQuery {
     }
 
     @Override
-    public List<Organization> getOrganizations() {
+    public List<OrganizationIdent> getOrganizations() {
         return repositoryOfOrganization.retrieveOrganizations();
     }
 }

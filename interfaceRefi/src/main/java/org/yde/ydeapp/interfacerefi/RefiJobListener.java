@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 import org.yde.ydeapp.application.in.flux.ReportImportFluxUseCase;
+import org.yde.ydeapp.application.in.organization.OrganizationQuery;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,6 +22,9 @@ import java.time.ZoneId;
 public class RefiJobListener implements JobExecutionListener {
 
     private final ReportImportFluxUseCase reportImportFluxUseCase;
+
+    @Autowired
+    OrganizationQuery organizationQuery;
 
     @Autowired
     private YdeAppWriter ydeAppWriter;
@@ -41,7 +45,7 @@ public class RefiJobListener implements JobExecutionListener {
         String keyName = jobExecution.getJobParameters().getString("refi_file_name");
         if (keyName != null) {
             this.pathRefiFileToImport = Paths.get(keyName);
-            ydeAppWriter.workOn(this.pathRefiFileToImport);
+            ydeAppWriter.workOn(this.pathRefiFileToImport, organizationQuery.getOrganizations());
             buildRefiItemReader.setResource(new FileSystemResource(this.pathRefiFileToImport));
         } else {
             this.pathRefiFileToImport = null;
