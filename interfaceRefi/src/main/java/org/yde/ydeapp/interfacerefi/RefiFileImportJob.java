@@ -19,7 +19,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.yde.ydeapp.application.in.application.ReferenceApplicationUseCase;
-import org.yde.ydeapp.application.in.application.ReferenceCollectionOfApplicationUseCase;
 
 @Configuration
 @EnableBatchProcessing
@@ -35,24 +34,24 @@ public class RefiFileImportJob {
     public Job importJob(StepBuilderFactory stepBuilderFactory,
                          JobBuilderFactory jobBuilderFactory,
                          RefiJobListener refiJobListener,
-                         ReferenceCollectionOfApplicationUseCase referenceCollectionOfApplicationUseCase) {
+                         YdeAppWriter ydeAppWriter) {
         log.trace("import-job created");
         return jobBuilderFactory.get(IMPORT_REFI_JOB)
             .incrementer(new RunIdIncrementer()) //
             .listener(refiJobListener)
-            .start(importStep(stepBuilderFactory, referenceCollectionOfApplicationUseCase)) //
+            .start(importStep(stepBuilderFactory, ydeAppWriter)) //
             .build();
     }
 
     @Bean
-    public Step importStep(StepBuilderFactory stepBuilderFactory, ReferenceCollectionOfApplicationUseCase referenceCollectionOfApplicationUseCase) {
+    public Step importStep(StepBuilderFactory stepBuilderFactory, YdeAppWriter ydeAppWriter) {
         return stepBuilderFactory.get(IMPORT_REFI_STEP) //
             .<ApplicationSourcePosition, ReferenceApplicationUseCase.ReferenceApplicationCmd>chunk(5) //
             .reader(buildRefiItemReader())
             .faultTolerant()
             .skipPolicy(fileVerificationSkipper())//
             .processor(processor())
-            .writer(ydeAppWriterBuilder(referenceCollectionOfApplicationUseCase)) //
+            .writer(ydeAppWriter) //
             .build();
     }
 
@@ -96,11 +95,6 @@ public class RefiFileImportJob {
                     item.getRPO(),
                     item.getRTO())
         );
-    }
-
-    @Bean
-    YdeAppWriter ydeAppWriterBuilder(ReferenceCollectionOfApplicationUseCase referenceCollectionOfApplicationUseCase) {
-        return new YdeAppWriter(referenceCollectionOfApplicationUseCase);
     }
 
     @Bean

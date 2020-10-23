@@ -1,6 +1,7 @@
 package org.yde.ydeapp.interfacerefi;
 
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.stereotype.Component;
 import org.yde.ydeapp.application.in.application.CollectionApplicationCmd;
 import org.yde.ydeapp.application.in.application.ReferenceApplicationUseCase.ReferenceApplicationCmd;
 import org.yde.ydeapp.application.in.application.ReferenceCollectionOfApplicationUseCase;
@@ -10,7 +11,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Component
 public class YdeAppWriter implements ItemWriter<ReferenceApplicationCmd> {
 
     private final ReferenceCollectionOfApplicationUseCase referenceCollectionOfApplicationUseCase;
