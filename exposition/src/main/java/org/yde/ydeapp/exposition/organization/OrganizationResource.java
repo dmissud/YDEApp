@@ -58,6 +58,20 @@ public class OrganizationResource {
     }
 
     @Secured("ROLE_ADMIN")
+    @PutMapping("organizations/{idrefog}")
+    public ResponseEntity<Void> updateOrganization(@Valid @RequestBody ReferenceOrganisationCmd referenceOrganisationCmd,
+                                                   @Valid @NotNull @PathVariable("idRefog") final String idRefog) {
+        Organization organization = referenceOrganizationUseCase.updateOrganization(referenceOrganisationCmd, idRefog);
+        URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{nameOrganization}")
+            .buildAndExpand(organization.getIdRefog())
+            .toUri();
+
+        return ResponseEntity.created(location).header("Access-Control-Expose-Headers", "Location").build();
+    }
+
+    @Secured("ROLE_ADMIN")
     @GetMapping(value = "organizations", produces = {"application/json"})
     public ResponseEntity<List<OrganizationIdent>> retrieveOrganizations() {
         List<OrganizationIdent> organizationList = organizationQuery.getOrganizations();

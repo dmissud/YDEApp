@@ -98,7 +98,7 @@ public class RegisterOrganizationSteps {
     @When("Administrator want change the name of the  organization with idRefog {string}  with {string}")
     public void administrator_want_change_the_name_of_the_organization_with_IdRefog_with(String idRefog, String newName) {
         ReferenceOrganisationCmd referenceOrganisationCmd = new ReferenceOrganisationCmd(newName, idRefog, new ArrayList<>());
-        organizationInRepository = referenceOrganizationUseCase.updateOrganization(referenceOrganisationCmd);
+        organizationInRepository = referenceOrganizationUseCase.updateOrganization(referenceOrganisationCmd, idRefog);
     }
 
     @Then("tne name of the organization {string} is {string}")

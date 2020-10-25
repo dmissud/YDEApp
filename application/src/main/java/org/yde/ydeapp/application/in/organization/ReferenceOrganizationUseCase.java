@@ -11,7 +11,7 @@ import java.util.List;
 public interface ReferenceOrganizationUseCase {
     Organization referenceOrganization(ReferenceOrganisationCmd referenceOrganisationCmd);
 
-    Organization updateOrganization(ReferenceOrganisationCmd referenceOrganisationCmd);
+    Organization updateOrganization(ReferenceOrganisationCmd referenceOrganisationCmd, String idRefog);
 
     @Validated
     class ReferenceOrganisationCmd extends SelfValidating<ReferenceOrganisationCmd> {
