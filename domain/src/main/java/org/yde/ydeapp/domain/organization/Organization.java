@@ -44,7 +44,7 @@ public class Organization {
 
     public int numberOfOrganizationForThisTree() {
         int totalOfOrganization = 1;
-        for(Organization organization: children) {
+        for (Organization organization : children) {
             totalOfOrganization = totalOfOrganization + organization.numberOfOrganizationForThisTree();
         }
         return totalOfOrganization;
@@ -52,7 +52,7 @@ public class Organization {
 
     public int numberOfApplicationForThisTree() {
         int totalOfApplications = applications.size();
-        for(Organization organization: children) {
+        for (Organization organization : children) {
             totalOfApplications = totalOfApplications + organization.numberOfApplicationForThisTree();
         }
         return totalOfApplications;
@@ -76,5 +76,9 @@ public class Organization {
 
     public Collection<ApplicationIdent> getApplications() {
         return applications.values();
+    }
+
+    public OrganizationIdent getOrganizationIdent() {
+        return new OrganizationIdent(this.idRefog, this.name);
     }
 }

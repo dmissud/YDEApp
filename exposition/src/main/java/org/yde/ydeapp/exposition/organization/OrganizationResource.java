@@ -10,7 +10,6 @@ import org.yde.ydeapp.application.in.organization.OrganizationQuery;
 import org.yde.ydeapp.application.in.organization.ReferenceOrganizationUseCase;
 import org.yde.ydeapp.application.in.organization.ReferenceOrganizationUseCase.ReferenceOrganisationCmd;
 import org.yde.ydeapp.domain.organization.Organization;
-import org.yde.ydeapp.domain.organization.OrganizationIdent;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -35,13 +34,15 @@ public class OrganizationResource {
         return new ResponseEntity<>(organization, HttpStatus.OK);
     }
 
-    @GetMapping(value = "organizations/root", produces = {"application/json"})
-    public ResponseEntity<List<OrganizationDTO>> retrieveOrganizationRoot() {
-        List<OrganizationDTO> organizationDTOList = organizationQuery.getOrganizationRoot().stream()
-            .map(this::mapDomainToDto)
-            .collect(Collectors.toList());
-
-        return new ResponseEntity<>(organizationDTOList, HttpStatus.OK);
+    @GetMapping(value = "organizations", produces = {"application/json"})
+    public ResponseEntity<List<OrganizationDTO>> retrieveOrganizations(@RequestParam(value = "isRootOnly", required = false) boolean isRootOnly) {
+        List<Organization> organizationList;
+        if (isRootOnly) {
+            organizationList = organizationQuery.getOrganizationRoot();
+        } else {
+            organizationList = organizationQuery.getOrganizations();
+        }
+        return new ResponseEntity<>(organizationList.stream().map(this::mapDomainToDto).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @Secured("ROLE_ADMIN")
@@ -58,7 +59,7 @@ public class OrganizationResource {
     }
 
     @Secured("ROLE_ADMIN")
-    @PutMapping("organizations/{idrefog}")
+    @PutMapping("organizations/{idRefog}")
     public ResponseEntity<Void> updateOrganization(@Valid @RequestBody ReferenceOrganisationCmd referenceOrganisationCmd,
                                                    @Valid @NotNull @PathVariable("idRefog") final String idRefog) {
         Organization organization = referenceOrganizationUseCase.updateOrganization(referenceOrganisationCmd, idRefog);
@@ -69,14 +70,6 @@ public class OrganizationResource {
             .toUri();
 
         return ResponseEntity.created(location).header("Access-Control-Expose-Headers", "Location").build();
-    }
-
-    @Secured("ROLE_ADMIN")
-    @GetMapping(value = "organizations", produces = {"application/json"})
-    public ResponseEntity<List<OrganizationIdent>> retrieveOrganizations() {
-        List<OrganizationIdent> organizationList = organizationQuery.getOrganizations();
-
-        return new ResponseEntity<>(organizationList, HttpStatus.OK);
     }
 
     private OrganizationDTO mapDomainToDto(Organization organization) {

@@ -33,7 +33,12 @@ public class OrganizationQueryService implements OrganizationQuery {
     }
 
     @Override
-    public List<OrganizationIdent> getOrganizations() {
+    public List<Organization> getOrganizations() {
         return repositoryOfOrganization.retrieveOrganizations();
+    }
+
+    @Override
+    public List<OrganizationIdent> getOrganizationsIdent() {
+        return repositoryOfOrganization.retrieveOrganizationsIdent();
     }
 }

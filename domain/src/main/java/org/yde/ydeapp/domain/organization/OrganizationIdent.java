@@ -4,7 +4,6 @@ public class OrganizationIdent {
     private final String idRefog;
     private final String name;
 
-
     public OrganizationIdent(String idRefog, String name) {
         this.idRefog = idRefog;
         this.name = name;

@@ -23,6 +23,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.times;
 
 public class RegisterOrganizationSteps {
@@ -35,8 +36,7 @@ public class RegisterOrganizationSteps {
     @Mock
     private RepositoryOfOrganization repositoryOfOrganization;
 
-    private Organization organizationInRepository;
-    private Organization organizationSearch;
+    private Organization organizationThen;
 
     @Before
     public void setup() {
@@ -52,7 +52,7 @@ public class RegisterOrganizationSteps {
 
     @Given("All The organization doesn't exist")
     public void all_the_organization_doesn_t_exist() {
-        organizationInRepository = null;
+//        organizationThen = null;
     }
 
     @When("Administrator want to create a new organization Tree based on organization with idRefog {string} and with name {string}")
@@ -62,7 +62,7 @@ public class RegisterOrganizationSteps {
             .thenReturn(null);
 
         ReferenceOrganisationCmd referenceOrganisationCmd = new ReferenceOrganisationCmd(organizationName, idRefog, new ArrayList<>());
-        organizationInRepository = referenceOrganizationUseCase.referenceOrganization(referenceOrganisationCmd);
+        organizationThen = referenceOrganizationUseCase.referenceOrganization(referenceOrganisationCmd);
     }
 
     @When("Administrator want to create a new organization Tree based on organization with idRefog {string} and  with name {string} and the following children")
@@ -72,68 +72,69 @@ public class RegisterOrganizationSteps {
             .thenReturn(null);
 
         ReferenceOrganisationCmd referenceOrganisationCmd = new ReferenceOrganisationCmd(organizationName, idRefog, childrenCmd);
-        organizationInRepository = referenceOrganizationUseCase.referenceOrganization(referenceOrganisationCmd);
-    }
-
-    @Then("a new organization tree is created with base {string} with a total of {string} Childs and {string} Organizations")
-    public void a_new_organization_tree_is_created_with_base_with_a_total_of_childs_and_organizations(String nameOfBase, String numberOfChildren, String numberOfOrganization) {
-        Mockito
-            .verify(repositoryOfOrganization, times(1))
-            .storeOrganization(any(Organization.class));
-
-        assertThat(organizationInRepository).isNotNull();
-        assertThat(organizationInRepository.getName()).isEqualTo(nameOfBase);
-        assertThat(organizationInRepository.numberOfChild()).isEqualTo(Integer.parseInt(numberOfChildren));
-        assertThat(organizationInRepository.numberOfOrganizationForThisTree()).isEqualTo(Integer.parseInt(numberOfOrganization));
+        organizationThen = referenceOrganizationUseCase.referenceOrganization(referenceOrganisationCmd);
     }
 
     @Given("The organization with idRefog {string} and with name {string} exist")
     public void the_organization_with_id_refog_and_with_name_exist(String idRefog, String name) {
-        this.organizationInRepository = new Organization(idRefog, name);
+        Organization organizationGiven = new Organization(idRefog, name);
         Mockito
             .when(repositoryOfOrganization.retrieveByIdRefog(idRefog))
-            .thenReturn(this.organizationInRepository);
+            .thenReturn(organizationGiven);
     }
 
     @When("Administrator want change the name of the  organization with idRefog {string}  with {string}")
     public void administrator_want_change_the_name_of_the_organization_with_IdRefog_with(String idRefog, String newName) {
         ReferenceOrganisationCmd referenceOrganisationCmd = new ReferenceOrganisationCmd(newName, idRefog, new ArrayList<>());
-        organizationInRepository = referenceOrganizationUseCase.updateOrganization(referenceOrganisationCmd, idRefog);
+        organizationThen = referenceOrganizationUseCase.updateOrganization(referenceOrganisationCmd, idRefog);
     }
 
-    @Then("tne name of the organization {string} is {string}")
+    @Then("the name of the organization {string} is {string}")
     public void tne_name_of_the_organization_is(String idRefog, String newName) {
-        assertThat(organizationInRepository.getIdRefog()).isEqualTo(idRefog);
-        assertThat(organizationInRepository.getName()).isEqualTo(newName);
+        assertThat(organizationThen.getIdRefog()).isEqualTo(idRefog);
+        assertThat(organizationThen.getName()).isEqualTo(newName);
         Mockito
             .verify(repositoryOfOrganization, times(1))
-            .storeOrganization(organizationInRepository);
+            .storeOrganization(organizationThen);
     }
 
     @Given("The organization with idRefog {string} and with name {string} exist in the repository")
     public void the_organization_with_id_refog_and_with_name_exist_in_the_repository(String idRefog, String nameOfOrganization) {
-        organizationSearch = null;
-        organizationInRepository = new Organization(idRefog, nameOfOrganization);
+        Organization organizationGiven = new Organization(idRefog, nameOfOrganization);
+        Mockito
+            .when(repositoryOfOrganization.retrieveByIdRefog(idRefog))
+            .thenReturn(organizationGiven);
+    }
+
+    @When("Administrator want to consult a organization Tree based on organization with idRefog {string}")
+    public void administrator_want_to_consult_a_organization_tree_based_on_organization_with_id_refog_and_with_name(String idRefog) {
+        organizationThen = organizationQuery.getOrganizationTree(idRefog);
+    }
+
+    @Given("The Organization with idRefog {string} and  with name {string} exist and have the following children")
+    public void the_organization_with_id_refog_and_with_name_exist_and_have_the_following_children(String idRefog, String organizationName, List<ReferenceOrganisationCmd> childrenCmd) {
+        Organization organizationInRepository = new Organization(idRefog, organizationName);
+        childrenCmd.forEach(cmd -> organizationInRepository.addChild(new Organization(cmd.getIdRefog(), cmd.getOrganizationName())));
         Mockito
             .when(repositoryOfOrganization.retrieveByIdRefog(idRefog))
             .thenReturn(organizationInRepository);
     }
 
-    @When("Administrator want to consult a organization Tree based on organization with idRefog {string}")
-    public void administrator_want_to_consult_a_organization_tree_based_on_organization_with_id_refog_and_with_name(String idRefog) {
-        organizationSearch = organizationQuery.getOrganizationTree(idRefog);
+    @When("Administrator want to update the organization Tree based on organization with idRefog {string} and  with name {string} and the following children")
+    public void administrator_want_to_update_the_organization_tree_based_on_organization_with_id_refog_and_with_name_and_the_following_children(String idRefog, String name, List<ReferenceOrganisationCmd> childrenCmd) {
+        ReferenceOrganisationCmd referenceOrganisationCmd = new ReferenceOrganisationCmd(name, idRefog, childrenCmd);
+        organizationThen = referenceOrganizationUseCase.updateOrganization(referenceOrganisationCmd, idRefog);
     }
 
-    @Then("a new organization tree exist with base {string} with a total of {string} Childs and {string} Organizations")
-    public void a_new_organization_tree_exist_with_base_with_a_total_of_childs_and_organizations(String nameOfBase, String numberOfChildren, String numberOfOrganization) {
+    @Then("a organization tree exist with base {string} with a total of {string} Childs and {string} Organizations")
+    public void a_organization_tree_exist_with_base_with_a_total_of_childs_and_organizations(String nameOfBase, String numberOfChildren, String numberOfOrganization) {
         Mockito
-            .verify(repositoryOfOrganization, times(1))
+            .verify(repositoryOfOrganization, atLeastOnce())
             .retrieveByIdRefog(any(String.class));
 
-        assertThat(organizationSearch).isNotNull();
-        assertThat(organizationSearch.getName()).isEqualTo(nameOfBase);
-        assertThat(organizationSearch.numberOfChild()).isEqualTo(Integer.parseInt(numberOfChildren));
-        assertThat(organizationSearch.numberOfOrganizationForThisTree()).isEqualTo(Integer.parseInt(numberOfOrganization));
+        assertThat(organizationThen).isNotNull();
+        assertThat(organizationThen.getName()).isEqualTo(nameOfBase);
+        assertThat(organizationThen.numberOfChild()).isEqualTo(Integer.parseInt(numberOfChildren));
+        assertThat(organizationThen.numberOfOrganizationForThisTree()).isEqualTo(Integer.parseInt(numberOfOrganization));
     }
-
 }

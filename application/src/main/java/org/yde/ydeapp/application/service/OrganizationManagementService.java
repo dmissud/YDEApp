@@ -12,7 +12,6 @@ import org.yde.ydeapp.domain.out.EntityIncorrect;
 import org.yde.ydeapp.domain.out.EntityNotFound;
 import org.yde.ydeapp.domain.out.RepositoryOfOrganization;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +42,7 @@ public class OrganizationManagementService implements ReferenceOrganizationUseCa
                 throw new EntityNotFound(String.format("The organization %s Not found", referenceOrganisationCmd.getOrganizationName()));
             }
 
-            organization = execUpdateOrganization(organization, referenceOrganisationCmd);
+            execUpdateOrganization(organization, referenceOrganisationCmd);
 
             repositoryOfOrganization.storeOrganization(organization);
             log.debug("Update of the organization {}", organization.getName());
@@ -54,7 +53,7 @@ public class OrganizationManagementService implements ReferenceOrganizationUseCa
         }
     }
 
-    private Organization execUpdateOrganization(Organization organization, ReferenceOrganisationCmd referenceOrganisationCmd) {
+    private void execUpdateOrganization(Organization organization, ReferenceOrganisationCmd referenceOrganisationCmd) {
         referenceOrganisationCmd.validate();
         organization.setName(referenceOrganisationCmd.getOrganizationName());
         // Parcourir les organizations fille de la cmd et mettre à jour si elles sont présente sinon les builds
@@ -66,14 +65,9 @@ public class OrganizationManagementService implements ReferenceOrganizationUseCa
             if (isAChild.isEmpty()) {
                 organization.addChild(this.buildOrganization(child));
             } else {
-                Organization updateOrganization = isAChild.get(0);
-                actualChildren.remove(updateOrganization);
-                organization.addChild(this.execUpdateOrganization(updateOrganization, child));
+                this.execUpdateOrganization(isAChild.get(0), child);
             }
         }
-
-
-        return organization;
     }
 
     private Organization buildOrganization(ReferenceOrganisationCmd referenceOrganisationCmd) {

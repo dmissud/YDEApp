@@ -45,7 +45,7 @@ public class RefiJobListener implements JobExecutionListener {
         String keyName = jobExecution.getJobParameters().getString("refi_file_name");
         if (keyName != null) {
             this.pathRefiFileToImport = Paths.get(keyName);
-            ydeAppWriter.workOn(this.pathRefiFileToImport, organizationQuery.getOrganizations());
+            ydeAppWriter.workOn(this.pathRefiFileToImport, organizationQuery.getOrganizationsIdent());
             buildRefiItemReader.setResource(new FileSystemResource(this.pathRefiFileToImport));
         } else {
             this.pathRefiFileToImport = null;

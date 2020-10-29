@@ -13,5 +13,7 @@ public interface RepositoryOfOrganization {
 
     List<Organization> retrieveRootOrganizations();
 
-    List<OrganizationIdent> retrieveOrganizations();
+    List<Organization> retrieveOrganizations();
+
+    List<OrganizationIdent> retrieveOrganizationsIdent();
 }

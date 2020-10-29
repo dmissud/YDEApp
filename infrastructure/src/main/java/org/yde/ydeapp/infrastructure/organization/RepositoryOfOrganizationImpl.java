@@ -40,7 +40,12 @@ public class RepositoryOfOrganizationImpl implements RepositoryOfOrganization {
     }
 
     @Override
-    public List<OrganizationIdent> retrieveOrganizations() {
+    public List<Organization> retrieveOrganizations() {
+        return repositoryOfOrganizationJpa.findAll().stream().map(this::mapEntityToDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrganizationIdent> retrieveOrganizationsIdent() {
         return repositoryOfOrganizationJpa.findAllOrganizationIdent();
     }
 
