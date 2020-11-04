@@ -89,11 +89,13 @@
     </dependencies>
 
     <build>
+        <finalName>YDEBatch</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <mainClass>org.yde.ydeapp.RefiImportBatchApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.springframework.boot</groupId>

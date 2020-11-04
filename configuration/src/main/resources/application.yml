@@ -11,13 +11,11 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQL10Dialect
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5436/db_cartographie
-    username: yde_users
-    password: yde_users
+    url: jdbc:postgresql://${DB_SERVER}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
     driverClassName: org.postgresql.Driver
     initialization-mode: always
-  batch:
-    initialize-schema: always
   servlet:
     multipart:
       enabled: true
@@ -31,6 +29,6 @@ logging:
     org.yde.ydeapp: error
     org.springframework: info
 ydeapp:
-  dir: /home/daniel/.ydeapp
+  dir: ${YDE_STORE}
   client: http://localhost:4201
   secret: ydeapp-42-secret-of-life

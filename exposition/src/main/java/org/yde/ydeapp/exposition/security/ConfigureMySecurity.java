@@ -61,7 +61,8 @@ public class ConfigureMySecurity extends WebSecurityConfigurerAdapter {
             // dont authenticate this authentication request
             .authorizeRequests()
             .antMatchers(HttpMethod.GET, "/api/V1/organizations/*/applications").permitAll()
-            .antMatchers(HttpMethod.GET, "/api/V1/organizations/root").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/V1/organizations").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/V1/applications/*").permitAll()
             .antMatchers(HttpMethod.POST, "/api/V1/authenticate").permitAll()
             // and authorize swagger-ui
             .antMatchers("/", "/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()

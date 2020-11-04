@@ -1,10 +1,56 @@
-version: '3.3'
+version: '3'
 services:
   yde.db_cartographie:
     image: postgres
+    container_name: yde_bd
+    volumes:
+      - yde_data:/var/lib/postgresql/data
     ports:
       - "5436:5432"
     environment:
       - POSTGRES_DB=db_cartographie
       - POSTGRES_USER=yde_users
       - POSTGRES_PASSWORD=yde_users
+
+  yde.app:
+    build: ../configuration
+    container_name: yde_app
+    volumes:
+      - yde_store:/var/lib/ydeapp
+    environment:
+      - DB_SERVER=yde.db_cartographie
+      - POSTGRES_DB=db_cartographie
+      - POSTGRES_USER=yde_users
+      - POSTGRES_PASSWORD=yde_users
+      - YDE_STORE=/var/lib/ydeapp
+    ports:
+      - 9090:9090
+    links:
+      - yde.db_cartographie
+
+  yde.batch:
+    build: ../interfaceRefi
+    container_name: yde_batch
+    volumes:
+      - yde_store:/var/lib/ydeapp
+    environment:
+      - DB_SERVER=yde.db_cartographie
+      - POSTGRES_DB=db_cartographie
+      - POSTGRES_USER=yde_users
+      - POSTGRES_PASSWORD=yde_users
+      - YDE_STORE=/var/lib/ydeapp
+    links:
+      - yde.db_cartographie
+
+  yde.ui:
+    build: ../../guiYDEApp
+    container_name: yde_ui
+    ports:
+      - 80:80
+    links:
+      - yde.app
+
+volumes:
+  yde_data:
+  yde_store:
+
