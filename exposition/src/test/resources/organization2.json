@@ -1,81 +1,81 @@
 {
   "idRefog": "20000000",
-  "organizationName": "ITG FRESH",
+  "organizationName": "Autre Département",
   "children": [
     {
       "idRefog": "20001000",
-      "organizationName": "Groupe 1",
+      "organizationName": "Autre Groupe 1 - Fonction 1",
       "children": [
         {
           "idRefog": "20001010",
-          "organizationName": "Domaine 11",
+          "organizationName": "Autre Domaine 11 - Fonction 11",
           "children": []
         },
         {
           "idRefog": "20001020",
-          "organizationName": "Domaine 12",
+          "organizationName": "Autre Domaine 12 - Fonction 12",
           "children": []
         },
         {
           "idRefog": "20001030",
-          "organizationName": "Domaine 13",
+          "organizationName": "Autre Domaine 13 - Fonction 13",
           "children": []
         },
         {
           "idRefog": "20001040",
-          "organizationName": "Domaine 14",
+          "organizationName": "Autre Domaine 14 - Fonction 14",
           "children": []
         }
       ]
     },
     {
       "idRefog": "20002000",
-      "organizationName": "Groupe 2",
+      "organizationName": "Autre Groupe 2 - Fonction 2",
       "children": [
         {
           "idRefog": "20002010",
-          "organizationName": "Domaine 21",
+          "organizationName": "Autre Domaine 21 - Fonction 21",
           "children": []
         },
         {
           "idRefog": "20002020",
-          "organizationName": "Domaine 22",
+          "organizationName": "Autre Domaine 22 - Fonction 22",
           "children": []
         },
         {
           "idRefog": "20002030",
-          "organizationName": "Domaine 23",
+          "organizationName": "Autre Domaine 23 - Fonction 23",
           "children": []
         }
       ]
     },
     {
       "idRefog": "20003000",
-      "organizationName": "Groupe 3",
+      "organizationName": "Autre Groupe 3 - Fonction 3",
       "children": [
         {
           "idRefog": "20003010",
-          "organizationName": "Domaine 31",
+          "organizationName": "Autre Domaine 31 - Fonction 31",
           "children": []
         },
         {
           "idRefog": "20003020",
-          "organizationName": "Domaine 32",
+          "organizationName": "Autre Domaine 32 - Fonction 32",
           "children": []
         },
         {
           "idRefog": "20003030",
-          "organizationName": "Domaine 33",
+          "organizationName": "Autre Domaine 33 - Fonction 33",
           "children": []
         },
         {
           "idRefog": "20003040",
-          "organizationName": "Domaine 34",
+          "organizationName": "Autre Domaine 34 - Fonction 34",
           "children": []
         },
         {
           "idRefog": "20003050",
-          "organizationName": "Domaine 35",
+          "organizationName": "Autre Domaine 35 - Fonction 35",
           "children": []
         }
       ]

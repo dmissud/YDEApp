@@ -1,6 +1,6 @@
 version: '3'
 services:
-  yde.db_cartographie:
+  yde-db-cartographie:
     image: postgres
     container_name: yde_bd
     volumes:
@@ -12,13 +12,12 @@ services:
       - POSTGRES_USER=yde_users
       - POSTGRES_PASSWORD=yde_users
 
-  yde.app:
+  yde-app:
     build: ../configuration
     container_name: yde_app
     volumes:
       - yde_store:/var/lib/ydeapp
     environment:
-      - DB_SERVER=yde.db_cartographie
       - POSTGRES_DB=db_cartographie
       - POSTGRES_USER=yde_users
       - POSTGRES_PASSWORD=yde_users
@@ -26,29 +25,32 @@ services:
     ports:
       - 9090:9090
     links:
-      - yde.db_cartographie
+      - yde-db-cartographie
+    image: dmissud/yde_app:latest
 
-  yde.batch:
+  yde-batch:
     build: ../interfaceRefi
     container_name: yde_batch
     volumes:
       - yde_store:/var/lib/ydeapp
     environment:
-      - DB_SERVER=yde.db_cartographie
+      - DB_SERVER=yde-db-cartographie
       - POSTGRES_DB=db_cartographie
       - POSTGRES_USER=yde_users
       - POSTGRES_PASSWORD=yde_users
       - YDE_STORE=/var/lib/ydeapp
     links:
-      - yde.db_cartographie
+      - yde-db-cartographie
+    image: dmissud/yde_batch:latest
 
-  yde.ui:
+  yde-ui:
     build: ../../guiYDEApp
     container_name: yde_ui
     ports:
       - 80:80
     links:
-      - yde.app
+      - yde-app
+    image: dmissud/yde_ui:latest
 
 volumes:
   yde_data:

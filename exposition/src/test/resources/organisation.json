@@ -4,78 +4,78 @@
   "children": [
     {
       "idRefog": "10001000",
-      "organizationName": "Groupe 1",
+      "organizationName": "Groupe 1 - Groupe Numéro 1",
       "children": [
         {
           "idRefog": "10001010",
-          "organizationName": "Domaine 11",
+          "organizationName": "Domaine 11 - Domaine Numéro 11",
           "children": []
         },
         {
           "idRefog": "10001020",
-          "organizationName": "Domaine 12",
+          "organizationName": "Domaine 12 - Domaine Numéro 12",
           "children": []
         },
         {
           "idRefog": "10001030",
-          "organizationName": "Domaine 13",
+          "organizationName": "Domaine 13 - Domaine Numéro 13",
           "children": []
         },
         {
           "idRefog": "10001040",
-          "organizationName": "Domaine 14",
+          "organizationName": "Domaine 14 - Domaine Numéro 14",
           "children": []
         }
       ]
     },
     {
       "idRefog": "10002000",
-      "organizationName": "Groupe 2",
+      "organizationName": "Groupe 2 - Groupe Numéro 2",
       "children": [
         {
           "idRefog": "10002010",
-          "organizationName": "Domaine 21",
+          "organizationName": "Domaine 21 - Domaine Numéro 21",
           "children": []
         },
         {
           "idRefog": "10002020",
-          "organizationName": "Domaine 22",
+          "organizationName": "Domaine 22 - Domaine Numéro 22",
           "children": []
         },
         {
           "idRefog": "10002030",
-          "organizationName": "Domaine 23",
+          "organizationName": "Domaine 23 - Domaine Numéro 23",
           "children": []
         }
       ]
     },
     {
       "idRefog": "10003000",
-      "organizationName": "Groupe 3",
+      "organizationName": "Groupe 3 - Groupe Numéro 3",
       "children": [
         {
           "idRefog": "10003010",
-          "organizationName": "Domaine 31",
+          "organizationName": "Domaine 31 - Domaine Numéro 31",
           "children": []
         },
         {
           "idRefog": "10003020",
-          "organizationName": "Domaine 32",
+          "organizationName": "Domaine 32 - Domaine Numéro 32",
           "children": []
         },
         {
           "idRefog": "10003030",
-          "organizationName": "Domaine 33",
+          "organizationName": "Domaine 33 - Domaine Numéro 33",
           "children": []
         },
         {
           "idRefog": "10003040",
-          "organizationName": "Domaine 34",
+          "organizationName": "Domaine 34 - Domaine Numéro 34",
           "children": []
         },
         {
           "idRefog": "10003050",
-          "organizationName": "Domaine 35",
+          "organizationName": "Domaine 35 - Domaine Numéro 35",
           "children": []
         }
       ]

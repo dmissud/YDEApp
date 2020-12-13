@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: yde-batch
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: postgres_db
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: postgres_password
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: postgres_user
+            - name: YDE_STORE
+              value: /var/lib/ydeapp
+          image: dmissud/yde_batch:latest
+          name: yde-batch
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/ydeapp
+              name: yde-store
+      restartPolicy: Never
+      volumes:
+        - name: yde-store
+          persistentVolumeClaim:
+            claimName: yde-store

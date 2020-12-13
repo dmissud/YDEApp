@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o k8s
+    kompose.version: 1.22.0 (955b78124)
+  labels:
+    io.kompose.service: yde-app
+  name: yde-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: yde-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o k8s
+        kompose.version: 1.22.0 (955b78124)
+      labels:
+        io.kompose.service: yde-app
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: postgres_db
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: postgres_password
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: postgres_user
+            - name: YDE_STORE
+              value: /var/lib/ydeapp
+          image: dmissud/yde_app:latest
+          name: yde-app
+          ports:
+            - containerPort: 9090
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/ydeapp
+              name: yde-store
+      restartPolicy: Always
+      volumes:
+        - name: yde-store
+          persistentVolumeClaim:
+            claimName: yde-store
